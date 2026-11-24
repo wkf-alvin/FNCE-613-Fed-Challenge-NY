@@ -1,0 +1,1937 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NY Fed Challenge</title>
+<meta name="description" content="Team NY Fed's December 2026 FOMC recommendation for the FNCE 613 Fed Challenge: raise the federal funds target range 25 bp to 4.00%-4.25%.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  /* Layout: a dark briefing stage. Chapter rail fixed on top; one scene at a time with kicker, headline and a big
+     readout at right; charts in the middle; prev/next bar fixed at the bottom. Brass is reserved for our call. */
+  --bg: #0b1517;
+  --raise: #111f22;
+  --ink: #ece6d9;
+  --ink-2: #aab5b2;
+  --muted: #7b8a86;
+  --grid: #1a292c;
+  --axis: #2b3b3e;
+  --hair: rgba(236, 230, 217, .10);
+  --teal: #2ba597;
+  --coral: #dd6650;
+  --brass: #d4a03f;
+  --ctx: #5d6b68;
+  --on-accent: #0b1517;
+  --wash: rgba(43, 165, 151, .12);
+  --halo: rgba(43, 165, 151, .09);
+  --glow: drop-shadow(0 0 5px rgba(43, 165, 151, .5));
+  --shadow: 0 12px 32px rgba(0, 0, 0, .45);
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --top-h: 58px;
+  --bot-h: 54px;
+  --side: max(clamp(16px, 3.6vw, 60px), env(safe-area-inset-left, 0px));
+  --side-r: max(clamp(16px, 3.6vw, 60px), env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f1f5f4;
+  --raise: #ffffff;
+  --ink: #0e2023;
+  --ink-2: #3d5053;
+  --muted: #5b6b68;
+  --grid: #dde5e3;
+  --axis: #b9c6c4;
+  --hair: rgba(14, 32, 35, .12);
+  --teal: #00897b;
+  --coral: #c9482f;
+  --brass: #9c6a0c;
+  --ctx: #9aa6a3;
+  --on-accent: #ffffff;
+  --wash: rgba(0, 137, 123, .10);
+  --halo: rgba(0, 137, 123, .07);
+  --glow: none;
+  --shadow: 0 12px 32px rgba(14, 32, 35, .14);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: clamp(14px, .42vw + 9.6px, 18px); line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.halo {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(60vw 55vh at 82% 0%, var(--halo), transparent 70%),
+    radial-gradient(45vw 45vh at 0% 100%, var(--halo), transparent 70%);
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+  height: calc(var(--top-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) var(--side-r) 0 var(--side);
+  display: flex; align-items: center; gap: 18px;
+  background: var(--bg); background: color-mix(in srgb, var(--bg) 86%, transparent);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hair);
+}
+.brand { flex: none; display: grid; line-height: 1.15; text-decoration: none; }
+.brand b { font-family: var(--display); font-stretch: 118%; font-weight: 600; font-size: 15px; letter-spacing: .01em; }
+.brand small { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.rail { flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.rail ol { list-style: none; margin: 0 0 0 auto; padding: 0; display: flex; gap: 2px; width: max-content; }
+.rail a {
+  display: flex; align-items: baseline; gap: 6px; padding: 18px 8px 16px;
+  color: var(--ink-2); text-decoration: none; font-size: 13px; white-space: nowrap;
+  border-bottom: 2px solid transparent; transition: color .2s, border-color .2s;
+}
+.rail a .n { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+.rail a:hover { color: var(--ink); }
+.rail a[aria-current="step"] { color: var(--ink); border-bottom-color: var(--brass); }
+.rail a[aria-current="step"] .n { color: var(--brass); }
+.tools { flex: none; display: flex; gap: 6px; }
+.icon-btn {
+  width: 34px; height: 34px; display: grid; place-items: center; padding: 0;
+  border-radius: 50%; border: 1px solid var(--hair); background: transparent; color: var(--ink-2); cursor: pointer;
+}
+.icon-btn:hover { color: var(--ink); border-color: var(--ink-2); }
+.icon-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 1320px) {
+  .rail a .t { display: none; }
+  .rail a[aria-current="step"] .t, .rail a .t.always { display: inline; }
+}
+@media (max-width: 720px) {
+  .brand small, #fsBtn { display: none; }
+  .rail a .t { display: inline; }
+}
+
+/* ---------- scenes ---------- */
+main {
+  position: relative; z-index: 1;
+  padding-top: calc(var(--top-h) + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(var(--bot-h) + env(safe-area-inset-bottom, 0px) + 8px);
+}
+.scene {
+  scroll-margin-top: calc(var(--top-h) + env(safe-area-inset-top, 0px));
+  max-width: 1500px; margin: 0 auto;
+  padding-block: clamp(18px, 3.2vh, 40px) clamp(16px, 2.4vh, 28px);
+  padding-left: var(--side); padding-right: var(--side-r);
+  display: flex; flex-direction: column; gap: clamp(14px, 2.1vh, 26px);
+}
+.scene-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 48px; align-items: start; }
+.kicker { margin: 0 0 10px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.kicker .n { color: var(--brass); margin-right: .75em; }
+.title {
+  margin: 0; font-family: var(--display); font-stretch: 112%; font-weight: 330;
+  font-size: clamp(25px, 1.75vw + 12px, 46px); line-height: 1.1; letter-spacing: -.012em;
+  text-wrap: balance; max-width: 30ch;
+}
+.title.long { font-size: clamp(22px, 1.2vw + 12px, 35px); max-width: 44ch; line-height: 1.16; }
+.hint { margin: 10px 0 0; font-size: .9em; color: var(--muted); }
+.readout { display: flex; flex-direction: column; align-items: flex-end; text-align: right; gap: 3px; min-width: 0; }
+.ro-lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ro-big {
+  font-family: var(--display); font-stretch: 120%; font-weight: 280;
+  font-size: clamp(42px, 3.3vw + 14px, 84px); line-height: .95; letter-spacing: -.025em; white-space: nowrap;
+}
+.ro-big.accent { color: var(--brass); }
+.ro-line { font-size: .88em; color: var(--ink-2); }
+.ro-line b { color: var(--ink); font-weight: 600; }
+@media (max-width: 760px) {
+  .scene-head { grid-template-columns: minmax(0, 1fr); }
+  .readout { align-items: flex-start; text-align: left; }
+}
+.src { margin: 0; font-size: .76em; color: var(--muted); max-width: 120ch; }
+.src a { color: var(--ink-2); text-underline-offset: 2px; }
+.disclaimer { margin: 0; font-size: .78em; color: var(--muted); max-width: 95ch; }
+
+/* text blocks */
+.block { min-width: 0; border-top: 1px solid var(--hair); padding-top: 12px; transition: opacity .3s; }
+.block h3 { margin: 0 0 8px; font-family: var(--display); font-stretch: 108%; font-weight: 600; font-size: .98em; color: var(--ink); }
+.block p { margin: 0; color: var(--ink-2); }
+.block p + p { margin-top: 8px; }
+.block b { color: var(--ink); font-weight: 600; }
+.sub-h { font-family: var(--mono); font-size: 10.5px !important; letter-spacing: .1em; text-transform: uppercase; color: var(--muted) !important; margin: 10px 0 6px !important; }
+.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.list li { position: relative; padding-left: 16px; color: var(--ink-2); }
+.list li::before { content: ""; position: absolute; left: 0; top: .78em; width: 8px; height: 1px; background: var(--muted); }
+.list li b { color: var(--ink); font-weight: 600; }
+.list a { color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: 3px; white-space: nowrap; font-size: .92em; }
+.statement mark { background: none; color: var(--ink); font-weight: 600; }
+.dim { opacity: .42; }
+.bottomline { display: grid; gap: 4px; border-top: 1px solid var(--hair); padding-top: 12px; min-width: 0; }
+.bottomline .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.bottomline p { margin: 0; font-family: var(--display); font-stretch: 106%; font-size: 1.12em; line-height: 1.38; max-width: 60ch; }
+
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px 18px; }
+.tile { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tile .v { font-family: var(--display); font-stretch: 112%; font-weight: 400; font-size: clamp(24px, 1.1vw + 14px, 34px); line-height: 1.05; letter-spacing: -.01em; }
+.tile .l { font-size: .84em; color: var(--ink-2); }
+
+/* grids */
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px clamp(20px, 2.6vw, 40px); }
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px clamp(24px, 3vw, 48px); }
+.gside { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 20px clamp(24px, 3vw, 48px); align-items: start; }
+.panel { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.panel > .seg { align-self: flex-start; }
+@media (max-width: 960px) { .g3, .g2, .gside { grid-template-columns: minmax(0, 1fr); } }
+
+/* figures */
+.fig { margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.fig-cap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 16px; }
+.fig-title { font-weight: 600; font-size: .95em; }
+.fig-sub { font-size: .8em; color: var(--muted); }
+.chart-wrap { position: relative; }
+.chart { position: relative; width: 100%; height: clamp(230px, 40vh, 470px); }
+.chart.md { height: clamp(200px, 30vh, 380px); }
+.chart.sm { height: clamp(170px, 24vh, 280px); }
+#coverChart { height: clamp(260px, 52vh, 600px); }
+@media (max-width: 760px) {
+  .chart, #coverChart { height: clamp(230px, 44vh, 340px); }
+  .chart.md { height: clamp(210px, 38vh, 300px); }
+}
+.fig-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: .8em; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .8em; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.lk { display: inline-block; width: 16px; height: 2px; border-radius: 1px; }
+.lk.dash { height: 0; border-top: 1.5px dashed var(--ink-2); border-radius: 0; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.sw.round { border-radius: 50%; }
+.sw.dash-box { border: 1.5px dashed var(--teal); }
+.k-teal { background: var(--teal); }
+.k-coral { background: var(--coral); }
+.k-brass { background: var(--brass); }
+.k-ctx { background: var(--ctx); }
+.k-ink { background: var(--ink); }
+.chart-ro { position: absolute; left: 56px; top: 10px; pointer-events: none; display: grid; gap: 2px; }
+.chart-ro .d { font-family: var(--display); font-stretch: 120%; font-weight: 280; font-size: clamp(28px, 2.2vw + 10px, 52px); line-height: 1; letter-spacing: -.02em; }
+.chart-ro .r { font-size: .88em; color: var(--ink-2); }
+.chart-ro .r b { color: var(--ink); font-weight: 600; }
+
+/* controls */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.ctl-lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border: 1px solid var(--hair); border-radius: 999px; }
+.seg button { font-size: .84em; padding: 6px 13px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.seg.accent button[aria-pressed="true"][data-v="hike"] { background: var(--brass); color: var(--on-accent); }
+.play {
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  font-size: .84em; padding: 6px 14px 6px 11px; border: 1px solid var(--hair); border-radius: 999px;
+  background: transparent; color: var(--ink); cursor: pointer;
+}
+.play:hover { border-color: var(--ink-2); }
+.play svg { width: 12px; height: 12px; fill: currentColor; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--hair); color: var(--ink); background: transparent; text-decoration: none; font-size: .9em; cursor: pointer;
+}
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary { background: var(--brass); border-color: var(--brass); color: var(--on-accent); font-weight: 600; }
+.tbl-btn {
+  margin-left: auto; padding: 4px 0; border: 0; background: none; color: var(--ink-2); cursor: pointer;
+  text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 3px;
+}
+.tbl-btn:hover { color: var(--ink); }
+.tbl { max-height: 260px; overflow: auto; border: 1px solid var(--hair); border-radius: 6px; }
+.tbl.static { max-height: none; }
+.tbl table { width: 100%; border-collapse: collapse; font-size: .82em; font-variant-numeric: tabular-nums; }
+.tbl th, .tbl td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--hair); white-space: nowrap; }
+.tbl th:first-child, .tbl td:first-child { text-align: left; }
+.tbl.static td, .tbl.static th { text-align: left; white-space: normal; }
+.tbl thead th { position: sticky; top: 0; background: var(--raise); color: var(--ink-2); font-weight: 600; }
+.tbl code { font-family: var(--mono); font-size: .95em; color: var(--ink); }
+
+/* timeline scrubber */
+.scrub { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 16px; }
+.scrub-track { position: relative; padding-bottom: 16px; min-width: 0; }
+.scrub-ticks { position: absolute; left: 0; right: 0; bottom: 0; height: 14px; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.scrub-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+input[type="range"] { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 22px; margin: 0; background: transparent; cursor: pointer; }
+input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--axis); border-radius: 1px; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -6px; border-radius: 50%; background: var(--ink); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--ink-2); }
+input[type="range"]::-moz-range-track { height: 2px; background: var(--axis); }
+input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 2px solid var(--bg); }
+
+/* cover */
+.cover-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.3fr); gap: 28px clamp(28px, 4vw, 72px); align-items: center; }
+.hero-num {
+  margin: 6px 0 12px; font-family: var(--display); font-stretch: 125%; font-weight: 250;
+  font-size: clamp(88px, 8.2vw + 24px, 206px); line-height: .85; letter-spacing: -.04em; color: var(--brass); white-space: nowrap;
+}
+.hero-num .u { font-size: .3em; font-weight: 400; letter-spacing: 0; color: var(--ink); margin-left: .16em; }
+.cover-title { margin: 0; font-family: var(--display); font-stretch: 112%; font-weight: 340; font-size: clamp(22px, 1.4vw + 12px, 38px); line-height: 1.15; text-wrap: balance; max-width: 24ch; }
+.cover-title b { font-weight: 560; }
+.lede { margin: 14px 0 0; color: var(--ink-2); max-width: 50ch; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+@media (max-width: 960px) { .cover-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 400px) {
+  .hero-num { font-size: 76px; }
+  .ro-big { font-size: 36px; }
+}
+
+/* votes */
+.votes { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 10px; }
+.vote { width: 20px; height: 20px; border-radius: 50%; transition: transform .15s; }
+.vote.hold { background: var(--teal); }
+.vote.hike { background: var(--brass); }
+.vote:hover, .vote:focus-visible { transform: scale(1.15); }
+
+/* watch list */
+.watch { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(16px, 2vw, 32px); }
+@media (max-width: 1100px) { .watch { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .watch { grid-template-columns: minmax(0, 1fr); } }
+.wt { min-width: 0; border-top: 1px solid var(--hair); padding-top: 12px; display: flex; flex-direction: column; gap: 3px; }
+.wt-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .84em; }
+.wt-top .l { color: var(--ink); font-weight: 600; }
+.wt-top .w { color: var(--muted); font-family: var(--mono); font-size: .86em; white-space: nowrap; }
+.wt .v { font-family: var(--display); font-stretch: 112%; font-weight: 400; font-size: clamp(28px, 1.4vw + 16px, 42px); line-height: 1.05; }
+.wt .d { font-size: .82em; color: var(--ink-2); }
+.spark { height: 58px; margin-top: 4px; }
+.wt .trig { margin: 4px 0 0; font-size: .82em; color: var(--muted); }
+.wt .trig b { color: var(--ink-2); font-weight: 600; }
+
+/* bottom bar */
+.botbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  height: calc(var(--bot-h) + env(safe-area-inset-bottom, 0px));
+  padding: 0 var(--side-r) env(safe-area-inset-bottom, 0px) var(--side);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 16px;
+  background: var(--bg); background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--hair);
+}
+.nav-btn { display: inline-flex; align-items: center; gap: 9px; min-width: 0; max-width: 100%; font-size: .86em; padding: 8px 2px; border: 0; background: none; color: var(--ink-2); cursor: pointer; }
+.nav-btn:hover { color: var(--ink); }
+.nav-btn .nb-n { font-family: var(--mono); font-size: .88em; color: var(--muted); }
+.nav-btn .nb-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-btn:disabled { visibility: hidden; }
+#prevBtn { justify-self: start; }
+#nextBtn { justify-self: end; color: var(--ink); }
+.mid { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.progress { position: relative; width: clamp(110px, 22vw, 320px); height: 2px; background: var(--axis); border-radius: 1px; }
+.progress i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--brass); border-radius: 1px; transition: width .45s cubic-bezier(.3, .7, .2, 1); }
+.keys { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--muted); white-space: nowrap; }
+@media (max-width: 640px) { .keys, .nav-btn .nb-t { display: none; } }
+
+/* tooltip */
+#tip {
+  position: fixed; left: 0; top: 0; z-index: 50; pointer-events: none;
+  background: var(--raise); border: 1px solid var(--hair); border-radius: 8px; padding: 8px 10px;
+  box-shadow: var(--shadow); font-size: 12.5px; line-height: 1.45; min-width: 130px; max-width: 270px;
+}
+.tip-h { color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .04em; margin-bottom: 3px; }
+.tip-r { display: flex; align-items: center; gap: 8px; }
+.tip-r b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tip-r span { color: var(--ink-2); }
+.tip-k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+.tip-note { color: var(--muted); margin-top: 4px; font-size: 11.5px; }
+
+/* svg chart marks */
+.csvg { display: block; overflow: visible; touch-action: pan-y; cursor: crosshair; }
+.csvg:focus { outline: none; }
+.csvg:focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; border-radius: 4px; }
+.csvg text { font-family: var(--body); }
+.grid { stroke: var(--grid); stroke-width: 1; }
+.zero, .axisln { stroke: var(--axis); stroke-width: 1; }
+.tick { fill: var(--muted); font-family: var(--mono) !important; font-size: 10.5px; font-variant-numeric: tabular-nums; }
+.ref { stroke: var(--ink-2); stroke-width: 1.2; stroke-dasharray: 5 4; opacity: .85; }
+.ref-lbl { fill: var(--ink-2); font-size: 11px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.shade { fill: var(--grid); }
+.ann { fill: var(--muted); font-size: 10.5px; font-family: var(--mono) !important; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.mark { stroke: var(--axis); stroke-width: 1; }
+.gapmark { stroke: var(--muted); stroke-width: 1; }
+.ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.ln.teal { stroke: var(--teal); }
+.ln.coral { stroke: var(--coral); }
+.ln.ctx { stroke: var(--ctx); stroke-width: 1.75; }
+.ln.primary { filter: var(--glow); }
+.ln.spark-ln { stroke: var(--ink-2); stroke-width: 1.5; }
+.area { fill: var(--wash); }
+.dot { stroke: var(--bg); stroke-width: 2; }
+.dot.teal { fill: var(--teal); }
+.dot.coral { fill: var(--coral); }
+.dot.ctx { fill: var(--ink-2); }
+.dot.brass { fill: var(--brass); }
+.end-lbl { fill: var(--ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.end-name { fill: var(--ink-2); font-weight: 400; }
+.leader { stroke: var(--muted); stroke-width: 1; }
+.xhair { stroke: var(--ink-2); stroke-width: 1; opacity: .55; }
+.hit { fill: transparent; }
+.hit:focus { outline: none; }
+.band { fill: var(--teal); }
+.band-mid { fill: none; stroke: var(--teal); stroke-width: 1.5; stroke-linejoin: round; }
+.band-interim { fill: var(--teal); opacity: .38; }
+.band-prop { fill: var(--brass); }
+.band-hold { fill: none; stroke: var(--teal); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.prop-lbl { fill: var(--ink); font-size: 12px; font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; }
+.prop-sub { fill: var(--ink-2); font-size: 11px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; }
+.bar { transition: opacity .15s; }
+.bar.hot { opacity: .72; }
+.bar-teal { fill: var(--teal); }
+.bar-coral { fill: var(--coral); }
+.bar-ctx { fill: var(--ctx); }
+.bar-ink { fill: var(--ink); }
+.val { fill: var(--ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.val-2 { fill: var(--ink-2); font-weight: 500; }
+.cat { fill: var(--ink-2); font-size: 12px; }
+.cat-sm { fill: var(--muted); font-size: 10.5px; font-family: var(--mono) !important; }
+.conn { stroke: var(--axis); stroke-width: 1; }
+
+/* motion */
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.scene.enter > * { animation: rise .6s cubic-bezier(.2, .7, .2, 1) both; }
+.scene.enter > *:nth-child(2) { animation-delay: .05s; }
+.scene.enter > *:nth-child(3) { animation-delay: .1s; }
+.scene.enter > *:nth-child(4) { animation-delay: .15s; }
+.scene.enter > *:nth-child(5) { animation-delay: .2s; }
+.scene.enter > *:nth-child(n+6) { animation-delay: .25s; }
+@media (prefers-reduced-motion: reduce) {
+  .scene.enter > * { animation: none; }
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="halo" aria-hidden="true"></div>
+
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="Team NY Fed briefing: back to the cover"><b>Team NY Fed</b><small>FNCE 613 · Fed Challenge</small></a>
+  <nav class="rail" aria-label="Chapters">
+    <ol id="railList">
+      <li><a href="#recap"><span class="n">01</span><span class="t">Recap</span></a></li>
+      <li><a href="#mandate"><span class="n">02</span><span class="t">Mandate</span></a></li>
+      <li><a href="#decision"><span class="n">03</span><span class="t">Decision</span></a></li>
+      <li><a href="#economy"><span class="n">04</span><span class="t">Economy</span></a></li>
+      <li><a href="#jobs"><span class="n">05</span><span class="t">Jobs</span></a></li>
+      <li><a href="#participation"><span class="n">06</span><span class="t">Participation</span></a></li>
+      <li><a href="#inflation"><span class="n">07</span><span class="t">Inflation</span></a></li>
+      <li><a href="#implications"><span class="n">08</span><span class="t">Implications</span></a></li>
+      <li><a href="#closing"><span class="n">09</span><span class="t">Closing</span></a></li>
+      <li><a href="#sources"><span class="t always">Sources</span></a></li>
+    </ol>
+  </nav>
+  <div class="tools">
+    <button class="icon-btn" id="fsBtn" type="button" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme (T)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" stroke="none"/></svg></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ===================== COVER ===================== -->
+<section class="scene" id="top" data-n="" data-label="Cover">
+  <div class="cover-grid">
+    <div>
+      <p class="kicker">December 2026 FOMC · Team NY Fed recommendation</p>
+      <p class="hero-num" aria-label="Plus 25 basis points">+25<span class="u">bp</span></p>
+      <h1 class="cover-title">Raise by 25 basis points. New target range: <b>4.00%–4.25%</b>.</h1>
+      <p class="lede">Inflation is still above target and core inflation momentum is sticky. Q3 GDP and domestic demand show the economy can likely absorb one more small step.</p>
+      <div class="cta">
+        <a class="btn primary" href="#recap">Start the briefing <span aria-hidden="true">→</span></a>
+        <a class="btn" href="#closing">Skip to our recommendation</a>
+      </div>
+    </div>
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Federal funds target range since 2015</span><span class="fig-sub">%, upper and lower limits</span></div>
+      <div class="legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Our December proposal</span></div>
+      <div class="chart-wrap">
+        <div class="chart" id="coverChart"></div>
+        <div class="chart-ro" id="coverRO" aria-live="off"><span class="d"></span><span class="r"></span></div>
+      </div>
+      <div class="fig-foot">
+        <button class="play" type="button" id="coverPlay" aria-pressed="false"><svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true" hidden><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg><span class="pl-lbl">Play</span></button>
+        <span>Replays the path from liftoff in 2015 to our December step.</span>
+        <button class="tbl-btn" type="button">Data table</button>
+      </div>
+      <div class="tbl" hidden></div>
+    </figure>
+  </div>
+  <p class="disclaimer">FNCE 613 Fed Challenge, classroom exercise. The 25 bp hike is a proposed classroom position, not official Federal Reserve policy. This page is not affiliated with the Federal Reserve.</p>
+</section>
+
+<!-- ===================== 01 RECAP ===================== -->
+<section class="scene" id="recap" data-n="01" data-label="Recap" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">01</span>October FOMC recap</p>
+      <h2 class="title">FOMC held the target range at 3.75%–4.00%.</h2>
+      <p class="hint">Hover a vote, or move along the rate path.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">Vote, October 28</span>
+      <span class="ro-big">10–2</span>
+      <span class="ro-line"><b>2</b> dissents preferred <b>+25 bp</b></span>
+    </div>
+  </header>
+  <div class="g3">
+    <article class="block">
+      <h3>What happened?</h3>
+      <div class="votes" id="votes" role="group" aria-label="FOMC vote: 10 to hold, 2 dissents preferring a 25 basis point increase"></div>
+      <div class="legend"><span><i class="sw round k-teal"></i>Hold · 10</span><span><i class="sw round k-brass"></i>Preferred +25 bp · 2</span></div>
+      <ul class="list" style="margin-top:10px"><li>Vote: 10–2.</li><li>Two dissents preferred a 25 bp increase.</li></ul>
+    </article>
+    <article class="block">
+      <h3>What the statement said</h3>
+      <ul class="list statement">
+        <li>Economic activity is expanding at a <mark>strong pace</mark>.</li>
+        <li>Domestic spending is <mark>resilient</mark>; productivity growth is <mark>strong</mark>; capital investment is <mark>robust</mark>.</li>
+        <li>Inflation remains <mark>elevated</mark>.</li>
+      </ul>
+    </article>
+    <article class="block">
+      <h3>Why this matters for December</h3>
+      <ul class="list">
+        <li>The starting point is already restrictive policy.</li>
+        <li>The question is whether inflation is sticky enough to justify one more move.</li>
+      </ul>
+    </article>
+  </div>
+  <figure class="fig">
+    <div class="fig-cap"><span class="fig-title">Federal funds target range, 2024 to today</span><span class="fig-sub">%, upper and lower limits</span></div>
+    <div class="chart sm" id="recapChart"></div>
+    <div class="fig-foot"><span>Three cuts in late 2025, a hike on Sep 17, 2026, then a hold on Oct 28.</span><button class="tbl-btn" type="button">Data table</button></div>
+    <div class="tbl" hidden></div>
+  </figure>
+  <p class="src">Source: Federal Reserve FOMC statement, October 28, 2026 (<a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm" target="_blank" rel="noopener">federalreserve.gov</a>). Target range: FRED DFEDTARL, DFEDTARU.</p>
+</section>
+
+<!-- ===================== 02 MANDATE ===================== -->
+<section class="scene" id="mandate" data-n="02" data-label="Mandate" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">02</span>Fed's dual mandate &amp; dilemma going into December</p>
+      <h2 class="title long">A small hike can be justified if the inflation risk still dominates the growth slowdown risk.</h2>
+      <p class="hint">Press Play or drag the timeline. Hover either chart and both follow.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-big" id="mDate">Oct 2026</span>
+      <span class="ro-line"><b id="mCore">3.1%</b> core PCE, y/y</span>
+      <span class="ro-line"><b id="mUn">4.1%</b> unemployment</span>
+      <span class="ro-line"><b id="mFF">3.75%–4.00%</b> fed funds target</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Time range</span>
+    <div class="seg" id="mRange" role="group" aria-label="Time range">
+      <button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button>
+    </div>
+  </div>
+  <div class="g2">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Price stability: return inflation to 2%</span><span class="fig-sub">PCE price index, % change from a year earlier</span></div>
+      <div class="legend"><span><i class="lk k-teal"></i>Core PCE</span><span><i class="lk k-ctx"></i>PCE (headline)</span><span><i class="lk dash"></i>2% target</span></div>
+      <div class="chart md" id="mInfl"></div>
+      <div class="fig-foot"><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Maximum employment: keep labor conditions as strong as possible over time</span><span class="fig-sub">Unemployment rate, %</span></div>
+      <div class="chart md" id="mUnChart"></div>
+      <div class="fig-foot"><span>Blank month: October 2025 was not collected during the federal shutdown.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+  </div>
+  <div class="scrub">
+    <button class="play" type="button" id="mPlay" aria-pressed="false"><svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true" hidden><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg><span class="pl-lbl">Play</span></button>
+    <div class="scrub-track"><input type="range" id="mSlider" aria-label="Month shown on both charts" step="1"><div class="scrub-ticks" id="mTicks" aria-hidden="true"></div></div>
+  </div>
+  <div class="g3">
+    <article class="block"><h3>Inflation side</h3><ul class="list"><li>Sep PCE inflation: <b>3.6%</b> y/y; core PCE: <b>3.1%</b> y/y.</li><li>Oct core CPI rose <b>0.3%</b> for the third straight month.</li></ul></article>
+    <article class="block"><h3>Growth / demand side</h3><ul class="list"><li>Q3 real GDP: <b>3.4%</b> SAAR.</li><li>Real final sales to private domestic purchasers: <b>4.9%</b> SAAR.</li></ul></article>
+    <article class="block"><h3>What makes this a dilemma?</h3><ul class="list"><li>Inflation is still above target.</li><li>Activity and domestic demand remain solid.</li><li>But policy lags mean more tightening could bite later.</li></ul></article>
+  </div>
+  <p class="src">Source: Federal Reserve October FOMC; BEA Q3 GDP, September PCE; BLS October CPI (<a href="https://www.federalreserve.gov" target="_blank" rel="noopener">federalreserve.gov</a>, <a href="https://www.bea.gov" target="_blank" rel="noopener">bea.gov</a>, <a href="https://www.bls.gov" target="_blank" rel="noopener">bls.gov</a>). Charts: FRED PCEPI, PCEPILFE, UNRATE; fed funds: DFEDTAR, DFEDTARL, DFEDTARU.</p>
+</section>
+
+<!-- ===================== 03 DECISION ===================== -->
+<section class="scene" id="decision" data-n="03" data-label="Decision" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">03</span>NY Fed's proposed decision</p>
+      <h2 class="title">Raise by 25 basis points</h2>
+      <p class="hint">Switch between our call and a pause to compare the two paths.</p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span class="ro-lbl" id="dLbl">New target range</span>
+      <span class="ro-big accent" id="dRange">4.00%–4.25%</span>
+      <span class="ro-line" id="dNote"><b>+25 bp</b> from 3.75%–4.00%</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Scenario</span>
+    <div class="seg accent" id="dSeg" role="group" aria-label="Scenario">
+      <button type="button" data-v="hike" aria-pressed="true">Raise 25 bp · our call</button><button type="button" data-v="hold" aria-pressed="false">Pause</button>
+    </div>
+  </div>
+  <div class="gside">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Federal funds target range, with the December step</span><span class="fig-sub">%, upper and lower limits</span></div>
+      <div class="legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Proposed +25 bp</span><span><i class="sw dash-box"></i>Pause</span></div>
+      <div class="chart" id="dChart"></div>
+      <div class="fig-foot"><span>The faded stretch is the current range until the December meeting.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <div class="panel">
+      <article class="block" data-scn="hike">
+        <h3>Why a marginal hike is defensible</h3>
+        <ul class="list">
+          <li>Inflation is still above target and core inflation momentum is sticky.</li>
+          <li>Q3 GDP and domestic demand show the economy can likely absorb one more small step.</li>
+          <li>A marginal increase helps prevent premature easing of financial conditions and reinforces inflation credibility.</li>
+        </ul>
+      </article>
+      <article class="block dim" data-scn="hold">
+        <h3>What would make us pause instead?</h3>
+        <ul class="list">
+          <li>Clear evidence of softer demand. <a href="#economy">Demand data →</a></li>
+          <li>A broader labor-market deterioration. <a href="#jobs">Labor data →</a></li>
+          <li>Faster disinflation in core measures. <a href="#implications">Core inflation →</a></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+  <p class="src">Source: Federal Reserve October 28 FOMC; BEA Q3 GDP and September PCE; BLS October CPI. 25 bp hike is a proposed classroom position, not official Fed policy. Target range: FRED DFEDTARL, DFEDTARU.</p>
+</section>
+
+<!-- ===================== 04 ECONOMY ===================== -->
+<section class="scene" id="economy" data-n="04" data-label="Economy" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">04</span>State of the U.S. economy</p>
+      <h2 class="title long">Growth is supported by consumption and investment; strong domestic demand limits the case for immediate easing.</h2>
+      <p class="hint">Hover any bar. Switch quarters to see what drove growth.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">Q3 real GDP, SAAR</span>
+      <span class="ro-big">3.4%</span>
+      <span class="ro-line"><b>4.9%</b> private domestic final sales¹</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Contributions for</span>
+    <div class="seg" id="eQ" role="group" aria-label="Quarter shown in the contributions chart">
+      <button type="button" data-v="Q4 2025" aria-pressed="false">Q4 '25</button><button type="button" data-v="Q1 2026" aria-pressed="false">Q1 '26</button><button type="button" data-v="Q2 2026" aria-pressed="false">Q2 '26</button><button type="button" data-v="Q3 2026" aria-pressed="true">Q3 '26</button>
+    </div>
+  </div>
+  <div class="g2">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Economic demand remained resilient</span><span class="fig-sub">Annualized real growth, %</span></div>
+      <div class="legend"><span><i class="sw k-ctx"></i>Q2 2026</span><span><i class="sw k-teal"></i>Q3 2026</span></div>
+      <div class="chart md" id="eDemand"></div>
+      <div class="fig-foot"><span>¹ Consumption + private fixed investment.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title" id="eWfTitle">Q3 2026 contributions to real GDP growth</span><span class="fig-sub">Percentage points, annualized</span></div>
+      <div class="legend"><span><i class="sw k-teal"></i>Adds to growth</span><span><i class="sw k-coral"></i>Subtracts</span><span><i class="sw k-ink"></i>Real GDP growth</span></div>
+      <div class="chart md" id="eWf"></div>
+      <div class="fig-foot"><span>Contributions add up to GDP growth, up to rounding.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+  </div>
+  <p class="src">Source: BEA Q3 GDP advance estimate, Oct 29 2026 (<a href="https://www.bea.gov/news/2026/gdp-advance-estimate-3rd-quarter-2026" target="_blank" rel="noopener">bea.gov</a>); GDP contributions: BEA via FRED (DPCERY2Q224SBEA, A007RY2Q224SBEA, A014RY2Q224SBEA, A822RY2Q224SBEA, A019RY2Q224SBEA). ¹ Consumption + private fixed investment.</p>
+</section>
+
+<!-- ===================== 05 JOBS ===================== -->
+<section class="scene" id="jobs" data-n="05" data-label="Jobs" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">05</span>State of the U.S. labor market: maintaining a “low-hire, low-fire” equilibrium</p>
+      <h2 class="title">Unemployment holding steady around 4%</h2>
+      <p class="hint">Hover the line and pick a range. Switch between the nation and New York.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">Unemployment rate, Oct 2026</span>
+      <span class="ro-big">4.1%</span>
+      <span class="ro-line"><b>4.2%</b> in September</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Time range</span>
+    <div class="seg" id="jRange" role="group" aria-label="Time range">
+      <button type="button" data-v="12" aria-pressed="false">1Y</button><button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button>
+    </div>
+  </div>
+  <div class="gside">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Civilian unemployment rate</span><span class="fig-sub">%, seasonally adjusted</span></div>
+      <div class="chart" id="jChart"></div>
+      <div class="fig-foot"><span>Blank month: October 2025 was not collected during the federal shutdown.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <div class="panel">
+      <div class="seg" id="jGeo" role="group" aria-label="Geography"><button type="button" data-v="nation" aria-pressed="true">Nation</button><button type="button" data-v="ny" aria-pressed="false">New York</button></div>
+      <article class="block" data-geo="nation">
+        <h3>Nation</h3>
+        <ul class="list">
+          <li>Unemployment is stable, around <b>4.1%</b></li>
+          <li>Layoffs are low</li>
+          <li>Hiring and job-switching are subdued</li>
+          <li>Average hourly earnings are up <b>3.1%</b> over the year, roughly in line with core PCE inflation</li>
+        </ul>
+      </article>
+      <article class="block" data-geo="ny" hidden>
+        <h3>New York</h3>
+        <p class="sub-h">Wall Street</p>
+        <div class="tiles">
+          <div class="tile"><span class="v">207,400</span><span class="l">securities jobs in 2025, a record</span></div>
+          <div class="tile"><span class="v">+5,300</span><span class="l">more jobs on pace for 2026</span></div>
+          <div class="tile"><span class="v">$45.9B</span><span class="l">first-half pretax profits, up 51.3%</span></div>
+        </div>
+        <p style="margin-top:10px">That means profits and pay are booming, with only modest job growth.</p>
+        <p class="sub-h">NYC private employment</p>
+        <div class="tiles">
+          <div class="tile"><span class="v">−16,300</span><span class="l">so far this year</span></div>
+          <div class="tile"><span class="v">−32,000</span><span class="l">over 12 months, excluding health care</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <p class="src">Source: BLS (<a href="https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm" target="_blank" rel="noopener">bls.gov</a>; FRED UNRATE). New York: NY State Comptroller, NYC securities industry report 2026 (<a href="https://www.osc.ny.gov/files/reports/osdc/2026/pdf/nyc-securities-industry-2026.pdf" target="_blank" rel="noopener">osc.ny.gov</a>); <a href="https://www.roic.ai/news/wall-street-profits-surge-51-as-ai-boom-fuels-record-pace-10-06-2026" target="_blank" rel="noopener">roic.ai</a>, Oct 6 2026.</p>
+</section>
+
+<!-- ===================== 06 PARTICIPATION ===================== -->
+<section class="scene" id="participation" data-n="06" data-label="Participation" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">06</span>State of the U.S. labor market: cooling labor force participation rate</p>
+      <h2 class="title">Participation rate shifting down</h2>
+      <p class="hint">Hover the line. Try “Since 2000” for the longer aging trend.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">Participation rate, Oct 2026</span>
+      <span class="ro-big">61.9%</span>
+      <span class="ro-line"><b id="pPre">63.3%</b> before the pandemic (Feb 2020)</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Time range</span>
+    <div class="seg" id="pRange" role="group" aria-label="Time range">
+      <button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="false">5Y</button><button type="button" data-v="120" aria-pressed="true">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button>
+    </div>
+  </div>
+  <div class="gside">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Labor force participation rate</span><span class="fig-sub">%, seasonally adjusted; shading = 2020 recession</span></div>
+      <div class="chart" id="pChart"></div>
+      <div class="fig-foot"><span>Blank month: October 2025 was not collected during the federal shutdown.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <div class="panel">
+      <article class="block">
+        <h3>Population shifts</h3>
+        <p>Population shifts (aging labor force) put downward pressure on participation without affecting the unemployment rate.</p>
+      </article>
+      <article class="block">
+        <h3>Involuntary part-time work</h3>
+        <div class="tiles">
+          <div class="tile"><span class="v">4.8M</span><span class="l">involuntary part-time, up 339,000</span></div>
+          <div class="tile"><span class="v">27.6%</span><span class="l">of the jobless are long-term unemployed</span></div>
+        </div>
+        <p style="margin-top:10px">Involuntary part-time work jumped by 339,000 to 4.8 million, and long-term unemployed make up 27.6% of the jobless.</p>
+      </article>
+    </div>
+  </div>
+  <p class="src">Source: BLS (<a href="https://www.bls.gov/charts/employment-situation/civilian-labor-force-participation-rate.htm" target="_blank" rel="noopener">bls.gov</a>; FRED CIVPART). Shading: February–April 2020 recession (NBER).</p>
+</section>
+
+<!-- ===================== 07 INFLATION ===================== -->
+<section class="scene" id="inflation" data-n="07" data-label="Inflation" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">07</span>Inflation: drivers and outlook, impact of AI</p>
+      <h2 class="title">Inflation is persistent</h2>
+      <p class="hint">Left: October CPI by category. Right: PCE, the Fed's target measure, split into goods and services.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">September PCE, y/y</span>
+      <span class="ro-big">3.6%</span>
+      <span class="ro-line"><b>3.1%</b> core PCE</span>
+    </div>
+  </header>
+  <div class="g2">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">October: price pressures across categories</span><span class="fig-sub">CPI, monthly price increase, %</span></div>
+      <div class="chart md" id="iCats"></div>
+      <div class="fig-foot"><span>Categories overlap; monthly changes.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">PCE inflation: goods vs. services</span><span class="fig-sub">% change from a year earlier</span></div>
+      <div class="legend"><span><i class="lk k-teal"></i>Services</span><span><i class="lk k-coral"></i>Goods</span><span><i class="lk dash"></i>2% target</span></div>
+      <div class="chart md" id="iGS"></div>
+      <div class="fig-foot"><span id="iGSnote"></span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+  </div>
+  <div class="g2">
+    <article class="block">
+      <h3>Two sources of pressure</h3>
+      <ul class="list">
+        <li><b>Demand:</b> consumer spending and business investment remain resilient.</li>
+        <li><b>Supply:</b> tariffs, energy and equipment capacity constraints can raise costs.</li>
+      </ul>
+    </article>
+    <div class="bottomline">
+      <span class="lbl">Bottom line</span>
+      <p>Broad category increases do not prove demand caused inflation; they do show it is more than an isolated energy move.</p>
+    </div>
+  </div>
+  <p class="src">Source: BLS October 2026 CPI (<a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">bls.gov</a>); BEA September PCE (<a href="https://www.bea.gov/news/2026/personal-income-and-outlays-september-2026" target="_blank" rel="noopener">bea.gov</a>; FRED DSERRG3M086SBEA, DGDSRG3M086SBEA, DNRGRG3M086SBEA, DFXARG3M086SBEA). Categories overlap; monthly changes.</p>
+</section>
+
+<!-- ===================== 08 IMPLICATIONS ===================== -->
+<section class="scene" id="implications" data-n="08" data-label="Implications" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">08</span>Inflation: implications for our decision</p>
+      <h2 class="title long">A single marginal increase is a risk-management move—not the start of a new hiking cycle.</h2>
+      <p class="hint">Switch between core PCE and core CPI. The dashed line is the monthly pace that adds up to 2% a year.</p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span class="ro-lbl" id="iLbl">Core PCE, Sep 2026, m/m</span>
+      <span class="ro-big" id="iBig">0.3%</span>
+      <span class="ro-line"><b id="iAnn">2.9%</b> 3-month annualized</span>
+      <span class="ro-line" id="iYoyLine"><b id="iYoy">3.1%</b> year over year</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Measure</span>
+    <div class="seg" id="iSeg" role="group" aria-label="Inflation measure">
+      <button type="button" data-v="pce" aria-pressed="true">Core PCE · Apr–Sep</button><button type="button" data-v="cpi" aria-pressed="false">Core CPI · May–Oct</button>
+    </div>
+  </div>
+  <div class="gside">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">Sticky core inflation</span><span class="fig-sub" id="iSub">Core PCE, monthly change, %</span></div>
+      <div class="legend"><span><i class="sw k-teal"></i><span id="iLegName">Core PCE, m/m</span></span><span><i class="lk dash"></i>2% a year ≈ 0.17% a month</span></div>
+      <div class="chart" id="iMoM"></div>
+      <div class="fig-foot"><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <div class="panel">
+      <article class="block">
+        <h3>Evidence supporting a 25 bp hike</h3>
+        <ul class="list">
+          <li>Inflation is still above target.</li>
+          <li>Core PCE rose <b>0.3%</b> m/m in August and September; core CPI rose 0.3% for three straight months.</li>
+          <li>Domestic demand remains resilient.</li>
+          <li>Two FOMC members already preferred hiking in October.</li>
+        </ul>
+      </article>
+      <article class="block">
+        <h3>Why not hold instead?</h3>
+        <ul class="list">
+          <li>Policy works with lags.</li>
+          <li>Some inflation is supply-driven and not solved by rates.</li>
+          <li>September real PCE was roughly flat.</li>
+        </ul>
+      </article>
+      <article class="block">
+        <h3>Our judgment</h3>
+        <ul class="list"><li>It keeps pressure on inflation while the economy is still absorbing current rates.</li></ul>
+      </article>
+    </div>
+  </div>
+  <p class="src">Source: BEA core PCE price index (FRED PCEPILFE) and BLS core CPI (FRED CPILFESL), through September and October 2026; BEA Q3 GDP, September PCE; Federal Reserve October 28 FOMC statement; New York Fed SCE November 9.</p>
+</section>
+
+<!-- ===================== 09 CLOSING ===================== -->
+<section class="scene" id="closing" data-n="09" data-label="Closing" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">09</span>Closing recommendation</p>
+      <h2 class="title">Raise by 25 bp to 4.00%–4.25%</h2>
+      <p class="hint">Below: the four readings that would change our view, with the latest data. Hover the sparklines.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">Team NY Fed recommendation</span>
+      <span class="ro-big accent">+25 bp</span>
+      <span class="ro-line">to <b>4.00%–4.25%</b></span>
+    </div>
+  </header>
+  <div class="g3">
+    <article class="block">
+      <h3>Summary rationale</h3>
+      <ul class="list">
+        <li>Inflation remains above target and broad enough to warrant additional restraint.</li>
+        <li>GDP and domestic demand remain resilient.</li>
+        <li>A marginal move preserves anti-inflation credibility without signalling an aggressive path.</li>
+      </ul>
+    </article>
+    <article class="block">
+      <h3>Acknowledge the risk</h3>
+      <p>If subsequent data show softer demand or weaker labor conditions, the Committee should pause after this move.</p>
+    </article>
+    <article class="block">
+      <h3>What could change our view?</h3>
+      <p>Faster core disinflation, weaker payrolls, higher unemployment, or a sharper drop in real spending.</p>
+    </article>
+  </div>
+  <div class="watch" id="watch">
+    <article class="wt" data-k="core">
+      <div class="wt-top"><span class="l">Core PCE inflation</span><span class="w" data-f="when"></span></div>
+      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
+      <div class="spark" data-f="spark"></div>
+      <p class="trig">Would change our view: <b>faster core disinflation</b></p>
+    </article>
+    <article class="wt" data-k="pay">
+      <div class="wt-top"><span class="l">Payroll growth</span><span class="w" data-f="when"></span></div>
+      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
+      <div class="spark" data-f="spark"></div>
+      <p class="trig">Would change our view: <b>weaker payrolls</b></p>
+    </article>
+    <article class="wt" data-k="un">
+      <div class="wt-top"><span class="l">Unemployment rate</span><span class="w" data-f="when"></span></div>
+      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
+      <div class="spark" data-f="spark"></div>
+      <p class="trig">Would change our view: <b>higher unemployment</b></p>
+    </article>
+    <article class="wt" data-k="rpce">
+      <div class="wt-top"><span class="l">Real consumer spending</span><span class="w" data-f="when"></span></div>
+      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
+      <div class="spark" data-f="spark"></div>
+      <p class="trig">Would change our view: <b>a sharper drop in real spending</b></p>
+    </article>
+  </div>
+  <p class="src">Source: Team NY Fed classroom proposal. Inputs: Federal Reserve Oct 28 FOMC; BEA GDP/PCE; BLS CPI/employment. Watch list: FRED PCEPILFE, PAYEMS, UNRATE, PCEC96; sparklines show the last 24 months.</p>
+</section>
+
+<!-- ===================== SOURCES ===================== -->
+<section class="scene" id="sources" data-n="" data-label="Sources" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker">Sources &amp; methods</p>
+      <h2 class="title">Where every number comes from</h2>
+      <p class="hint">Every chart in the briefing also has a data table under it.</p>
+    </div>
+  </header>
+  <div class="g2">
+    <article class="block">
+      <h3>Official releases</h3>
+      <ul class="list">
+        <li>Federal Reserve, FOMC statement, October 28, 2026: <a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+        <li>BEA, GDP advance estimate, Q3 2026 (Oct 29, 2026): <a href="https://www.bea.gov/news/2026/gdp-advance-estimate-3rd-quarter-2026" target="_blank" rel="noopener">bea.gov</a></li>
+        <li>BEA, Personal income and outlays, September 2026: <a href="https://www.bea.gov/news/2026/personal-income-and-outlays-september-2026" target="_blank" rel="noopener">bea.gov</a></li>
+        <li>BLS, Consumer Price Index, October 2026: <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">bls.gov</a></li>
+        <li>BLS charts: <a href="https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm" target="_blank" rel="noopener">unemployment rate</a>, <a href="https://www.bls.gov/charts/employment-situation/civilian-labor-force-participation-rate.htm" target="_blank" rel="noopener">participation rate</a></li>
+        <li>New York State Comptroller, NYC securities industry report, 2026: <a href="https://www.osc.ny.gov/files/reports/osdc/2026/pdf/nyc-securities-industry-2026.pdf" target="_blank" rel="noopener">osc.ny.gov</a></li>
+        <li>roic.ai, Wall Street profits, October 6, 2026: <a href="https://www.roic.ai/news/wall-street-profits-surge-51-as-ai-boom-fuels-record-pace-10-06-2026" target="_blank" rel="noopener">roic.ai</a></li>
+        <li>New York Fed, Survey of Consumer Expectations, November 9, 2026 (cited in 08)</li>
+      </ul>
+    </article>
+    <article class="block">
+      <h3>Methods</h3>
+      <ul class="list">
+        <li>Chart series come from FRED, Federal Reserve Bank of St. Louis, retrieved November 24, 2026.</li>
+        <li>Year over year is the 12-month percent change in a price index; month over month is the 1-month change; 3-month annualized is (index ÷ index three months earlier)<sup>4</sup> − 1.</li>
+        <li>A 2% annual rate works out to about 0.165% a month: 1.02<sup>1/12</sup> − 1.</li>
+        <li>GDP growth and contributions are seasonally adjusted annual rates from BEA; contributions add up to growth, up to rounding.</li>
+        <li>October 2025 household-survey and CPI data were not collected during the federal government shutdown, so those months are blank.</li>
+        <li>On the rate charts, December's step is our proposal (or the pause alternative), placed at the December meeting.</li>
+      </ul>
+    </article>
+  </div>
+  <article class="block">
+    <h3>FRED series used</h3>
+    <div class="tbl static">
+      <table>
+        <thead><tr><th>Series</th><th>What it is</th><th>Used in</th><th>Latest</th></tr></thead>
+        <tbody>
+          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code></td><td>Federal funds target range, lower and upper limit</td><td>Cover, 01, 02, 03</td><td>Nov 23, 2026</td></tr>
+          <tr><td><code>DFEDTAR</code></td><td>Federal funds target rate, before December 2008</td><td>02</td><td>Dec 15, 2008</td></tr>
+          <tr><td><code>PCEPI</code></td><td>PCE price index</td><td>02</td><td>Sep 2026</td></tr>
+          <tr><td><code>PCEPILFE</code></td><td>PCE price index excluding food and energy</td><td>02, 08, 09</td><td>Sep 2026</td></tr>
+          <tr><td><code>UNRATE</code></td><td>Unemployment rate</td><td>02, 05, 09</td><td>Oct 2026</td></tr>
+          <tr><td><code>CIVPART</code></td><td>Labor force participation rate</td><td>06</td><td>Oct 2026</td></tr>
+          <tr><td><code>CPILFESL</code></td><td>CPI excluding food and energy</td><td>08</td><td>Oct 2026</td></tr>
+          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>07</td><td>Sep 2026</td></tr>
+          <tr><td><code>DNRGRG3M086SBEA</code>, <code>DFXARG3M086SBEA</code></td><td>PCE price indexes for energy and for food</td><td>07</td><td>Sep 2026</td></tr>
+          <tr><td><code>A191RL1Q225SBEA</code></td><td>Real GDP, annualized percent change</td><td>04</td><td>Q3 2026</td></tr>
+          <tr><td><code>DPCERY2Q224SBEA</code>, <code>A007RY2Q224SBEA</code>, <code>A014RY2Q224SBEA</code>, <code>A822RY2Q224SBEA</code>, <code>A019RY2Q224SBEA</code></td><td>Contributions to real GDP growth: consumption, fixed investment, inventories, government, net exports</td><td>04</td><td>Q3 2026</td></tr>
+          <tr><td><code>PAYEMS</code></td><td>Total nonfarm payrolls</td><td>09</td><td>Oct 2026</td></tr>
+          <tr><td><code>PCEC96</code></td><td>Real personal consumption expenditures</td><td>09</td><td>Sep 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+  <article class="block">
+    <h3>Getting around</h3>
+    <ul class="list">
+      <li><b>← →</b> or Page Up / Page Down move between chapters; <b>1–9</b> jump to a chapter, <b>0</b> to the cover.</li>
+      <li><b>F</b> toggles full screen for presenting; <b>T</b> switches between the dark and light themes.</li>
+      <li>Charts respond to hover or tap. Tab to a chart and use the arrow keys to step through months.</li>
+    </ul>
+  </article>
+  <p class="disclaimer">Team NY Fed is a student team in FNCE 613. This briefing is a classroom exercise: the 25 bp hike is a proposed classroom position, not official Federal Reserve policy, and this page is not affiliated with or endorsed by the Federal Reserve.</p>
+</section>
+
+</main>
+
+<footer class="botbar">
+  <button class="nav-btn" id="prevBtn" type="button"><span aria-hidden="true">←</span><span class="nb-n"></span><span class="nb-t"></span></button>
+  <div class="mid"><div class="progress" id="progress" aria-hidden="true"><i></i></div><span class="keys">← → move · 0–9 jump · F full screen · T theme</span></div>
+  <button class="nav-btn" id="nextBtn" type="button"><span class="nb-n"></span><span class="nb-t"></span><span aria-hidden="true">→</span></button>
+</footer>
+
+<div id="tip" role="tooltip" hidden></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const NS = 'http://www.w3.org/2000/svg';
+const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function S_(tag, attrs, parent) { const e = document.createElementNS(NS, tag); if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function T_(parent, attrs, text) { const e = S_('text', attrs, parent); e.textContent = text; return e; }
+function H_(tag, cls, text, parent) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+
+/* ================= data: FRED, St. Louis Fed (retrieved Nov 24, 2026) =================
+   To refresh after a new release (e.g. Oct PCE), append the newest monthly value to the end of the matching
+   comma-separated string in RAW below (fred.stlouisfed.org/data/<SERIES>.txt lists every value). Charts,
+   readouts, tables and the watch list all recompute from these strings. Update the copy in the HTML by hand. */
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const M = (y, m) => y * 12 + m - 1;                       // month index
+const fmtT = t => MON[t % 12] + ' ' + Math.floor(t / 12);
+function monthly(y, m, str) { const t0 = M(y, m); return str.split(',').map((x, i) => ({ t: t0 + i, v: x === '' ? null : +x })); }
+const dx = s => { const [y, m, d] = s.split('-').map(Number); const a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return y + (Date.UTC(y, m - 1, d) - a) / (b - a); };
+const fmtDate = s => { const [y, m, d] = s.split('-').map(Number); return MON[m - 1] + ' ' + d + ', ' + y; };
+
+const RAW = {
+  // UNRATE, Jan 1999 - Oct 2026 (Oct 2025 not collected)
+  unrate: '4.3,4.4,4.2,4.3,4.2,4.3,4.3,4.2,4.2,4.1,4.1,4.0,4.0,4.1,4.0,3.8,4.0,4.0,4.0,4.1,3.9,3.9,3.9,3.9,4.2,4.2,4.3,4.4,4.3,4.5,4.6,4.9,5.0,5.3,5.5,5.7,5.7,5.7,5.7,5.9,5.8,5.8,5.8,5.7,5.7,5.7,5.9,6.0,5.8,5.9,5.9,6.0,6.1,6.3,6.2,6.1,6.1,6.0,5.8,5.7,5.7,5.6,5.8,5.6,5.6,5.6,5.5,5.4,5.4,5.5,5.4,5.4,5.3,5.4,5.2,5.2,5.1,5.0,5.0,4.9,5.0,5.0,5.0,4.9,4.7,4.8,4.7,4.7,4.6,4.6,4.7,4.7,4.5,4.4,4.5,4.4,4.6,4.5,4.4,4.5,4.4,4.6,4.7,4.6,4.7,4.7,4.7,5.0,5.0,4.9,5.1,5.0,5.4,5.6,5.8,6.1,6.1,6.5,6.8,7.3,7.8,8.3,8.7,9.0,9.4,9.5,9.5,9.6,9.8,10.0,9.9,9.9,9.8,9.8,9.9,9.9,9.6,9.4,9.4,9.5,9.5,9.4,9.8,9.3,9.1,9.0,9.0,9.1,9.0,9.1,9.0,9.0,9.0,8.8,8.6,8.5,8.3,8.3,8.2,8.2,8.2,8.2,8.2,8.1,7.8,7.8,7.7,7.9,8.0,7.7,7.5,7.6,7.5,7.5,7.3,7.2,7.2,7.2,6.9,6.7,6.6,6.7,6.7,6.2,6.3,6.1,6.2,6.1,5.9,5.7,5.8,5.6,5.7,5.5,5.4,5.4,5.6,5.3,5.2,5.1,5.0,5.0,5.1,5.0,4.8,4.9,5.0,5.1,4.8,4.9,4.8,4.9,5.0,4.9,4.7,4.7,4.7,4.6,4.4,4.4,4.4,4.3,4.3,4.4,4.3,4.2,4.2,4.1,4.0,4.1,4.0,4.0,3.8,4.0,3.8,3.8,3.7,3.8,3.8,3.9,4.0,3.8,3.8,3.7,3.6,3.6,3.7,3.6,3.5,3.6,3.6,3.6,3.6,3.5,4.4,14.8,13.2,11.0,10.2,8.4,7.8,6.9,6.7,6.7,6.4,6.2,6.1,6.1,5.8,5.9,5.4,5.1,4.7,4.5,4.1,3.9,4.0,3.9,3.7,3.7,3.6,3.6,3.5,3.6,3.5,3.6,3.6,3.5,3.5,3.6,3.5,3.4,3.6,3.6,3.5,3.7,3.7,3.9,3.7,3.8,3.7,3.9,3.9,3.9,3.9,4.1,4.2,4.2,4.1,4.1,4.2,4.1,4.0,4.2,4.2,4.2,4.3,4.1,4.3,4.3,4.4,,4.5,4.4,4.3,4.4,4.3,4.3,4.3,4.2,4.1,4.1,4.2,4.1',
+  // CIVPART, Jan 1999 - Oct 2026
+  civpart: '67.2,67.2,67.0,67.1,67.1,67.1,67.1,67.0,67.0,67.0,67.1,67.1,67.3,67.3,67.3,67.3,67.1,67.1,66.9,66.9,66.9,66.8,66.9,67.0,67.2,67.1,67.2,66.9,66.7,66.7,66.8,66.5,66.8,66.7,66.7,66.7,66.5,66.8,66.6,66.7,66.7,66.6,66.5,66.6,66.7,66.6,66.4,66.3,66.4,66.4,66.3,66.4,66.4,66.5,66.2,66.1,66.1,66.1,66.1,65.9,66.1,66.0,66.0,65.9,66.0,66.1,66.1,66.0,65.8,65.9,66.0,65.9,65.8,65.9,65.9,66.1,66.1,66.1,66.1,66.2,66.1,66.1,66.0,66.0,66.0,66.1,66.2,66.1,66.1,66.2,66.1,66.2,66.1,66.2,66.3,66.4,66.4,66.3,66.2,65.9,66.0,66.0,66.0,65.8,66.0,65.8,66.0,66.0,66.2,66.0,66.1,65.9,66.1,66.1,66.1,66.1,66.0,66.0,65.9,65.8,65.7,65.8,65.6,65.7,65.7,65.7,65.5,65.4,65.1,65.0,65.0,64.6,64.8,64.9,64.9,65.2,64.9,64.6,64.6,64.7,64.6,64.4,64.6,64.3,64.2,64.1,64.2,64.2,64.1,64.0,64.0,64.1,64.2,64.1,64.1,64.0,63.7,63.8,63.8,63.7,63.7,63.8,63.7,63.5,63.6,63.8,63.6,63.7,63.7,63.4,63.3,63.4,63.4,63.4,63.3,63.3,63.2,62.8,63.0,62.9,62.9,62.9,63.1,62.8,62.9,62.8,62.9,62.9,62.8,62.9,62.9,62.8,62.9,62.7,62.6,62.8,62.9,62.7,62.6,62.6,62.4,62.5,62.5,62.7,62.7,62.8,63.0,62.9,62.7,62.7,62.8,62.9,62.9,62.8,62.7,62.7,62.8,62.9,62.9,63.0,62.8,62.8,62.9,62.9,63.1,62.7,62.7,62.7,62.7,63.0,62.9,62.9,62.9,63.0,63.0,62.6,62.8,62.9,62.9,63.0,63.1,63.1,63.0,62.8,62.9,63.0,63.1,63.1,63.2,63.3,63.3,63.3,63.3,63.3,62.6,60.1,60.8,61.5,61.5,61.7,61.4,61.7,61.5,61.5,61.4,61.4,61.5,61.6,61.6,61.7,61.8,61.7,61.7,61.8,61.9,62.0,62.2,62.3,62.4,62.2,62.3,62.2,62.1,62.3,62.2,62.2,62.1,62.3,62.4,62.5,62.6,62.6,62.6,62.6,62.6,62.8,62.7,62.6,62.8,62.5,62.5,62.6,62.7,62.6,62.6,62.6,62.7,62.7,62.7,62.5,62.4,62.5,62.6,62.5,62.5,62.6,62.4,62.3,62.2,62.3,62.5,,62.5,62.4,62.1,62.0,61.9,61.8,61.8,61.5,61.4,61.6,61.8,61.9',
+  // PCEPI, Jan 1999 - Sep 2026
+  pce: '71.398,71.358,71.412,71.757,71.804,71.826,72.017,72.148,72.407,72.529,72.594,72.763,72.961,73.191,73.505,73.444,73.505,73.754,73.939,73.934,74.252,74.353,74.457,74.571,74.932,75.048,75.055,75.187,75.385,75.518,75.493,75.484,75.227,75.492,75.441,75.363,75.431,75.558,75.763,76.080,76.130,76.225,76.393,76.543,76.681,76.821,76.897,76.971,77.201,77.526,77.725,77.593,77.504,77.588,77.816,78.079,78.323,78.333,78.432,78.605,78.909,79.077,79.199,79.346,79.604,79.831,79.905,79.946,80.104,80.448,80.758,80.801,80.907,81.132,81.375,81.603,81.649,81.700,82.046,82.377,83.172,83.305,83.131,83.131,83.534,83.584,83.746,84.135,84.361,84.569,84.858,85.125,84.902,84.702,84.731,85.032,85.316,85.581,85.894,86.096,86.346,86.529,86.661,86.720,87.054,87.318,87.781,87.984,88.206,88.382,88.635,88.799,89.180,89.827,90.245,90.172,90.247,89.651,88.593,88.098,88.108,88.266,88.169,88.295,88.387,88.912,88.922,89.180,89.324,89.663,89.887,89.939,90.136,90.134,90.261,90.310,90.339,90.301,90.378,90.502,90.592,90.881,91.062,91.268,91.542,91.797,92.166,92.557,92.838,92.819,92.977,93.196,93.327,93.329,93.520,93.574,93.894,94.104,94.284,94.408,94.302,94.254,94.288,94.605,94.893,95.174,95.109,95.094,95.275,95.614,95.488,95.391,95.461,95.673,95.792,95.934,95.976,96.103,96.246,96.414,96.614,96.660,96.815,96.987,97.147,97.253,97.391,97.379,97.413,97.384,97.291,97.120,96.654,96.825,97.008,97.094,97.327,97.516,97.605,97.612,97.477,97.477,97.538,97.456,97.496,97.445,97.673,97.993,98.153,98.325,98.342,98.479,98.666,98.868,98.901,99.071,99.451,99.586,99.535,99.725,99.682,99.766,99.803,100.027,100.400,100.531,100.675,100.821,101.199,101.416,101.524,101.766,101.941,102.029,102.137,102.208,102.418,102.595,102.630,102.701,102.648,102.836,103.069,103.360,103.435,103.484,103.622,103.670,103.733,103.917,104.024,104.307,104.490,104.573,104.271,103.838,103.942,104.270,104.578,104.870,105.057,105.151,105.258,105.699,106.065,106.441,107.019,107.553,108.069,108.668,109.162,109.599,109.948,110.700,111.435,112.088,112.678,113.370,114.425,114.688,115.401,116.512,116.650,116.924,117.307,117.902,118.221,118.372,118.938,119.265,119.564,119.886,120.129,120.410,120.571,120.944,121.403,121.557,121.636,121.760,122.206,122.613,123.093,123.289,123.369,123.504,123.701,123.891,124.146,124.482,124.666,124.984,125.423,125.770,125.869,126.163,126.408,126.730,126.906,127.229,127.601,127.790,128.045,128.455,128.845,129.293,130.105,130.672,131.241,131.106,131.187,131.611,132.257',
+  // PCEPILFE, Jan 1999 - Sep 2026
+  core: '73.180,73.155,73.177,73.365,73.435,73.474,73.606,73.642,73.837,73.963,74.034,74.128,74.306,74.415,74.568,74.617,74.697,74.754,74.925,75.021,75.203,75.308,75.441,75.515,75.796,75.930,76.009,76.130,76.148,76.318,76.515,76.553,76.118,76.654,76.810,76.828,76.871,77.018,77.110,77.325,77.411,77.534,77.692,77.845,77.972,78.038,78.114,78.187,78.240,78.348,78.474,78.561,78.674,78.718,78.915,79.004,79.114,79.260,79.368,79.467,79.671,79.800,79.934,80.142,80.252,80.379,80.474,80.505,80.656,80.831,81.005,81.109,81.401,81.536,81.737,81.831,81.999,82.056,82.176,82.243,82.425,82.662,82.873,82.959,83.145,83.279,83.509,83.764,83.974,84.186,84.268,84.440,84.573,84.726,84.766,84.880,85.224,85.408,85.494,85.616,85.717,85.859,85.988,86.116,86.351,86.576,86.746,86.920,87.093,87.178,87.349,87.400,87.559,87.760,87.918,88.026,88.116,87.991,87.952,87.909,87.882,87.952,88.015,88.211,88.279,88.392,88.468,88.599,88.755,89.082,89.160,89.236,89.368,89.446,89.579,89.625,89.724,89.767,89.769,89.855,89.906,90.043,90.160,90.179,90.372,90.530,90.667,90.875,91.091,91.191,91.326,91.508,91.570,91.614,91.808,91.960,92.235,92.364,92.521,92.661,92.755,92.850,92.946,93.005,93.119,93.345,93.445,93.514,93.703,93.805,93.891,93.937,94.047,94.209,94.329,94.431,94.543,94.703,94.860,94.961,95.064,95.109,95.250,95.413,95.574,95.682,95.848,95.885,96.013,96.096,96.181,96.249,96.214,96.324,96.470,96.648,96.766,96.882,96.978,97.056,97.196,97.228,97.332,97.396,97.567,97.736,97.876,98.117,98.284,98.386,98.529,98.703,98.834,98.961,99.005,99.120,99.385,99.561,99.519,99.723,99.803,99.937,100.010,100.118,100.240,100.486,100.535,100.683,101.007,101.198,101.419,101.602,101.780,101.872,102.006,102.016,102.205,102.366,102.556,102.735,102.870,102.963,103.058,103.265,103.371,103.560,103.678,103.797,103.873,104.028,104.092,104.322,104.507,104.711,104.632,104.293,104.402,104.565,104.937,105.243,105.410,105.507,105.605,105.896,106.168,106.435,106.865,107.493,107.989,108.522,108.971,109.340,109.548,110.119,110.671,111.280,111.822,112.362,112.807,113.178,113.571,114.273,114.658,115.248,115.727,116.186,116.520,116.923,117.415,117.825,118.295,118.671,119.061,119.350,119.515,119.662,120.053,120.321,120.525,120.694,121.201,121.570,122.016,122.252,122.406,122.667,122.872,123.135,123.462,123.816,123.989,124.198,124.609,125.002,125.144,125.524,125.818,126.133,126.363,126.646,126.940,127.165,127.363,127.765,128.270,128.701,129.030,129.395,129.796,129.969,130.148,130.489,130.902',
+  // CPILFESL, Jan 2018 - Oct 2026 (Oct 2025 not collected)
+  cpiCore: '255.204,255.711,256.271,256.630,257.145,257.399,257.699,257.891,258.368,258.917,259.439,260.063,260.766,261.186,261.567,261.997,262.217,262.739,263.280,263.877,264.388,264.970,265.548,266.020,266.716,267.370,267.054,265.746,265.412,265.849,267.389,268.422,268.933,269.306,269.981,270.341,270.387,270.793,271.459,273.660,275.465,277.651,278.648,278.997,279.698,281.668,283.406,285.180,286.757,288.273,289.056,290.514,292.063,294.050,295.088,296.535,298.226,299.399,300.325,301.394,302.642,304.123,305.147,306.534,307.652,308.322,308.960,309.580,310.539,311.457,312.392,313.195,314.319,315.564,316.792,317.649,318.095,318.390,318.940,319.750,320.732,321.731,322.657,323.259,324.638,325.465,325.690,326.467,326.893,327.658,328.682,329.700,330.418,,331.043,331.814,332.793,333.512,334.165,335.423,336.121,336.065,336.789,337.765,338.896,339.900',
+  // DSERRG3M086SBEA (PCE services), Jan 2014 - Sep 2026
+  serv: '92.856,92.969,93.265,93.403,93.648,93.762,93.971,94.066,94.198,94.289,94.473,94.643,94.676,94.770,94.907,95.086,95.223,95.434,95.584,95.734,95.868,95.955,96.103,96.204,96.446,96.614,96.832,97.074,97.357,97.561,97.816,98.023,98.168,98.363,98.552,98.747,99.015,99.231,99.209,99.534,99.727,99.925,100.026,100.222,100.441,100.695,100.867,101.109,101.400,101.676,101.945,102.114,102.345,102.539,102.740,102.893,103.118,103.303,103.549,103.887,103.917,104.083,104.268,104.559,104.688,104.890,105.109,105.260,105.400,105.599,105.732,106.076,106.314,106.533,106.547,106.346,106.587,106.820,107.119,107.318,107.627,107.770,107.864,108.215,108.453,108.898,109.456,109.883,110.232,110.721,111.248,111.625,111.877,112.354,112.875,113.427,113.787,114.282,114.936,115.453,115.985,116.793,117.258,117.923,118.521,119.085,119.586,120.129,120.671,121.108,121.591,122.019,122.416,122.874,123.258,123.492,124.051,124.310,124.767,125.091,125.822,126.246,126.838,127.092,127.387,127.738,128.055,128.446,128.881,129.348,129.653,130.049,130.425,130.852,131.202,131.667,131.970,132.265,132.533,132.947,133.249,133.583,133.898,134.322,134.890,135.205,135.598,136.068,136.645,136.843,137.024,137.451,137.932',
+  // DGDSRG3M086SBEA (PCE goods), Jan 2014 - Sep 2026
+  goods: '105.026,104.915,104.747,104.995,104.961,105.049,105.026,104.769,104.577,104.275,103.554,102.609,101.015,101.363,101.650,101.523,101.975,102.114,102.066,101.752,101.018,100.825,100.689,100.204,99.794,99.256,99.505,100.001,99.889,99.990,99.484,99.467,99.747,99.964,99.657,99.771,100.396,100.355,100.242,100.135,99.581,99.419,99.319,99.604,100.309,100.176,100.261,100.202,100.764,100.857,100.623,101.020,101.077,100.940,100.849,100.746,100.923,101.082,100.672,100.178,99.946,100.183,100.516,100.807,100.771,100.503,100.474,100.310,100.217,100.372,100.429,100.590,100.657,100.462,99.534,98.661,98.516,99.019,99.345,99.808,99.774,99.782,99.916,100.520,101.119,101.371,101.987,102.709,103.521,104.319,104.752,105.302,105.832,107.096,108.228,109.065,110.085,111.146,112.952,112.736,113.792,115.483,114.997,114.517,114.485,115.138,115.106,114.486,115.101,115.218,115.158,115.276,115.219,115.157,114.887,115.529,115.797,115.748,115.094,114.829,114.717,115.089,115.348,115.431,115.088,114.805,114.769,114.567,114.472,114.556,114.504,114.673,115.230,115.418,115.033,114.995,115.124,115.497,115.495,115.640,116.146,116.054,116.191,116.571,116.616,117.321,118.941,119.693,120.246,119.465,119.351,119.768,120.731',
+  // PAYEMS (thousands), Sep 2023 - Oct 2026
+  pay: '156417,156576,156703,156857,157032,157238,157466,157530,157608,157695,157748,157757,157912,157945,158079,158316,158268,158310,158377,158485,158498,158478,158542,158472,158548,158408,158449,158432,158592,158436,158650,158798,158861,158892,158882,159068,159128,159293',
+  // PCEC96 (billions of chained 2017 $), Aug 2023 - Sep 2026
+  rpce: '15602.4,15638.6,15680.8,15733.4,15780.4,15744.7,15801.8,15854.0,15884.2,15960.6,16013.0,16058.8,16071.4,16165.2,16185.1,16246.1,16370.1,16266.3,16251.3,16362.3,16372.0,16349.6,16413.3,16491.2,16529.7,16557.6,16587.7,16615.4,16610.6,16596.8,16631.3,16674.3,16727.4,16784.6,16854.0,16882.2,16975.0,16977.6'
+};
+// PCE energy and food price indexes, Aug and Sep 2026 (DNRGRG3M086SBEA, DFXARG3M086SBEA)
+const ENERGY = [156.696, 165.088], FOOD = [132.166, 132.145];
+
+const D = {
+  unrate: monthly(1999, 1, RAW.unrate),
+  civpart: monthly(1999, 1, RAW.civpart),
+  pce: monthly(1999, 1, RAW.pce),
+  core: monthly(1999, 1, RAW.core),
+  cpiCore: monthly(2018, 1, RAW.cpiCore),
+  serv: monthly(2014, 1, RAW.serv),
+  goods: monthly(2014, 1, RAW.goods),
+  pay: monthly(2023, 9, RAW.pay),
+  rpce: monthly(2023, 8, RAW.rpce)
+};
+function pct(s, lag) { const o = []; for (let i = lag; i < s.length; i++) { const a = s[i].v, b = s[i - lag].v; o.push({ t: s[i].t, v: a == null || b == null ? null : (a / b - 1) * 100 }); } return o; }
+function diff(s) { const o = []; for (let i = 1; i < s.length; i++) { const a = s[i].v, b = s[i - 1].v; o.push({ t: s[i].t, v: a == null || b == null ? null : a - b }); } return o; }
+const at = (s, t) => { const i = t - s[0].t; return i >= 0 && i < s.length ? s[i].v : null; };
+const lastPt = s => { for (let i = s.length - 1; i >= 0; i--) if (s[i].v != null) return s[i]; return null; };
+const annualized = (s, t, k) => { const a = at(s, t), b = at(s, t - k); return a == null || b == null ? null : (Math.pow(a / b, 12 / k) - 1) * 100; };
+const S = {
+  unrate: D.unrate, civpart: D.civpart,
+  pceY: pct(D.pce, 12), coreY: pct(D.core, 12), coreM: pct(D.core, 1), cpiCoreM: pct(D.cpiCore, 1),
+  servY: pct(D.serv, 12), goodsY: pct(D.goods, 12),
+  payChg: diff(D.pay), rpceM: pct(D.rpce, 1)
+};
+
+// Federal funds target: single target until Dec 15 2008 (DFEDTAR), then a range (DFEDTARL / DFEDTARU)
+const FF = [
+  ['1999-01-01', 4.75, 4.75], ['1999-06-30', 5, 5], ['1999-08-24', 5.25, 5.25], ['1999-11-16', 5.5, 5.5], ['2000-02-02', 5.75, 5.75], ['2000-03-21', 6, 6], ['2000-05-16', 6.5, 6.5],
+  ['2001-01-03', 6, 6], ['2001-01-31', 5.5, 5.5], ['2001-03-20', 5, 5], ['2001-04-18', 4.5, 4.5], ['2001-05-15', 4, 4], ['2001-06-27', 3.75, 3.75], ['2001-08-21', 3.5, 3.5], ['2001-09-17', 3, 3], ['2001-10-02', 2.5, 2.5], ['2001-11-06', 2, 2], ['2001-12-11', 1.75, 1.75],
+  ['2002-11-06', 1.25, 1.25], ['2003-06-25', 1, 1], ['2004-06-30', 1.25, 1.25], ['2004-08-10', 1.5, 1.5], ['2004-09-21', 1.75, 1.75], ['2004-11-10', 2, 2], ['2004-12-14', 2.25, 2.25],
+  ['2005-02-02', 2.5, 2.5], ['2005-03-22', 2.75, 2.75], ['2005-05-03', 3, 3], ['2005-06-30', 3.25, 3.25], ['2005-08-09', 3.5, 3.5], ['2005-09-20', 3.75, 3.75], ['2005-11-01', 4, 4], ['2005-12-13', 4.25, 4.25],
+  ['2006-01-31', 4.5, 4.5], ['2006-03-28', 4.75, 4.75], ['2006-05-10', 5, 5], ['2006-06-29', 5.25, 5.25], ['2007-09-18', 4.75, 4.75], ['2007-10-31', 4.5, 4.5], ['2007-12-11', 4.25, 4.25],
+  ['2008-01-22', 3.5, 3.5], ['2008-01-30', 3, 3], ['2008-03-18', 2.25, 2.25], ['2008-04-30', 2, 2], ['2008-10-08', 1.5, 1.5], ['2008-10-29', 1, 1],
+  ['2008-12-16', 0, 0.25], ['2015-12-16', 0.25, 0.5], ['2016-12-14', 0.5, 0.75], ['2017-03-16', 0.75, 1], ['2017-06-15', 1, 1.25], ['2017-12-14', 1.25, 1.5],
+  ['2018-03-22', 1.5, 1.75], ['2018-06-14', 1.75, 2], ['2018-09-27', 2, 2.25], ['2018-12-20', 2.25, 2.5], ['2019-08-01', 2, 2.25], ['2019-09-19', 1.75, 2], ['2019-10-31', 1.5, 1.75],
+  ['2020-03-04', 1, 1.25], ['2020-03-16', 0, 0.25], ['2022-03-17', 0.25, 0.5], ['2022-05-05', 0.75, 1], ['2022-06-16', 1.5, 1.75], ['2022-07-28', 2.25, 2.5], ['2022-09-22', 3, 3.25],
+  ['2022-11-03', 3.75, 4], ['2022-12-15', 4.25, 4.5], ['2023-02-02', 4.5, 4.75], ['2023-03-23', 4.75, 5], ['2023-05-04', 5, 5.25], ['2023-07-27', 5.25, 5.5],
+  ['2024-09-19', 4.75, 5], ['2024-11-08', 4.5, 4.75], ['2024-12-19', 4.25, 4.5], ['2025-09-18', 4, 4.25], ['2025-10-30', 3.75, 4], ['2025-12-11', 3.5, 3.75], ['2026-09-17', 3.75, 4]
+].map(([d, lo, hi]) => ({ d, x: dx(d), lo, hi }));
+const FF_END_X = dx('2026-11-23');          // last FRED observation
+const PROP_X = dx('2026-12-10');            // December meeting, where the proposed step is drawn
+const PROP = { lo: 4.0, hi: 4.25 };
+const CUR = FF[FF.length - 1];
+function ffAt(x) { let r = null; for (const f of FF) { if (f.x <= x) r = f; else break; } return r; }
+
+// GDP (BEA): contributions to real GDP growth, percentage points, SAAR
+const GDP_Q = {
+  'Q4 2025': { gdp: 0.2, c: [1.28, 0.23, -0.04, -1.01, -0.25] },
+  'Q1 2026': { gdp: 2.5, c: [0.49, 1.07, 0.18, 0.80, -0.04] },
+  'Q2 2026': { gdp: 2.2, c: [2.51, 1.35, -0.53, -0.01, -1.10] },
+  'Q3 2026': { gdp: 3.4, c: [2.52, 1.66, 1.61, 0.90, -3.32] }
+};
+const GDP_PARTS = [
+  { name: 'Personal consumption', lbl: 'Consumption', short: 'Cons.' },
+  { name: 'Fixed investment', lbl: 'Fixed inv.', short: 'Fixed' },
+  { name: 'Change in private inventories', lbl: 'Inventories', short: 'Invent.' },
+  { name: 'Government', lbl: 'Government', short: 'Gov.' },
+  { name: 'Net exports', lbl: 'Net exports', short: 'Net exp.' }
+];
+const DEMAND = [
+  { name: 'Real GDP', short: 'Real GDP', q2: 2.2, q3: 3.4 },
+  { name: 'Private domestic final sales¹', short: 'Private final sales¹', q2: 4.6, q3: 4.9 }
+];
+// BLS October 2026 CPI, monthly % change (from the deck)
+const CPI_CATS = [
+  { name: 'Core CPI', lines: ['Core CPI'], v: 0.3 },
+  { name: 'Shelter', lines: ['Shelter'], v: 0.3 },
+  { name: 'Food', lines: ['Food'], v: 0.5 },
+  { name: 'Energy', lines: ['Energy'], v: 0.7 },
+  { name: 'Recreation', lines: ['Recreation'], v: 0.8 },
+  { name: 'Transport services', lines: ['Transport', 'services'], v: 0.8 },
+  { name: 'Medical services', lines: ['Medical', 'services'], v: 0.3 }
+];
+const SHUTDOWN = { [M(2025, 10)]: 'Not collected: federal government shutdown' };
+
+/* ================= formatting ================= */
+const fx = (v, d = 1) => (Math.abs(v) < 0.5 * Math.pow(10, -d) ? 0 : v).toFixed(d);
+const pctF = (v, d = 1) => v == null ? 'n/a' : fx(v, d) + '%';
+const sgn = (v, d = 1) => { const r = Math.abs(v) < 0.5 * Math.pow(10, -d) ? 0 : v; return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r).toFixed(d); };
+const rng = (lo, hi) => lo === hi ? lo.toFixed(2) + '%' : lo.toFixed(2) + '%–' + hi.toFixed(2) + '%';
+const kF = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(Math.round(v)).toLocaleString('en-US') + 'K';
+const arrow = d => Math.abs(d) < 0.05 ? '=' : d > 0 ? '▲' : '▼';
+
+/* ================= scales & geometry ================= */
+function lin(d0, d1, r0, r1) { const k = (r1 - r0) / ((d1 - d0) || 1); const f = v => r0 + (v - d0) * k; f.inv = p => d0 + (p - r0) / k; return f; }
+function niceTicks(lo, hi, n) {
+  if (!(hi - lo > 1e-9)) { hi = lo + 1; }
+  const raw = (hi - lo) / Math.max(1, n), p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p;
+  const step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p;
+  const a = Math.floor(lo / step + 1e-9), b = Math.ceil(hi / step - 1e-9), ticks = [];
+  for (let k = a; k <= b; k++) ticks.push(+(k * step).toFixed(10));
+  return { ticks, lo: a * step, hi: b * step, step };
+}
+const decFor = step => step >= 1 ? 0 : step >= 0.1 - 1e-9 ? 1 : 2;
+const tickF = (v, dec, unit = '') => { const r = Math.abs(v) < 0.5 * Math.pow(10, -dec) ? 0 : v; return (r < 0 ? '−' : '') + Math.abs(r).toFixed(dec) + unit; };
+function lineD(pts, xS, yS) { let d = '', pen = false; for (const p of pts) { if (p.v == null) { pen = false; continue; } d += (pen ? 'L' : 'M') + xS(p.t).toFixed(1) + ',' + yS(p.v).toFixed(1); pen = true; } return d; }
+function areaD(pts, xS, yS, y0) {
+  let d = '', run = [];
+  const flush = () => { if (run.length > 1) { d += 'M' + xS(run[0].t).toFixed(1) + ',' + y0 + run.map(p => 'L' + xS(p.t).toFixed(1) + ',' + yS(p.v).toFixed(1)).join('') + 'L' + xS(run[run.length - 1].t).toFixed(1) + ',' + y0 + 'Z'; } run = []; };
+  for (const p of pts) { if (p.v == null) flush(); else run.push(p); }
+  flush(); return d;
+}
+function vbar(x, w, yb, ye, r = 4) {
+  const h = Math.abs(ye - yb);
+  if (h < 0.75) return `M${x},${yb - 0.4}h${w}v0.8h${-w}Z`;
+  r = Math.min(r, h, w / 2);
+  if (ye < yb) return `M${x},${yb}V${ye + r}Q${x},${ye} ${x + r},${ye}H${x + w - r}Q${x + w},${ye} ${x + w},${ye + r}V${yb}Z`;
+  return `M${x},${yb}V${ye - r}Q${x},${ye} ${x + r},${ye}H${x + w - r}Q${x + w},${ye} ${x + w},${ye - r}V${yb}Z`;
+}
+function hbar(y, h, xb, xe, r = 4) {
+  const w = Math.abs(xe - xb);
+  if (w < 0.75) return `M${xb},${y}v${h}h0.8v${-h}Z`;
+  r = Math.min(r, w, h / 2);
+  return `M${xb},${y}H${xe - r}Q${xe},${y} ${xe},${y + r}V${y + h - r}Q${xe},${y + h} ${xe - r},${y + h}H${xb}Z`;
+}
+function xTicks(t0, t1, pw) {
+  const span = t1 - t0, o = [];
+  if (span <= 30) { const step = (pw / Math.max(1, span)) * 3 >= 46 ? 3 : 6; for (let t = Math.ceil(t0 / step) * step; t <= t1; t += step) o.push(t); return o; }
+  const pxY = pw / (span / 12), ys = [1, 2, 5, 10].find(s => s * pxY >= 44) || 10;
+  for (let y = Math.ceil(t0 / 12); y * 12 <= t1; y++) if (y % ys === 0) o.push(y * 12);
+  return o;
+}
+
+/* ================= tooltip ================= */
+const tip = $('#tip');
+function showTip(title, rows, cx, cy, note) {
+  tip.replaceChildren();
+  H_('div', 'tip-h', title, tip);
+  rows.forEach(r => { const row = H_('div', 'tip-r', null, tip); if (r.cls) H_('i', 'tip-k k-' + r.cls, null, row); H_('b', null, r.value, row); if (r.label) H_('span', null, r.label, row); });
+  if (note) H_('div', 'tip-note', note, tip);
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight, pad = 14;
+  let x = cx + pad, y = cy + pad;
+  if (x + w > innerWidth - 8) x = cx - w - pad;
+  if (y + h > innerHeight - 8) y = cy - h - pad;
+  tip.style.transform = `translate(${Math.round(Math.max(8, x))}px, ${Math.round(Math.max(8, y))}px)`;
+}
+function hideTip() { tip.hidden = true; }
+window.addEventListener('scroll', hideTip, { passive: true });
+
+/* ================= chart plumbing ================= */
+const registry = {};
+const reg = (id, c) => { (registry[id] = registry[id] || []).push(c); return c; };
+function chartBase(host, drawFn) {
+  const c = { host, intro: false, w: 0, h: 0 };
+  c.draw = force => {
+    const W = host.clientWidth, H = host.clientHeight;
+    if (W < 40 || H < 40) return;
+    if (!force && W === c.w && H === c.h) return;
+    c.w = W; c.h = H; host.replaceChildren(); drawFn(W, H); c.intro = false;
+  };
+  if ('ResizeObserver' in window) new ResizeObserver(() => c.draw(false)).observe(host);
+  else window.addEventListener('resize', () => c.draw(false));
+  return c;
+}
+function animLines(svg) {
+  if (reduceMotion) return;
+  svg.querySelectorAll('path.ln').forEach(p => {
+    const L = p.getTotalLength ? p.getTotalLength() : 0; if (!L) return;
+    p.style.strokeDasharray = L + ' ' + L; p.style.strokeDashoffset = L; p.getBoundingClientRect();
+    p.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(.3,.7,.2,1)'; p.style.strokeDashoffset = '0';
+    setTimeout(() => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; p.style.transition = ''; }, 1250);
+  });
+  svg.querySelectorAll('.fade').forEach(e => e.animate && e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: 'ease-out' }));
+}
+function animBars(nodes, horizontal) {
+  if (reduceMotion) return;
+  nodes.forEach((n, i) => {
+    if (!n.animate) return;
+    const b = +n.dataset.base;
+    n.style.transformOrigin = horizontal ? `${b}px 0px` : `0px ${b}px`;
+    n.animate([{ transform: horizontal ? 'scaleX(0)' : 'scaleY(0)' }, { transform: 'none' }], { duration: 650, delay: i * 70, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'backwards' });
+  });
+}
+function hoverMark(hit, mark, getTip) {
+  const on = ev => {
+    if (mark) mark.classList.add('hot');
+    const [title, rows, note] = getTip(); const r = hit.getBoundingClientRect();
+    showTip(title, rows, ev && ev.clientX != null ? ev.clientX : r.right, ev && ev.clientY != null ? ev.clientY : r.top + 12, note);
+  };
+  const off = () => { if (mark) mark.classList.remove('hot'); hideTip(); };
+  hit.addEventListener('pointermove', on); hit.addEventListener('pointerdown', on); hit.addEventListener('pointerleave', off);
+  hit.addEventListener('focus', () => on()); hit.addEventListener('blur', off);
+}
+function setupTable(fig, build) {
+  const btn = fig.querySelector('.tbl-btn'), box = fig.querySelector('.tbl');
+  if (!btn || !box) return;
+  btn.setAttribute('aria-expanded', 'false');
+  const render = () => {
+    const { cols, rows } = build(); box.replaceChildren();
+    const tb = H_('table', null, null, box), tr = H_('tr', null, null, H_('thead', null, null, tb)), bd = H_('tbody', null, null, tb);
+    cols.forEach(c => H_('th', null, c, tr));
+    rows.forEach(r => { const row = H_('tr', null, null, bd); r.forEach(cell => H_('td', null, cell, row)); });
+  };
+  btn.addEventListener('click', () => { const open = box.hidden; if (open) render(); box.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Hide table' : 'Data table'; });
+  fig._refresh = () => { if (!box.hidden) render(); };
+}
+function segBind(seg, fn) {
+  seg.addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b || !seg.contains(b)) return;
+    seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    fn(b.dataset.v);
+  });
+}
+const players = new Set();
+function Player(btn, o) {
+  let raf = 0, t0 = 0, on = false;
+  const lbl = btn.querySelector('.pl-lbl'), ip = btn.querySelector('.ic-play'), ipa = btn.querySelector('.ic-pause');
+  const ui = () => { btn.setAttribute('aria-pressed', String(on)); lbl.textContent = on ? 'Pause' : 'Play'; if (on) { ip.setAttribute('hidden', ''); ipa.removeAttribute('hidden'); } else { ipa.setAttribute('hidden', ''); ip.removeAttribute('hidden'); } };
+  const api = {
+    start() { if (on) return; if (reduceMotion) { o.frame(1); if (o.end) o.end(); return; } on = true; players.add(api); ui(); t0 = performance.now(); raf = requestAnimationFrame(tick); },
+    stop(fin) { if (!on) return; on = false; cancelAnimationFrame(raf); players.delete(api); ui(); if (fin && o.end) o.end(); }
+  };
+  function tick(now) { const k = Math.min(1, (now - t0) / o.duration()); o.frame(k); if (!on) return; if (k < 1) raf = requestAnimationFrame(tick); else api.stop(true); }
+  btn.addEventListener('click', () => on ? api.stop(false) : api.start());
+  return api;
+}
+
+/* ================= line chart ================= */
+function LineChart(host, cfg) {
+  const st = { win: cfg.win || null, cursor: null, reveal: null };
+  cfg.series.forEach(s => { s.byT = new Map(s.data.map(p => [p.t, p.v])); });
+  let svg = null, xS, yS, P, curG;
+  const c = chartBase(host, draw);
+  function bounds() {
+    if (st.win) return st.win;
+    return [Math.min(...cfg.series.map(s => s.data[0].t)), Math.max(...cfg.series.map(s => s.data[s.data.length - 1].t))];
+  }
+  function draw(W, H) {
+    const [t0, t1] = bounds();
+    const narrow = W < 520;
+    const vis = s => s.data.filter(p => p.t >= t0 && p.t <= t1);
+    const shown = s => vis(s).filter(p => st.reveal == null || p.t <= st.reveal);
+    const vals = [];
+    cfg.series.forEach(s => vis(s).forEach(p => { if (p.v != null) vals.push(p.v); }));
+    (cfg.refs || []).forEach(r => vals.push(r.v));
+    if (cfg.zero) vals.push(0);
+    const lo = Math.min(...vals), hi = Math.max(...vals), pad = (hi - lo) * 0.06 || 0.5;
+    const m = { l: 44, r: cfg.endLabels ? (cfg.endPad || (narrow ? 48 : 56)) : 14, t: 14, b: 26 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const nt = niceTicks(lo - pad, hi + pad, Math.max(3, Math.min(7, Math.round(ph / 50))));
+    const dec = decFor(nt.step);
+    xS = lin(t0, t1, m.l, m.l + pw); yS = lin(nt.lo, nt.hi, m.t + ph, m.t);
+    P = { m, pw, ph, t0, t1 };
+    svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', tabindex: '0', 'aria-label': cfg.aria }, host);
+    (cfg.shades || []).forEach(sh => {
+      const a = Math.max(sh.t0, t0), b = Math.min(sh.t1, t1); if (b < a) return;
+      const xa = xS(a), xb = xS(b);
+      S_('rect', { x: xa, y: m.t, width: Math.max(2, xb - xa), height: ph, class: 'shade' }, svg);
+      if (sh.label) T_(svg, { x: xb + 5, y: m.t + 11, class: 'ann' }, sh.label);
+    });
+    const gA = S_('g', {}, svg);
+    nt.ticks.forEach(v => {
+      const y = Math.round(yS(v)) + 0.5;
+      S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: (cfg.zero && Math.abs(v) < 1e-9) ? 'zero' : 'grid' }, gA);
+      T_(gA, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, tickF(v, dec, '%'));
+    });
+    S_('line', { x1: m.l, x2: m.l + pw, y1: m.t + ph + 0.5, y2: m.t + ph + 0.5, class: 'axisln' }, gA);
+    xTicks(t0, t1, pw).forEach(t => {
+      const x = Math.round(xS(t)) + 0.5;
+      S_('line', { x1: x, x2: x, y1: m.t + ph, y2: m.t + ph + 4, class: 'axisln' }, gA);
+      T_(gA, { x, y: H - 7, 'text-anchor': 'middle', class: 'tick' }, (t1 - t0) <= 30 && t % 12 !== 0 ? MON[t % 12] : String(Math.floor(t / 12)));
+    });
+    (cfg.refs || []).forEach(r => {
+      const y = yS(r.v);
+      S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: 'ref' }, svg);
+      const end = r.align === 'end';
+      T_(svg, { x: end ? m.l + pw - 4 : m.l + 6, y: y - 6, 'text-anchor': end ? 'end' : 'start', class: 'ref-lbl' }, r.label);
+    });
+    const gS = S_('g', {}, svg);
+    cfg.series.forEach(s => {
+      const pts = shown(s);
+      if (cfg.area && s.role === 'primary') { const d = areaD(pts, xS, yS, m.t + ph); if (d) S_('path', { d, class: 'area fade' }, gS); }
+      const d = lineD(pts, xS, yS);
+      if (d) S_('path', { d, class: 'ln ' + s.cls + (s.role === 'primary' ? ' primary' : '') }, gS);
+    });
+    if (cfg.gaps) {
+      cfg.series.forEach(s => shown(s).forEach(p => { if (p.v == null && p.t > t0 && p.t < t1) { const x = xS(p.t); S_('line', { x1: x, x2: x, y1: m.t + ph - 7, y2: m.t + ph, class: 'gapmark' }, gS); } }));
+    }
+    if (cfg.endLabels) endLabels(gS, shown, m, ph);
+    curG = S_('g', {}, svg);
+    S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
+    bind();
+    if (st.cursor != null && st.cursor >= t0 && st.cursor <= t1) drawCursor(st.cursor, null, false, false);
+    if (c.intro) animLines(svg);
+  }
+  function endLabels(g, shown, m, ph) {
+    const labs = [];
+    cfg.series.forEach(s => { const pts = shown(s).filter(p => p.v != null); if (!pts.length) return; const p = pts[pts.length - 1]; labs.push({ s, p, x: xS(p.t), y: yS(p.v), ty: yS(p.v) }); });
+    labs.sort((a, b) => a.ty - b.ty);
+    for (let i = 1; i < labs.length; i++) if (labs[i].ty - labs[i - 1].ty < 15) labs[i].ty = labs[i - 1].ty + 15;
+    const over = labs.length ? labs[labs.length - 1].ty - (m.t + ph) : 0; if (over > 0) labs.forEach(l => { l.ty -= over; });
+    labs.forEach(l => {
+      S_('circle', { cx: l.x, cy: l.y, r: 4, class: 'dot ' + l.s.cls }, g);
+      const lx = l.x + 9;
+      if (Math.abs(l.ty - l.y) > 3) S_('line', { x1: l.x + 5, y1: l.y, x2: lx - 1, y2: l.ty, class: 'leader' }, g);
+      const tEl = T_(g, { x: lx, y: l.ty + 4, class: 'end-lbl' }, cfg.fmt(l.p.v));
+      if (cfg.endNames) { const ts = S_('tspan', { class: 'end-name', dx: '5' }, tEl); ts.textContent = l.s.short || l.s.name; }
+    });
+  }
+  function tAt(px) { const hiT = st.reveal != null ? Math.min(P.t1, st.reveal) : P.t1; return Math.max(P.t0, Math.min(hiT, Math.round(xS.inv(px)))); }
+  function drawCursor(t, ev, tipOn, emit) {
+    if (!curG) return;
+    curG.replaceChildren(); st.cursor = t;
+    const x = xS(t);
+    S_('line', { x1: x, x2: x, y1: P.m.t, y2: P.m.t + P.ph, class: 'xhair' }, curG);
+    const rows = cfg.series.map(s => { const v = s.byT.get(t); if (v != null) S_('circle', { cx: x, cy: yS(v), r: 4.5, class: 'dot ' + s.cls }, curG); return { cls: s.cls, value: v == null ? 'n/a' : cfg.fmt(v), label: s.name }; });
+    if (tipOn) { const r = svg.getBoundingClientRect(); showTip(fmtT(t), rows, ev ? ev.clientX : r.left + x, ev ? ev.clientY : r.top + P.m.t + 10, cfg.notes && cfg.notes[t]); }
+    if (emit && cfg.onCursor) cfg.onCursor(t);
+  }
+  function bind() {
+    const move = ev => { const r = svg.getBoundingClientRect(); drawCursor(tAt(ev.clientX - r.left), ev, true, true); };
+    svg.addEventListener('pointermove', move);
+    svg.addEventListener('pointerdown', move);
+    svg.addEventListener('pointerleave', hideTip);
+    svg.addEventListener('focus', () => drawCursor(st.cursor != null ? tAt(xS(st.cursor)) : tAt(P.m.l + P.pw), null, true, true));
+    svg.addEventListener('blur', hideTip);
+    svg.addEventListener('keydown', ev => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(ev.key)) return;
+      ev.preventDefault(); ev.stopPropagation();
+      let t = st.cursor != null ? st.cursor : P.t1;
+      t = ev.key === 'ArrowLeft' ? t - 1 : ev.key === 'ArrowRight' ? t + 1 : ev.key === 'Home' ? P.t0 : P.t1;
+      drawCursor(tAt(xS(t)), null, true, true);
+    });
+  }
+  c.setWindow = w => { st.win = w; st.reveal = null; if (st.cursor != null && (st.cursor < w[0] || st.cursor > w[1])) st.cursor = null; c.draw(true); };
+  c.setReveal = t => { st.reveal = t; c.draw(true); };
+  c.setCursor = t => { st.cursor = t; if (svg && P && t >= P.t0 && t <= P.t1) drawCursor(t, null, false, false); };
+  c.bounds = bounds;
+  return c;
+}
+
+/* ================= federal funds band chart ================= */
+function BandChart(host, cfg) {
+  const st = { scn: cfg.scenario || null, reveal: null, cursor: null };
+  let svg = null, xS, yS, P, curG;
+  const c = chartBase(host, draw);
+  function infoAt(x) {
+    if (x <= FF_END_X) { const f = ffAt(x); return f ? { lo: f.lo, hi: f.hi, note: 'In effect since ' + fmtDate(f.d), cls: 'teal' } : null; }
+    if (!st.scn || x < PROP_X) return { lo: CUR.lo, hi: CUR.hi, note: 'Current range, until the December meeting', cls: 'teal' };
+    return st.scn === 'hike'
+      ? { lo: PROP.lo, hi: PROP.hi, note: 'Team NY Fed proposal: +25 bp', cls: 'brass' }
+      : { lo: CUR.lo, hi: CUR.hi, note: 'Alternative: pause in December', cls: 'teal' };
+  }
+  function bandD(segs) {
+    let d = '';
+    segs.forEach((s, i) => { d += (i ? 'L' : 'M') + xS(s.a).toFixed(1) + ',' + yS(s.hi).toFixed(1) + 'L' + xS(s.b).toFixed(1) + ',' + yS(s.hi).toFixed(1); });
+    for (let i = segs.length - 1; i >= 0; i--) { const s = segs[i]; d += 'L' + xS(s.b).toFixed(1) + ',' + yS(s.lo).toFixed(1) + 'L' + xS(s.a).toFixed(1) + ',' + yS(s.lo).toFixed(1); }
+    return d + 'Z';
+  }
+  function draw(W, H) {
+    const m = { l: 44, r: 16, t: 16, b: 26 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b;
+    xS = lin(cfg.x0, cfg.x1, m.l, m.l + pw); yS = lin(cfg.y0, cfg.y1, m.t + ph, m.t);
+    P = { m, pw, ph };
+    svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', tabindex: '0', 'aria-label': cfg.aria }, host);
+    const gA = S_('g', {}, svg), step = cfg.yStep || 1, dec = step < 1 ? 1 : 0;
+    for (let k = 0; cfg.y0 + k * step <= cfg.y1 + 1e-9; k++) {
+      const v = cfg.y0 + k * step, y = Math.round(yS(v)) + 0.5;
+      S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: 'grid' }, gA);
+      T_(gA, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, v.toFixed(dec) + '%');
+    }
+    S_('line', { x1: m.l, x2: m.l + pw, y1: m.t + ph + 0.5, y2: m.t + ph + 0.5, class: 'axisln' }, gA);
+    const pxY = pw / (cfg.x1 - cfg.x0), ys = [1, 2, 5].find(s => s * pxY >= 40) || 5;
+    for (let y = Math.ceil(cfg.x0); y <= cfg.x1; y++) {
+      if (y % ys) continue;
+      const x = Math.round(xS(y)) + 0.5;
+      S_('line', { x1: x, x2: x, y1: m.t + ph, y2: m.t + ph + 4, class: 'axisln' }, gA);
+      T_(gA, { x, y: H - 7, 'text-anchor': 'middle', class: 'tick' }, String(y));
+    }
+    const gN = S_('g', {}, svg);
+    (cfg.ann || []).forEach(a => {
+      const x = xS(a.x); if (x < m.l || x > m.l + pw) return;
+      S_('line', { x1: x, x2: x, y1: m.t + 4 + (a.row || 0) * 14, y2: m.t + ph, class: 'mark' }, gN);
+      T_(gN, { x: x + (a.anchor === 'end' ? -5 : 5), y: m.t + 12 + (a.row || 0) * 14, 'text-anchor': a.anchor || 'start', class: 'ann' }, a.label);
+    });
+    const g = S_('g', {}, svg);
+    const r = st.reveal == null ? Infinity : st.reveal;
+    const xe = Math.min(FF_END_X, r, cfg.x1), segs = [];
+    for (let i = 0; i < FF.length; i++) {
+      const a = Math.max(FF[i].x, cfg.x0), b = Math.min(i + 1 < FF.length ? FF[i + 1].x : FF_END_X, xe);
+      if (b > a) segs.push({ a, b, lo: FF[i].lo, hi: FF[i].hi });
+    }
+    if (segs.length) {
+      S_('path', { d: bandD(segs), class: 'band' }, g);
+      // thin midline so moves bigger than the band's own 25 bp height still read as one connected path
+      S_('path', { d: segs.map((s, i) => (i ? 'L' : 'M') + xS(s.a).toFixed(1) + ',' + yS((s.lo + s.hi) / 2).toFixed(1) + 'L' + xS(s.b).toFixed(1) + ',' + yS((s.lo + s.hi) / 2).toFixed(1)).join(''), class: 'band-mid' }, g);
+    }
+    if (cfg.x1 > FF_END_X && r > FF_END_X) {
+      const b = Math.min(st.scn ? PROP_X : cfg.x1, r, cfg.x1);
+      if (b > FF_END_X) S_('path', { d: bandD([{ a: FF_END_X, b, lo: CUR.lo, hi: CUR.hi }]), class: 'band-interim' }, g);
+      if (st.scn && r > PROP_X) {
+        const b2 = Math.min(r, cfg.x1);
+        const lo = st.scn === 'hike' ? PROP.lo : CUR.lo, hi = st.scn === 'hike' ? PROP.hi : CUR.hi;
+        const prop = S_('path', { d: bandD([{ a: PROP_X, b: b2, lo, hi }]), class: st.scn === 'hike' ? 'band-prop' : 'band-hold' }, g);
+        if (r >= cfg.x1 && W >= (cfg.propLabelMinW || 0)) {
+          const x = xS(PROP_X);
+          S_('line', { x1: x, x2: x, y1: m.t + 30, y2: yS(hi) - 4, class: 'leader' }, g);
+          T_(g, { x: x - 6, y: m.t + 10, 'text-anchor': 'end', class: 'prop-lbl' }, st.scn === 'hike' ? '+25 bp in December (proposed)' : 'Pause in December (alternative)');
+          T_(g, { x: x - 6, y: m.t + 25, 'text-anchor': 'end', class: 'prop-sub' }, rng(lo, hi));
+          if (c.intro && !reduceMotion && prop.animate) prop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 250, easing: 'ease-out', fill: 'backwards' });
+        }
+      }
+    }
+    curG = S_('g', {}, svg);
+    S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
+    bind();
+    if (st.cursor != null) drawCursor(st.cursor, null, false, false);
+  }
+  function xAt(px) { const lim = st.reveal == null ? cfg.x1 : Math.min(cfg.x1, st.reveal); return Math.max(cfg.x0, Math.min(lim, xS.inv(px))); }
+  function drawCursor(x, ev, tipOn, emit) {
+    if (!curG) return;
+    curG.replaceChildren(); st.cursor = x;
+    const px = xS(x), inf = infoAt(x);
+    S_('line', { x1: px, x2: px, y1: P.m.t, y2: P.m.t + P.ph, class: 'xhair' }, curG);
+    if (inf) S_('circle', { cx: px, cy: yS((inf.lo + inf.hi) / 2), r: 4.5, class: 'dot ' + inf.cls }, curG);
+    if (tipOn && inf) { const r = svg.getBoundingClientRect(); showTip(fmtT(Math.floor(x * 12 + 1e-6)), [{ cls: inf.cls, value: rng(inf.lo, inf.hi), label: 'target range' }], ev ? ev.clientX : r.left + px, ev ? ev.clientY : r.top + P.m.t + 10, inf.note); }
+    if (emit && cfg.onCursor) cfg.onCursor(x, inf);
+  }
+  function bind() {
+    const move = ev => { const r = svg.getBoundingClientRect(); drawCursor(xAt(ev.clientX - r.left), ev, true, true); };
+    svg.addEventListener('pointermove', move);
+    svg.addEventListener('pointerdown', move);
+    svg.addEventListener('pointerleave', () => { hideTip(); curG.replaceChildren(); st.cursor = null; if (cfg.onLeave) cfg.onLeave(); });
+    svg.addEventListener('focus', () => drawCursor(st.cursor != null ? st.cursor : Math.min(cfg.x1 - 0.01, FF_END_X), null, true, true));
+    svg.addEventListener('blur', () => { hideTip(); if (cfg.onLeave) cfg.onLeave(); });
+    svg.addEventListener('keydown', ev => {
+      if (!['ArrowLeft', 'ArrowRight'].includes(ev.key)) return;
+      ev.preventDefault(); ev.stopPropagation();
+      const x = (st.cursor != null ? st.cursor : FF_END_X) + (ev.key === 'ArrowLeft' ? -1 / 12 : 1 / 12);
+      drawCursor(xAt(xS(x)), null, true, true);
+    });
+  }
+  c.setReveal = x => { st.reveal = x; c.draw(true); };
+  c.setScenario = s => { st.scn = s; c.intro = !reduceMotion; c.draw(true); };
+  c.infoAt = infoAt;
+  return c;
+}
+
+/* ================= bar charts ================= */
+function DemandChart(host) {
+  const c = chartBase(host, draw);
+  function draw(W, H) {
+    const narrow = W < 460;
+    const m = { l: 40, r: 8, t: 24, b: 46 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const yS = lin(0, 6, m.t + ph, m.t);
+    const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': 'Real GDP grew 2.2% in Q2 and 3.4% in Q3 2026; private domestic final sales grew 4.6% and 4.9%, annualized.' }, host);
+    svg.style.cursor = 'default';
+    for (let v = 0; v <= 6; v += ph < 190 ? 2 : 1) {
+      const y = Math.round(yS(v)) + 0.5;
+      S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: v === 0 ? 'zero' : 'grid' }, svg);
+      T_(svg, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, v + '%');
+    }
+    const band = pw / DEMAND.length, bw = Math.min(24, band / 4), gap = 6, bars = [];
+    DEMAND.forEach((g, gi) => {
+      const cx = m.l + band * (gi + 0.5);
+      [['q2', 'Q2 2026', 'ctx', 'Q2'], ['q3', 'Q3 2026', 'teal', 'Q3']].forEach(([k, lbl, cls, sh], bi) => {
+        const x = bi === 0 ? cx - gap / 2 - bw : cx + gap / 2, v = g[k];
+        const bar = S_('path', { d: vbar(x, bw, yS(0), yS(v)), class: 'bar bar-' + cls }, svg); bar.dataset.base = yS(0); bars.push(bar);
+        T_(svg, { x: x + bw / 2, y: yS(v) - 7, 'text-anchor': 'middle', class: 'val' + (bi === 0 ? ' val-2' : '') }, v.toFixed(1) + '%');
+        T_(svg, { x: x + bw / 2, y: m.t + ph + 15, 'text-anchor': 'middle', class: 'cat-sm' }, sh);
+        const hit = S_('rect', { x: x - gap / 2, y: m.t, width: bw + gap, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${g.short}, ${lbl}: ${v.toFixed(1)}%` }, svg);
+        hoverMark(hit, bar, () => [g.name.replace('¹', ''), [{ cls, value: v.toFixed(1) + '%', label: lbl + ', annualized' }]]);
+      });
+      T_(svg, { x: cx, y: m.t + ph + 34, 'text-anchor': 'middle', class: 'cat' }, narrow ? g.short : g.name);
+    });
+    if (c.intro) animBars(bars);
+  }
+  return c;
+}
+
+function Waterfall(host, getQ) {
+  const c = chartBase(host, draw);
+  function draw(W, H) {
+    const qk = getQ(), q = GDP_Q[qk];
+    let run = 0;
+    const steps = GDP_PARTS.map((p, i) => { const v = q.c[i], a = run; run += v; return Object.assign({}, p, { v, a, b: run }); });
+    const total = run, ext = [0, total];
+    steps.forEach(s => ext.push(s.a, s.b));
+    const nt = niceTicks(Math.min(...ext), Math.max(...ext), 5);
+    const m = { l: 44, r: 8, t: 22, b: 30 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const yS = lin(nt.lo, nt.hi, m.t + ph, m.t), dec = decFor(nt.step);
+    const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': `${qk} contributions to real GDP growth: ` + steps.map(s => `${s.name} ${sgn(s.v, 2)}`).join(', ') + `; real GDP ${q.gdp.toFixed(1)}%.` }, host);
+    svg.style.cursor = 'default';
+    nt.ticks.forEach(v => {
+      const y = Math.round(yS(v)) + 0.5;
+      S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: Math.abs(v) < 1e-9 ? 'zero' : 'grid' }, svg);
+      T_(svg, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, tickF(v, dec));
+    });
+    const n = steps.length + 1, band = pw / n, bw = Math.min(24, band * 0.42), useShort = band < 80, bars = [];
+    steps.forEach((s, i) => {
+      const x = m.l + band * (i + 0.5) - bw / 2, cls = s.v >= 0 ? 'teal' : 'coral';
+      const bar = S_('path', { d: vbar(x, bw, yS(s.a), yS(s.b)), class: 'bar bar-' + cls }, svg); bar.dataset.base = yS(s.a); bars.push(bar);
+      const nx = m.l + band * (i + 1.5) - bw / 2;
+      S_('line', { x1: x + bw, x2: nx, y1: yS(s.b), y2: yS(s.b), class: 'conn' }, svg);
+      T_(svg, { x: x + bw / 2, y: s.v >= 0 ? yS(s.b) - 7 : yS(s.b) + 15, 'text-anchor': 'middle', class: 'val' }, sgn(s.v, 2));
+      T_(svg, { x: x + bw / 2, y: H - 9, 'text-anchor': 'middle', class: 'cat' }, useShort ? s.short : s.lbl);
+      const hit = S_('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${s.name}: ${sgn(s.v, 2)} percentage points` }, svg);
+      hoverMark(hit, bar, () => [s.name + ', ' + qk, [{ cls, value: sgn(s.v, 2) + ' pp', label: 'contribution' }, { value: s.b.toFixed(2) + ' pp', label: 'running total' }]]);
+    });
+    const x = m.l + band * (n - 0.5) - bw / 2;
+    const tb = S_('path', { d: vbar(x, bw, yS(0), yS(total)), class: 'bar bar-ink' }, svg); tb.dataset.base = yS(0); bars.push(tb);
+    T_(svg, { x: x + bw / 2, y: total >= 0 ? yS(total) - 7 : yS(total) + 15, 'text-anchor': 'middle', class: 'val' }, q.gdp.toFixed(1) + '%');
+    T_(svg, { x: x + bw / 2, y: H - 9, 'text-anchor': 'middle', class: 'cat' }, useShort ? 'GDP' : 'Real GDP');
+    const hit = S_('rect', { x: m.l + band * (n - 1), y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `Real GDP growth ${q.gdp.toFixed(1)}%` }, svg);
+    hoverMark(hit, tb, () => ['Real GDP, ' + qk, [{ cls: 'ink', value: q.gdp.toFixed(1) + '%', label: 'growth, annualized' }], 'Contributions sum to ' + total.toFixed(2) + ' pp; the gap is rounding.']);
+    if (c.intro) animBars(bars);
+  }
+  return c;
+}
+
+function HBars(host, items) {
+  const c = chartBase(host, draw);
+  function draw(W, H) {
+    const narrow = W < 460;
+    const m = { l: narrow ? 86 : 118, r: 46, t: 4, b: 24 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const nt = niceTicks(0, Math.max(1, ...items.map(d => d.v)), Math.max(3, Math.min(6, Math.round(pw / 80))));
+    const xS = lin(0, nt.hi, m.l, m.l + pw), dec = decFor(nt.step);
+    const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': 'October CPI monthly increases: ' + items.map(d => `${d.name} ${d.v}%`).join(', ') }, host);
+    svg.style.cursor = 'default';
+    nt.ticks.forEach(v => {
+      const x = Math.round(xS(v)) + 0.5;
+      S_('line', { x1: x, x2: x, y1: m.t, y2: m.t + ph, class: v === 0 ? 'zero' : 'grid' }, svg);
+      T_(svg, { x, y: H - 6, 'text-anchor': 'middle', class: 'tick' }, v.toFixed(dec) + '%');
+    });
+    const slot = ph / items.length, bh = Math.min(22, slot * 0.6), bars = [];
+    items.forEach((d, i) => {
+      const y = m.t + slot * (i + 0.5) - bh / 2;
+      const bar = S_('path', { d: hbar(y, bh, xS(0), xS(d.v)), class: 'bar bar-teal' }, svg); bar.dataset.base = xS(0); bars.push(bar);
+      T_(svg, { x: xS(d.v) + 6, y: y + bh / 2 + 4, class: 'val' }, d.v.toFixed(1) + '%');
+      const tEl = T_(svg, { x: m.l - 10, y: y + bh / 2 + 4 - (d.lines.length - 1) * 7, 'text-anchor': 'end', class: 'cat' }, '');
+      d.lines.forEach((ln, k) => { const ts = S_('tspan', { x: m.l - 10, dy: k ? '14' : '0' }, tEl); ts.textContent = ln; });
+      const hit = S_('rect', { x: 0, y: m.t + slot * i, width: W, height: slot, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${d.name}: ${d.v.toFixed(1)}%` }, svg);
+      hoverMark(hit, bar, () => [d.name, [{ cls: 'teal', value: '+' + d.v.toFixed(1) + '%', label: 'October, month over month' }]]);
+    });
+    if (c.intro) animBars(bars, true);
+  }
+  return c;
+}
+
+const PACE_2PCT = (Math.pow(1.02, 1 / 12) - 1) * 100;     // ~0.165% a month
+function momData(mode) { const s = mode === 'pce' ? S.coreM : S.cpiCoreM; const end = lastPt(s).t, out = []; for (let t = end - 5; t <= end; t++) out.push({ t, v: at(s, t) }); return out; }
+function MoMChart(host, getMode) {
+  const c = chartBase(host, draw);
+  function draw(W, H) {
+    const mode = getMode(), d = momData(mode), name = mode === 'pce' ? 'Core PCE' : 'Core CPI';
+    const vals = d.map(p => p.v).concat([0, PACE_2PCT, 0.4]);
+    const nt = niceTicks(Math.min(...vals), Math.max(...vals), 4);
+    const m = { l: 46, r: 10, t: 22, b: 28 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const yS = lin(nt.lo, nt.hi, m.t + ph, m.t), dec = decFor(nt.step);
+    const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': `${name}, monthly change: ` + d.map(p => `${fmtT(p.t)} ${p.v.toFixed(2)}%`).join(', ') }, host);
+    svg.style.cursor = 'default';
+    nt.ticks.forEach(v => {
+      const y = Math.round(yS(v)) + 0.5;
+      S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: Math.abs(v) < 1e-9 ? 'zero' : 'grid' }, svg);
+      T_(svg, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, tickF(v, dec, '%'));
+    });
+    const band = pw / d.length, bw = Math.min(24, band * 0.42), bars = [];
+    d.forEach((p, i) => {
+      const x = m.l + band * (i + 0.5) - bw / 2;
+      const bar = S_('path', { d: vbar(x, bw, yS(0), yS(p.v)), class: 'bar bar-teal' }, svg); bar.dataset.base = yS(0); bars.push(bar);
+      T_(svg, { x: x + bw / 2, y: p.v >= 0 ? yS(p.v) - 7 : yS(p.v) + 15, 'text-anchor': 'middle', class: 'val' }, fx(p.v) + '%');
+      T_(svg, { x: x + bw / 2, y: H - 8, 'text-anchor': 'middle', class: 'tick' }, (i === 0 || p.t % 12 === 0) ? MON[p.t % 12] + " '" + String(Math.floor(p.t / 12)).slice(2) : MON[p.t % 12]);
+      const hit = S_('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${fmtT(p.t)}: ${p.v.toFixed(2)}%` }, svg);
+      hoverMark(hit, bar, () => [fmtT(p.t), [{ cls: 'teal', value: sgn(p.v, 2) + '%', label: name + ', m/m' }], p.v > PACE_2PCT ? 'Faster than a 2%-a-year pace' : 'At or below a 2%-a-year pace']);
+    });
+    const yr = yS(PACE_2PCT);
+    S_('line', { x1: m.l, x2: m.l + pw, y1: yr, y2: yr, class: 'ref' }, svg);
+    if (c.intro) animBars(bars);
+  }
+  return c;
+}
+
+function Spark(host, data, o) {
+  const c = chartBase(host, draw);
+  function draw(W, H) {
+    const pts = data.filter(p => p.v != null), vals = pts.map(p => p.v).concat(o.zero ? [0] : []);
+    let lo = Math.min(...vals), hi = Math.max(...vals); if (hi - lo < 1e-9) { hi += 1; lo -= 1; }
+    const m = { l: 2, r: 8, t: 7, b: 7 };
+    const xS = lin(data[0].t, data[data.length - 1].t, m.l, W - m.r), yS = lin(lo, hi, H - m.b, m.t);
+    const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', tabindex: '0', 'aria-label': o.aria }, host);
+    if (o.zero && lo < 0) S_('line', { x1: m.l, x2: W - m.r, y1: yS(0), y2: yS(0), class: 'zero' }, svg);
+    S_('path', { d: lineD(data, xS, yS), class: 'ln spark-ln' }, svg);
+    const lp = pts[pts.length - 1];
+    S_('circle', { cx: xS(lp.t), cy: yS(lp.v), r: 4, class: 'dot brass' }, svg);
+    const cur = S_('g', {}, svg);
+    S_('rect', { x: 0, y: 0, width: W, height: H, class: 'hit' }, svg);
+    const t0 = data[0].t, t1 = data[data.length - 1].t;
+    let ct = lp.t;
+    const showAt = (t, ev) => {
+      cur.replaceChildren(); const v = at(data, t), x = xS(t);
+      S_('line', { x1: x, x2: x, y1: m.t - 2, y2: H - m.b + 2, class: 'xhair' }, cur);
+      if (v != null) S_('circle', { cx: x, cy: yS(v), r: 3.5, class: 'dot ctx' }, cur);
+      const r = svg.getBoundingClientRect();
+      showTip(fmtT(t), [{ cls: 'ink', value: v == null ? 'n/a' : o.fmt(v), label: o.name }], ev ? ev.clientX : r.left + x, ev ? ev.clientY : r.top, o.notes && o.notes[t]);
+    };
+    svg.addEventListener('pointermove', ev => { const r = svg.getBoundingClientRect(); ct = Math.max(t0, Math.min(t1, Math.round(xS.inv(ev.clientX - r.left)))); showAt(ct, ev); });
+    svg.addEventListener('pointerleave', () => { cur.replaceChildren(); hideTip(); });
+    svg.addEventListener('focus', () => showAt(ct));
+    svg.addEventListener('blur', () => { cur.replaceChildren(); hideTip(); });
+    svg.addEventListener('keydown', ev => { if (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight') return; ev.preventDefault(); ev.stopPropagation(); ct = Math.max(t0, Math.min(t1, ct + (ev.key === 'ArrowLeft' ? -1 : 1))); showAt(ct); });
+    if (c.intro) animLines(svg);
+  }
+  return c;
+}
+
+/* ================= scenes ================= */
+const fmtPct1 = v => fx(v) + '%';
+const lastN = (s, n) => s.slice(Math.max(0, s.length - n));
+
+function initCover(sc) {
+  const ro = $('#coverRO'), dEl = ro.querySelector('.d'), rEl = ro.querySelector('.r');
+  const setRO = (dateTxt, inf) => { dEl.textContent = dateTxt; rEl.replaceChildren(); if (inf) { H_('b', null, rng(inf.lo, inf.hi), rEl); rEl.append(inf.cls === 'brass' ? ' proposed' : ' target range'); } };
+  const def = () => setRO('Dec 2026', { lo: PROP.lo, hi: PROP.hi, cls: 'brass' });
+  const ch = reg('top', BandChart($('#coverChart'), {
+    x0: 2015, x1: 2027.25, y0: 0, y1: 6, yStep: 1, scenario: 'hike', propLabelMinW: 640,
+    aria: 'Federal funds target range from 2015 to November 2026: near zero until 2016, up to 2.25–2.50% in 2018, back to zero in 2020, a peak of 5.25–5.50% in 2023, 3.75–4.00% today, and our proposed December step to 4.00–4.25%.',
+    onCursor: (x, inf) => setRO(fmtT(Math.floor(x * 12 + 1e-6)), inf), onLeave: def
+  }));
+  def();
+  Player($('#coverPlay'), {
+    duration: () => 6500,
+    frame: k => { const x = 2015 + (2027.25 - 2015) * k; ch.setReveal(x); setRO(fmtT(Math.floor(x * 12 + 1e-6)), ch.infoAt(x)); },
+    end: () => { ch.setReveal(null); def(); }
+  });
+  setupTable(sc.querySelector('.fig'), () => ({ cols: ['Effective', 'Target range'], rows: [['December 2026 (our proposal)', rng(PROP.lo, PROP.hi)]].concat(FF.filter(f => f.x >= 2015).map(f => [fmtDate(f.d), rng(f.lo, f.hi)]).reverse()) }));
+}
+
+function initRecap(sc) {
+  const votes = $('#votes');
+  for (let i = 0; i < 12; i++) {
+    const hike = i >= 10, v = H_('span', 'vote ' + (hike ? 'hike' : 'hold'), null, votes);
+    v.tabIndex = 0; v.setAttribute('role', 'img'); v.setAttribute('aria-label', hike ? 'Dissent: preferred a 25 basis point increase' : 'Voted to hold');
+    const show = ev => { const r = v.getBoundingClientRect(); showTip('October 28 vote', [{ cls: hike ? 'brass' : 'teal', value: hike ? 'Dissent' : 'Hold', label: hike ? 'preferred +25 bp' : 'at 3.75%–4.00%' }], ev && ev.clientX != null ? ev.clientX : r.right, ev && ev.clientY != null ? ev.clientY : r.bottom); };
+    v.addEventListener('pointermove', show); v.addEventListener('pointerdown', show); v.addEventListener('pointerleave', hideTip);
+    v.addEventListener('focus', () => show()); v.addEventListener('blur', hideTip);
+  }
+  reg('recap', BandChart($('#recapChart'), {
+    x0: 2024, x1: FF_END_X, y0: 3, y1: 6, yStep: 0.5, scenario: null,
+    ann: [{ x: dx('2026-09-17'), label: 'Sep 17: +25 bp', anchor: 'end', row: 0 }, { x: dx('2026-10-28'), label: 'Oct 28: hold', anchor: 'end', row: 1 }],
+    aria: 'Federal funds target range since 2024: 5.25–5.50% until September 2024, cut to 4.25–4.50% by December 2024, three more cuts in late 2025 to 3.50–3.75%, then a hike to 3.75–4.00% on September 17, 2026.'
+  }));
+  setupTable(sc.querySelector('.fig'), () => ({ cols: ['Effective', 'Target range'], rows: FF.filter(f => f.x >= 2023.5).map(f => [fmtDate(f.d), rng(f.lo, f.hi)]).reverse() }));
+}
+
+function initMandate(sc) {
+  const tEnd = lastPt(S.unrate).t, slider = $('#mSlider'), ticks = $('#mTicks');
+  let win = [tEnd - 59, tEnd], lastT = null;
+  const read = t => {
+    $('#mDate').textContent = fmtT(t);
+    let cv = at(S.coreY, t), note = '';
+    const lp = lastPt(S.coreY);
+    if (cv == null && t > lp.t) { cv = lp.v; note = ' (' + MON[lp.t % 12] + ')'; }
+    $('#mCore').textContent = pctF(cv) + note;
+    const u = at(S.unrate, t); $('#mUn').textContent = u == null ? 'n/a' : fx(u) + '%';
+    const f = ffAt((t + 0.5) / 12); $('#mFF').textContent = f ? rng(f.lo, f.hi) : 'n/a';
+  };
+  const infl = reg('mandate', LineChart($('#mInfl'), {
+    series: [{ name: 'Core PCE', short: 'Core', cls: 'teal', role: 'primary', data: S.coreY }, { name: 'PCE (headline)', short: 'PCE', cls: 'ctx', role: 'context', data: S.pceY }],
+    refs: [{ v: 2, label: '2% target' }], win, fmt: fmtPct1, endLabels: true,
+    aria: 'PCE and core PCE inflation, percent change from a year earlier, against the 2% target. Core PCE was 3.1% in September 2026.',
+    onCursor: t => { un.setCursor(t); read(t); }
+  }));
+  const un = reg('mandate', LineChart($('#mUnChart'), {
+    series: [{ name: 'Unemployment rate', cls: 'teal', role: 'primary', data: S.unrate }],
+    win, fmt: fmtPct1, endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
+    aria: 'Unemployment rate. 4.1% in October 2026.',
+    onCursor: t => { infl.setCursor(t); read(t); }
+  }));
+  const buildTicks = () => {
+    ticks.replaceChildren();
+    const span = win[1] - win[0], w = ticks.clientWidth || 600;
+    const step = [1, 2, 5, 10].find(s => (w / (span / 12)) * s >= 48) || 10;
+    for (let y = Math.ceil(win[0] / 12); y * 12 <= win[1]; y++) {
+      if (y % step) continue;
+      const k = (y * 12 - win[0]) / span, sp = H_('span', null, String(y), ticks);
+      sp.style.left = `calc(7px + (100% - 14px) * ${k.toFixed(4)})`;
+    }
+  };
+  const setSlider = () => { slider.min = win[0]; slider.max = tEnd; slider.value = tEnd; buildTicks(); };
+  const reveal = t => { infl.setReveal(t); un.setReveal(t); infl.setCursor(t); un.setCursor(t); read(t); };
+  const pl = Player($('#mPlay'), {
+    duration: () => Math.min(9000, Math.max(4500, (win[1] - win[0]) * 55)),
+    frame: k => { const t = Math.round(win[0] + (win[1] - win[0]) * k); if (t !== lastT) { lastT = t; slider.value = t; reveal(t); } },
+    end: () => { lastT = null; slider.value = tEnd; infl.setReveal(null); un.setReveal(null); infl.setCursor(tEnd); un.setCursor(tEnd); read(tEnd); }
+  });
+  slider.addEventListener('input', () => {
+    pl.stop(false);
+    const t = +slider.value;
+    if (t >= tEnd) { infl.setReveal(null); un.setReveal(null); infl.setCursor(t); un.setCursor(t); read(t); } else reveal(t);
+  });
+  segBind($('#mRange'), v => {
+    pl.stop(false);
+    win = v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd];
+    infl.intro = un.intro = !reduceMotion;
+    infl.setWindow(win); un.setWindow(win); setSlider(); read(tEnd);
+    $$('.fig', sc).forEach(f => f._refresh && f._refresh());
+  });
+  if ('ResizeObserver' in window) new ResizeObserver(buildTicks).observe(ticks);
+  setSlider(); read(tEnd);
+  const figs = $$('.fig', sc);
+  setupTable(figs[0], () => { const rows = []; for (let t = win[1]; t >= win[0]; t--) { const a = at(S.coreY, t), b = at(S.pceY, t); if (a == null && b == null) continue; rows.push([fmtT(t), a == null ? '—' : a.toFixed(2) + '%', b == null ? '—' : b.toFixed(2) + '%']); } return { cols: ['Month', 'Core PCE, y/y', 'PCE, y/y'], rows }; });
+  setupTable(figs[1], () => { const rows = []; for (let t = win[1]; t >= win[0]; t--) { const a = at(S.unrate, t); rows.push([fmtT(t), a == null ? 'not collected' : a.toFixed(1) + '%']); } return { cols: ['Month', 'Unemployment rate'], rows }; });
+}
+
+function initDecision(sc) {
+  const ch = reg('decision', BandChart($('#dChart'), {
+    x0: 2024.5, x1: 2027.25, y0: 3, y1: 6, yStep: 0.5, scenario: 'hike',
+    aria: 'Federal funds target range from mid-2024 with the December decision: our proposal raises it from 3.75–4.00% to 4.00–4.25%; the pause alternative keeps it at 3.75–4.00%.'
+  }));
+  segBind($('#dSeg'), v => {
+    ch.setScenario(v);
+    const hike = v === 'hike';
+    $('#dLbl').textContent = hike ? 'New target range' : 'Target range stays';
+    const big = $('#dRange'); big.textContent = hike ? rng(PROP.lo, PROP.hi) : rng(CUR.lo, CUR.hi); big.classList.toggle('accent', hike);
+    const note = $('#dNote'); note.replaceChildren();
+    if (hike) { H_('b', null, '+25 bp', note); note.append(' from ' + rng(CUR.lo, CUR.hi)); } else { H_('b', null, 'No change', note); note.append(' from October'); }
+    $$('.panel .block', sc).forEach(b => b.classList.toggle('dim', b.dataset.scn !== v));
+    const f = sc.querySelector('.fig'); if (f._refresh) f._refresh();
+  });
+  setupTable(sc.querySelector('.fig'), () => {
+    const hike = $('#dSeg [aria-pressed="true"]').dataset.v === 'hike';
+    return { cols: ['Effective', 'Target range'], rows: [[hike ? 'December 2026 (our proposal)' : 'December 2026 (pause)', hike ? rng(PROP.lo, PROP.hi) : rng(CUR.lo, CUR.hi)]].concat(FF.filter(f => f.x >= 2024).map(f => [fmtDate(f.d), rng(f.lo, f.hi)]).reverse()) };
+  });
+}
+
+function initEconomy(sc) {
+  reg('economy', DemandChart($('#eDemand')));
+  let q = 'Q3 2026';
+  const wf = reg('economy', Waterfall($('#eWf'), () => q));
+  const figs = $$('.fig', sc);
+  segBind($('#eQ'), v => { q = v; $('#eWfTitle').textContent = v + ' contributions to real GDP growth'; wf.intro = !reduceMotion; wf.draw(true); if (figs[1]._refresh) figs[1]._refresh(); });
+  setupTable(figs[0], () => ({ cols: ['Measure', 'Q2 2026', 'Q3 2026'], rows: DEMAND.map(d => [d.name, d.q2.toFixed(1) + '%', d.q3.toFixed(1) + '%']) }));
+  setupTable(figs[1], () => { const g = GDP_Q[q]; return { cols: ['Component (' + q + ')', 'Contribution, pp'], rows: GDP_PARTS.map((p, i) => [p.name, sgn(g.c[i], 2)]).concat([['Real GDP growth, %', g.gdp.toFixed(1)]]) }; });
+}
+
+function initJobs(sc) {
+  const tEnd = lastPt(S.unrate).t;
+  const ch = reg('jobs', LineChart($('#jChart'), {
+    series: [{ name: 'Unemployment rate', cls: 'teal', role: 'primary', data: S.unrate }],
+    win: [tEnd - 59, tEnd], fmt: fmtPct1, endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
+    aria: 'Unemployment rate. 4.1% in October 2026, after 4.2% in September.'
+  }));
+  const fig = sc.querySelector('.fig');
+  segBind($('#jRange'), v => { ch.intro = !reduceMotion; ch.setWindow(v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd]); if (fig._refresh) fig._refresh(); });
+  segBind($('#jGeo'), v => { $$('[data-geo]', sc).forEach(b => { b.hidden = b.dataset.geo !== v; }); });
+  setupTable(fig, () => { const [a, b] = ch.bounds(), rows = []; for (let t = b; t >= a; t--) { const v = at(S.unrate, t); rows.push([fmtT(t), v == null ? 'not collected' : v.toFixed(1) + '%']); } return { cols: ['Month', 'Unemployment rate'], rows }; });
+}
+
+function initParticipation(sc) {
+  const tEnd = lastPt(S.civpart).t, pre = at(S.civpart, M(2020, 2));
+  $('#pPre').textContent = fx(pre) + '%';
+  const ch = reg('participation', LineChart($('#pChart'), {
+    series: [{ name: 'Participation rate', cls: 'teal', role: 'primary', data: S.civpart }],
+    win: [tEnd - 119, tEnd], fmt: fmtPct1, endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
+    refs: [{ v: pre, label: 'Feb 2020: ' + fx(pre) + '%', align: 'end' }],
+    shades: [{ t0: M(2020, 2), t1: M(2020, 4), label: 'Recession' }],
+    aria: 'Labor force participation rate. 61.9% in October 2026, below 63.3% in February 2020.'
+  }));
+  const fig = sc.querySelector('.fig');
+  segBind($('#pRange'), v => { ch.intro = !reduceMotion; ch.setWindow(v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd]); if (fig._refresh) fig._refresh(); });
+  setupTable(fig, () => { const [a, b] = ch.bounds(), rows = []; for (let t = b; t >= a; t--) { const v = at(S.civpart, t); rows.push([fmtT(t), v == null ? 'not collected' : v.toFixed(1) + '%']); } return { cols: ['Month', 'Participation rate'], rows }; });
+}
+
+function initInflation(sc) {
+  reg('inflation', HBars($('#iCats'), CPI_CATS));
+  const tEnd = lastPt(S.servY).t;
+  reg('inflation', LineChart($('#iGS'), {
+    series: [{ name: 'Services', cls: 'teal', role: 'primary', data: S.servY }, { name: 'Goods', cls: 'coral', role: 'primary', data: S.goodsY }],
+    refs: [{ v: 2, label: '2% target' }], win: [M(2019, 1), tEnd], fmt: fmtPct1, endLabels: true, endNames: true, endPad: 104, zero: true,
+    aria: 'PCE inflation for goods and for services, percent change from a year earlier, since 2019. In September 2026 services were 3.5% and goods 3.9%.'
+  }));
+  const mm = (s, t) => (at(s, t) / at(s, t - 1) - 1) * 100;
+  const e = (ENERGY[1] / ENERGY[0] - 1) * 100, f = (FOOD[1] / FOOD[0] - 1) * 100;
+  $('#iGSnote').textContent = `September, month over month: services ${sgn(mm(D.serv, tEnd), 2)}%, goods ${sgn(mm(D.goods, tEnd), 2)}%, energy ${sgn(e, 2)}%, food ${sgn(f, 2)}%.`;
+  const figs = $$('.fig', sc);
+  setupTable(figs[0], () => ({ cols: ['Category', 'October, m/m'], rows: CPI_CATS.map(d => [d.name, d.v.toFixed(1) + '%']) }));
+  setupTable(figs[1], () => { const rows = []; for (let t = tEnd; t >= M(2019, 1); t--) rows.push([fmtT(t), at(S.servY, t).toFixed(2) + '%', at(S.goodsY, t).toFixed(2) + '%']); return { cols: ['Month', 'Services, y/y', 'Goods, y/y'], rows }; });
+}
+
+function initImplications(sc) {
+  let mode = 'pce';
+  const ch = reg('implications', MoMChart($('#iMoM'), () => mode));
+  const fig = sc.querySelector('.fig');
+  const read = () => {
+    const s = mode === 'pce' ? S.coreM : S.cpiCoreM, idx = mode === 'pce' ? D.core : D.cpiCore, name = mode === 'pce' ? 'Core PCE' : 'Core CPI', lp = lastPt(s);
+    $('#iLbl').textContent = name + ', ' + fmtT(lp.t) + ', m/m';
+    $('#iBig').textContent = fx(lp.v) + '%';
+    $('#iAnn').textContent = pctF(annualized(idx, lp.t, 3));
+    const yoy = annualized(idx, lp.t, 12);
+    $('#iYoyLine').hidden = yoy == null;
+    if (yoy != null) $('#iYoy').textContent = pctF(yoy);
+    $('#iSub').textContent = name + ', monthly change, %';
+    $('#iLegName').textContent = name + ', m/m';
+  };
+  segBind($('#iSeg'), v => { mode = v; ch.intro = !reduceMotion; ch.draw(true); read(); if (fig._refresh) fig._refresh(); });
+  read();
+  setupTable(fig, () => ({ cols: ['Month', (mode === 'pce' ? 'Core PCE' : 'Core CPI') + ', m/m'], rows: momData(mode).slice().reverse().map(p => [fmtT(p.t), p.v.toFixed(2) + '%']) }));
+}
+
+function initClosing(sc) {
+  const tile = k => $(`.wt[data-k="${k}"]`, sc);
+  const fill = (k, when, val, delta) => { const el = tile(k); el.querySelector('[data-f="when"]').textContent = when; el.querySelector('[data-f="val"]').textContent = val; el.querySelector('[data-f="delta"]').textContent = delta; return el.querySelector('[data-f="spark"]'); };
+  // core PCE inflation, y/y
+  let lp = lastPt(S.coreY), prev = at(S.coreY, lp.t - 1);
+  let host = fill('core', fmtT(lp.t) + ', y/y', fx(lp.v) + '%', `${arrow(lp.v - prev)} ${fx(Math.abs(lp.v - prev))} pt from ${MON[(lp.t - 1) % 12]}`);
+  reg('closing', Spark(host, lastN(S.coreY, 24), { name: 'core PCE, y/y', fmt: v => v.toFixed(2) + '%', aria: 'Core PCE inflation over the last 24 months; ' + fx(lp.v) + '% in ' + fmtT(lp.t) + '.' }));
+  // payrolls
+  lp = lastPt(S.payChg);
+  const avg3 = (at(S.payChg, lp.t) + at(S.payChg, lp.t - 1) + at(S.payChg, lp.t - 2)) / 3;
+  host = fill('pay', fmtT(lp.t) + ', monthly change', kF(lp.v), '3-month average: ' + kF(avg3));
+  reg('closing', Spark(host, lastN(S.payChg, 24), { name: 'nonfarm payrolls, monthly change', fmt: kF, zero: true, aria: 'Monthly payroll changes over the last 24 months; ' + kF(lp.v) + ' in ' + fmtT(lp.t) + '.' }));
+  // unemployment
+  lp = lastPt(S.unrate); prev = at(S.unrate, lp.t - 1);
+  host = fill('un', fmtT(lp.t), fx(lp.v) + '%', `${arrow(lp.v - prev)} ${fx(Math.abs(lp.v - prev))} pt from ${MON[(lp.t - 1) % 12]}`);
+  reg('closing', Spark(host, lastN(S.unrate, 24), { name: 'unemployment rate', fmt: v => v.toFixed(1) + '%', notes: SHUTDOWN, aria: 'Unemployment rate over the last 24 months; ' + fx(lp.v) + '% in ' + fmtT(lp.t) + '.' }));
+  // real PCE, m/m
+  lp = lastPt(S.rpceM); prev = at(S.rpceM, lp.t - 1);
+  host = fill('rpce', fmtT(lp.t) + ', m/m', sgn(lp.v, 1) + '%', `${MON[(lp.t - 1) % 12]}: ${sgn(prev, 1)}%`);
+  reg('closing', Spark(host, lastN(S.rpceM, 24), { name: 'real PCE, m/m', fmt: v => sgn(v, 2) + '%', zero: true, aria: 'Real consumer spending, monthly change, over the last 24 months; ' + sgn(lp.v, 1) + '% in ' + fmtT(lp.t) + '.' }));
+}
+
+/* ================= navigation ================= */
+const scenes = $$('.scene'), order = scenes.map(s => s.id), rail = $$('#railList a');
+const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), prog = $('#progress i');
+const inits = { top: initCover, recap: initRecap, mandate: initMandate, decision: initDecision, economy: initEconomy, jobs: initJobs, participation: initParticipation, inflation: initInflation, implications: initImplications, closing: initClosing };
+const done = new Set();
+let cur = -1, booted = false;
+function setNav(btn, j) {
+  if (j < 0 || j >= scenes.length) { btn.disabled = true; return; }
+  btn.disabled = false; const s = scenes[j];
+  btn.querySelector('.nb-n').textContent = s.dataset.n || '';
+  btn.querySelector('.nb-t').textContent = s.dataset.label;
+  btn.setAttribute('aria-label', (btn === prevBtn ? 'Previous: ' : 'Next: ') + s.dataset.label);
+}
+function show(i) {
+  i = Math.max(0, Math.min(scenes.length - 1, i));
+  if (i === cur) return;
+  players.forEach(p => p.stop(true)); hideTip();
+  scenes.forEach((s, k) => { s.hidden = k !== i; });
+  cur = i;
+  const sc = scenes[i];
+  if (!done.has(sc.id)) { done.add(sc.id); if (inits[sc.id]) inits[sc.id](sc); }
+  (registry[sc.id] || []).forEach(ch => { ch.intro = booted && !reduceMotion; ch.draw(true); });
+  if (booted && !reduceMotion) { sc.classList.remove('enter'); void sc.offsetWidth; sc.classList.add('enter'); }
+  window.scrollTo(0, 0);
+  rail.forEach(a => { if (a.getAttribute('href') === '#' + sc.id) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); });
+  const act = rail.find(a => a.hasAttribute('aria-current'));
+  if (act && booted) act.scrollIntoView({ block: 'nearest', inline: 'center' });
+  prog.style.width = (i / (scenes.length - 1) * 100) + '%';
+  setNav(prevBtn, i - 1); setNav(nextBtn, i + 1);
+  booted = true;
+}
+const idxFromHash = () => { const i = order.indexOf(decodeURIComponent(location.hash.slice(1))); return i < 0 ? 0 : i; };
+// Navigate directly, then mirror the chapter in the URL hash where the page allows it (sandboxed viewers may not).
+function go(i) {
+  i = Math.max(0, Math.min(scenes.length - 1, i));
+  show(i);
+  if (location.protocol === 'data:') return;   // sandboxed previews refuse hash changes
+  try { if (location.hash !== '#' + order[i]) location.hash = order[i]; } catch (e) { /* hash not writable here */ }
+}
+window.addEventListener('hashchange', () => show(idxFromHash()));
+document.addEventListener('click', ev => {
+  const a = ev.target.closest && ev.target.closest('a[href^="#"]');
+  if (!a) return;
+  const i = order.indexOf(a.getAttribute('href').slice(1));
+  if (i < 0) return;
+  ev.preventDefault(); go(i);
+});
+prevBtn.addEventListener('click', () => go(cur - 1));
+nextBtn.addEventListener('click', () => go(cur + 1));
+
+/* theme + full screen */
+const themeBtn = $('#themeBtn');
+function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); themeBtn.setAttribute('aria-label', t === 'light' ? 'Switch to dark theme' : 'Switch to light theme'); }
+function toggleTheme() { const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; applyTheme(next); try { localStorage.setItem('nyfc-theme', next); } catch (e) { /* storage unavailable */ } }
+try { const saved = localStorage.getItem('nyfc-theme'); if (saved === 'light' || saved === 'dark') applyTheme(saved); } catch (e) { /* storage unavailable */ }
+themeBtn.addEventListener('click', toggleTheme);
+function toggleFs() { try { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); } catch (e) { /* not allowed here */ } }
+$('#fsBtn').addEventListener('click', toggleFs);
+
+document.addEventListener('keydown', ev => {
+  if (ev.defaultPrevented || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+  const tg = ev.target, tag = tg && tg.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (tg && tg.isContentEditable)) return;
+  const k = ev.key;
+  if (k === 'ArrowRight' || k === 'PageDown') { ev.preventDefault(); go(cur + 1); }
+  else if (k === 'ArrowLeft' || k === 'PageUp') { ev.preventDefault(); go(cur - 1); }
+  else if (/^[0-9]$/.test(k)) { go(+k); }
+  else if (k === 'f' || k === 'F') { toggleFs(); }
+  else if (k === 't' || k === 'T') { toggleTheme(); }
+});
+
+show(idxFromHash());
+})();
+</script>
+</body>
+</html>
