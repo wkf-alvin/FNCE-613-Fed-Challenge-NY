@@ -1293,11 +1293,11 @@ function LineChart(host, cfg) {
       S_('line', { x1: x, x2: x, y1: y + 4, y2: m.t + ph, class: 'mark' }, gA);
       T_(gA, { x: x + (k.anchor === 'end' ? -4 : 4), y, 'text-anchor': k.anchor || 'start', class: 'ann' }, k.label);
     });
+    const refLbls = [];
     (cfg.refs || []).forEach(r => {
       const y = yS(r.v);
       S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: 'ref' }, svg);
-      const end = r.align === 'end';
-      T_(svg, { x: end ? m.l + pw - 4 : m.l + 6, y: y - 6, 'text-anchor': end ? 'end' : 'start', class: 'ref-lbl' }, r.label);
+      if (r.label) refLbls.push({ r, y });
     });
     const gS = S_('g', {}, svg);
     if (cfg.between) betweenFill(gS, shown);
@@ -1318,7 +1318,8 @@ function LineChart(host, cfg) {
     }
     P.ts = cfg.snap ? [...new Set(cfg.series.flatMap(s => shown(s).filter(p => p.v != null).map(p => p.t)))].sort((a, b) => a - b) : null;
     if (cfg.endLabels) endLabels(gS, shown, m, ph);
-    if (st.reveal == null) annotate(gS, m, pw, ph);
+    placeRefs(refLbls, shown, m, pw);
+    if (st.reveal == null) annotate(gS, m, pw, ph, shown);
     curG = S_('g', {}, svg);
     S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
     bind();
@@ -1360,28 +1361,70 @@ function LineChart(host, cfg) {
     if (dn) S_('path', { d: dn, class: 'gap-dn fade' }, g);
   }
   // Emphasis drawn on the chart itself, hidden while a Play runs: callouts (a leader from a point to a short label)
-  // and brackets (a dashed span between two values at one date, labeled in the right margin).
-  function annotate(g, m, pw, ph) {
+  // and brackets (a dashed span between two values at one date, labeled in the right margin). A callout lists
+  // candidate spots for its label in data units (at: [[t, v], ...]); the first spot whose label clears every data
+  // line, every other label and any HTML overlay named in cfg.avoid is used, and if none clears, it is left out.
+  // Data lines as segments in svg pixels, and tests that keep labels off them and off each other.
+  function lineSegs(shown) {
+    const segs = [];
+    cfg.series.forEach(s => { let prev = null; shown(s).forEach(p => { if (p.v == null) { prev = null; return; } const q = [xS(p.t), yS(p.v)]; if (prev) segs.push([prev, q]); prev = q; }); });
+    return segs;
+  }
+  const PAD = 3;
+  const meets = (a, b) => a.x < b.x + b.width + PAD && b.x < a.x + a.width + PAD && a.y < b.y + b.height + PAD && b.y < a.y + a.height + PAD;
+  const crosses = (segs, b) => segs.some(([[x1, y1], [x2, y2]]) => {
+    if (Math.max(x1, x2) < b.x - PAD || Math.min(x1, x2) > b.x + b.width + PAD || Math.max(y1, y2) < b.y - PAD || Math.min(y1, y2) > b.y + b.height + PAD) return false;
+    const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / 2));
+    for (let k = 0; k <= n; k++) { const x = x1 + (x2 - x1) * k / n, y = y1 + (y2 - y1) * k / n; if (x > b.x - PAD && x < b.x + b.width + PAD && y > b.y - PAD && y < b.y + b.height + PAD) return true; }
+    return false;
+  });
+  // Reference-line labels go to the first clear spot (left or right end, above or below the line), or stay off.
+  function placeRefs(items, shown, m, pw) {
+    if (!items.length) return;
+    const segs = lineSegs(shown), taken = [...svg.querySelectorAll('text.end-lbl')].map(t => t.getBBox());
+    items.forEach(({ r, y }) => {
+      const sides = r.align === 'end' ? ['end', 'start'] : ['start', 'end'];
+      for (const al of sides) for (const dy of [-6, 14]) {
+        const t = T_(svg, { x: al === 'end' ? m.l + pw - 4 : m.l + 6, y: y + dy, 'text-anchor': al, class: 'ref-lbl' }, r.label), b = t.getBBox();
+        if (!crosses(segs, b) && !taken.some(o => meets(b, o))) return;
+        t.remove();
+      }
+    });
+  }
+  function annotate(g, m, pw, ph, shown) {
     const list = o => (typeof o === 'function' ? o() : o) || [];
     list(cfg.brackets).forEach(b => {
       if (b.t < P.t0 || b.t > P.t1 || b.v0 == null || b.v1 == null) return;
       const x = xS(b.t), ya = yS(b.v0), yb = yS(b.v1), mid = (ya + yb) / 2;
       S_('path', { d: `M${(x - 5).toFixed(1)},${ya.toFixed(1)}H${(x + 5).toFixed(1)}M${x.toFixed(1)},${ya.toFixed(1)}V${yb.toFixed(1)}`, class: 'bracket endfx' }, g);
-      if (Math.abs(ya - yb) < (b.sub ? 46 : 28)) return;      // no room between the end labels: keep just the span
+      if (Math.abs(ya - yb) < (b.sub ? 58 : 34)) return;      // no room between the end labels: keep just the span
       T_(g, { x: x + 10, y: mid + (b.sub ? 0 : 7), class: 'callout-num endfx' }, b.text);
       if (b.sub) T_(g, { x: x + 10, y: mid + 16, class: 'callout-sub endfx' }, b.sub);
     });
-    if (pw < 460) return;       // callouts need room; on phones the chart stands on its own
-    list(cfg.callouts).forEach(c => {
+    const cos = list(cfg.callouts);
+    if (pw < 320 || !cos.length) return;       // callouts need room; on phones the chart stands on its own
+    const segs = lineSegs(shown), boxes = [...svg.querySelectorAll('text')].filter(t => t.textContent).map(t => t.getBBox()).filter(b => b.width);
+    const sr = svg.getBoundingClientRect();
+    (cfg.avoid ? cfg.avoid() : []).forEach(el => { if (!el || !el.getClientRects().length) return; const r = el.getBoundingClientRect(); boxes.push({ x: r.left - sr.left, y: r.top - sr.top, width: r.width, height: r.height }); });
+    cos.forEach(c => {
       if (c.t < P.t0 || c.t > P.t1 || c.v == null) return;
-      const px = xS(c.t), py = yS(c.v), up = (c.dy || 0) < 0, a = c.anchor || 'start';
-      const ex = Math.max(m.l + 4, Math.min(m.l + pw - 4, px + (c.dx || 0)));
-      const ey = Math.max(m.t + (up ? (c.sub ? 36 : 20) : 0), Math.min(m.t + ph - (up ? 0 : (c.sub ? 36 : 20)), py + (c.dy || 0)));
-      S_('line', { x1: px, y1: py, x2: ex, y2: ey, class: 'callout-ln endfx' }, g);
-      S_('circle', { cx: px, cy: py, r: 3.5, class: 'callout-dot endfx' }, g);
-      const y1 = up ? ey - 6 - (c.sub ? 16 : 0) : ey + 16;
-      T_(g, { x: ex, y: y1, 'text-anchor': a, class: 'callout endfx' }, c.text);
-      if (c.sub) T_(g, { x: ex, y: y1 + 16, 'text-anchor': a, class: 'callout-sub endfx' }, c.sub);
+      const px = xS(c.t), py = yS(c.v), a = c.anchor || 'start', lift = c.sub ? 36 : 20;
+      for (const [tt, tv] of c.at) {
+        const ex = Math.max(m.l + 4, Math.min(m.l + pw - 4, xS(Math.max(P.t0, Math.min(P.t1, tt)))));
+        const up = yS(tv) < py, ey = up ? Math.max(m.t + lift, yS(tv)) : Math.min(m.t + ph - lift, yS(tv));
+        const cg = S_('g', {}, g);
+        const y1 = up ? ey - 6 - (c.sub ? 16 : 0) : ey + 16;
+        const texts = [T_(cg, { x: ex, y: y1, 'text-anchor': a, class: 'callout endfx' }, c.text)];
+        if (c.sub) texts.push(T_(cg, { x: ex, y: y1 + 16, 'text-anchor': a, class: 'callout-sub endfx' }, c.sub));
+        const bb = texts.map(t => t.getBBox()), box = { x: Math.min(...bb.map(b => b.x)), y: Math.min(...bb.map(b => b.y)), width: 0, height: 0 };
+        box.width = Math.max(...bb.map(b => b.x + b.width)) - box.x; box.height = Math.max(...bb.map(b => b.y + b.height)) - box.y;
+        const inside = box.x >= m.l - 2 && box.x + box.width <= m.l + pw + (cfg.endPad || 0) && box.y >= m.t - 2 && box.y + box.height <= m.t + ph + 2;
+        if (!inside || crosses(segs, box) || boxes.some(b => meets(box, b))) { cg.remove(); continue; }
+        S_('line', { x1: px, y1: py, x2: ex, y2: ey, class: 'callout-ln endfx' }, cg);
+        S_('circle', { cx: px, cy: py, r: 3.5, class: 'callout-dot endfx' }, cg);
+        boxes.push(box);
+        break;
+      }
     });
   }
   function tAt(px) {
@@ -1887,7 +1930,9 @@ function initMandate(sc) {
     refs: [{ v: 2, label: '2% inflation target' }],
     win, fmt: pct1, endLabels: true, endNames: true, endPad: 124, notes: SHUTDOWN, gaps: true,
     brackets: () => [{ t: cL.t, v0: 2, v1: cL.v, text: '+' + (cL.v - 2).toFixed(1) + ' pts', sub: 'above target' }],
-    callouts: () => [{ t: uL.t, v: uL.v, text: 'Jobs: near maximum employment', sub: 'FOMC long-run estimate ' + SEP.unLR.toFixed(1) + '%', dx: -28, dy: -62, anchor: 'end' }],
+    callouts: () => [{ t: uL.t, v: uL.v, text: 'Jobs: near maximum employment', sub: 'FOMC long-run estimate ' + SEP.unLR.toFixed(1) + '%', anchor: 'end',
+      at: [[uL.t - 2, uL.v + 1.0], [uL.t - 2, uL.v + 1.5], [uL.t - 8, uL.v + 0.8], [uL.t - 2, uL.v + 2.2]] }],
+    avoid: () => [$('#mandate .chart-ro.tr')],
     aria: 'Core and headline PCE inflation and the unemployment rate on one chart, with the 2% inflation target and the 4.2% long-run unemployment rate.',
     onCursor: t => read(t)
   }));
@@ -1945,13 +1990,15 @@ function initLabor(sc) {
     un: reg('labor', LineChart($('#lUn'), {
       series: [{ name: 'Unemployment rate', cls: 'teal', role: 'primary', data: S.unrate }], win: win(60), fmt: pct1,
       endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
-      callouts: () => [{ t: uL.t, v: uL.v, text: 'Low hiring, low firing', sub: 'layoffs low, job-switching subdued', dx: -40, dy: 74, anchor: 'end' }],
+      callouts: () => [{ t: uL.t, v: uL.v, text: 'Low hiring, low firing', sub: 'layoffs low, job-switching subdued', anchor: 'end',
+        at: [[uL.t - 1, uL.v - 0.35], [uL.t - 1, uL.v - 0.55], [uL.t - 1, uL.v + 0.45]] }],
       aria: 'Unemployment rate, 4.1% in October 2026.' })),
     part: reg('labor', LineChart($('#lPart'), {
       series: [{ name: 'Participation rate', cls: 'teal', role: 'primary', data: S.civpart }], win: win(120), fmt: pct1,
       endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
       refs: [{ v: pre, label: 'Feb 2020: ' + fx(pre) + '%', align: 'end' }], shades: [{ t0: M(2020, 2), t1: M(2020, 4), label: 'Recession' }],
-      callouts: () => [{ t: pL.t, v: pL.v, text: 'An aging workforce pulls it down', sub: 'involuntary part-time: 4.8M, +339K', dx: -30, dy: 96, anchor: 'end' }],
+      callouts: () => [{ t: pL.t, v: pL.v, text: 'An aging workforce pulls it down', sub: 'involuntary part-time: 4.8M, +339K', anchor: 'end',
+        at: [[pL.t - 1, pL.v - 0.8], [pL.t - 1, pL.v - 1.2], [pL.t - 1, pL.v - 0.5]] }],
       aria: 'Labor force participation rate, 61.9% in October 2026, below 63.3% in February 2020.' }))
   };
   const HEAD = { un: 'Unemployment holding steady around 4%', part: 'Participation rate shifting down' };
@@ -2022,7 +2069,8 @@ function initInflation(sc) {
   reg('inflation', LineChart($('#iGS'), {
     series: [{ name: 'Services', cls: 'teal', role: 'primary', data: S.servY }, { name: 'Goods', cls: 'coral', role: 'primary', data: S.goodsY }],
     refs: [{ v: 2, label: '' }], win: [M(2019, 1), tEnd], fmt: pct1, endLabels: true, endNames: true, endPad: 104, zero: true,
-    callouts: () => [{ t: gL.t, v: gL.v, text: 'Goods: tariffs and energy', dx: -36, dy: -124, anchor: 'end' }, { t: sL.t - 5, v: at(S.servY, sL.t - 5), text: 'Services: resilient demand', dx: -24, dy: 150, anchor: 'end' }],
+    callouts: () => [{ t: gL.t, v: gL.v, text: 'Goods: tariffs and energy', anchor: 'end', at: [[gL.t - 2, 8.5], [gL.t - 2, 7.2], [gL.t - 2, 10]] },
+      { t: sL.t - 5, v: at(S.servY, sL.t - 5), text: 'Services: resilient demand', anchor: 'end', at: [[sL.t - 6, -2.0], [sL.t - 6, -2.8], [sL.t - 12, 7.5]] }],
     aria: 'PCE inflation for goods and for services since 2019. In September 2026 goods were 3.9% and services 3.5%.'
   }));
 }
