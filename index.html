@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NY Fed Challenge</title>
-<meta name="description" content="Team NY Fed's December 2026 FOMC recommendation for the FNCE 613 Fed Challenge: raise the federal funds target range 25 bp to 4.00%-4.25%.">
+<title>Team Big Apple: +25 bp in December</title>
+<meta name="description" content="Team Big Apple's recommendation for the December 2026 FOMC meeting: raise the federal funds target range 25 bp to 4.00%-4.25%. A student project.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -436,31 +436,186 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   .scene.enter > * { animation: none; }
   *, *::before, *::after { transition: none !important; }
 }
+/* ================= chart-first stages: each chapter fills the screen and its chart takes the room ================= */
+.brand b { font-size: 16px; }
+.brand small { font-family: var(--body); font-size: 11.5px; letter-spacing: 0; text-transform: none; color: var(--ink-2); white-space: nowrap; }
+.tool-link { align-self: center; margin-right: 4px; padding: 6px 13px; border: 1px solid var(--hair); border-radius: 999px; font-size: 12.5px; color: var(--ink-2); text-decoration: none; white-space: nowrap; }
+.tool-link:hover { color: var(--ink); border-color: var(--ink-2); }
+.back-link { color: var(--brass); text-decoration: none; }
+.team-m { display: none; }
+@media (max-width: 1100px) {
+  .brand small { display: none; }
+  .team-m { display: block; margin: 0 0 6px; font-size: .95em; color: var(--ink); max-width: 40ch; text-wrap: balance; }
+}
+
+.scene.stage {
+  max-width: 1760px;
+  height: calc(100vh - var(--top-h) - var(--bot-h) - 8px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  height: calc(100dvh - var(--top-h) - var(--bot-h) - 8px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  min-height: 560px;
+  padding-block: clamp(12px, 2.4vh, 30px) clamp(8px, 1.4vh, 16px);
+  gap: clamp(10px, 1.8vh, 20px);
+}
+.stage > .chart-wrap.fill, .stage > .duo, .stage > .mk-views, .stage > .ty-grid, .stage > .ai-grid, .stage > .cover-grid { flex: 1 1 0; min-height: 0; }
+.stage-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 28px; }
+.headline { margin: 0; font-family: var(--display); font-stretch: 112%; font-weight: 360; font-size: clamp(22px, 1.25vw + 12px, 40px); line-height: 1.1; letter-spacing: -.012em; text-wrap: balance; max-width: 46ch; }
+.chap { font-family: var(--mono); font-stretch: 100%; font-weight: 500; font-size: 12px; letter-spacing: .08em; color: var(--brass); margin-right: .9em; vertical-align: middle; }
+.chap-only { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.chap-only .chap { vertical-align: baseline; }
+.stage-top .legend { font-size: .88em; }
+
+.chart-wrap.fill { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.chart.fill { flex: 1 1 0; height: auto; min-height: 180px; }
+.cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; min-height: 0; }
+.cell > .chart-wrap.fill { flex: 1 1 0; }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px clamp(20px, 3vw, 56px); }
+.cell-cap { font-family: var(--display); font-stretch: 108%; font-weight: 600; font-size: clamp(15px, .45vw + 11px, 20px); line-height: 1.25; color: var(--ink); }
+.sub-cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.chart-tools { position: absolute; right: 0; bottom: -1px; z-index: 3; }
+.chart-tools .tbl-btn { padding: 0; font-family: var(--mono); font-size: 11px; line-height: 14px; color: var(--muted); }
+.chart-tools .tbl-btn:hover { color: var(--ink); }
+.tbl.overlay-tbl { position: absolute; right: 0; bottom: 30px; z-index: 6; width: min(560px, calc(100% - 60px)); max-height: min(62%, 420px); background: var(--raise); box-shadow: var(--shadow); }
+.nw { white-space: nowrap; }
+.chart-ro { text-shadow: 0 0 8px var(--bg), 0 0 3px var(--bg); }
+.chart-ro.tr { left: auto; right: 16px; top: 2px; justify-items: end; text-align: right; }
+
+/* words on the chart: chips, callouts, brackets */
+.chips { position: absolute; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: calc(100% - 90px); pointer-events: none; }
+.chip-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+.chip { display: inline-flex; align-items: baseline; gap: 7px; padding: 7px 14px; border: 1px solid var(--hair); border-radius: 999px; background: var(--bg); background: color-mix(in srgb, var(--bg) 84%, transparent); font-size: .9em; color: var(--ink-2); }
+.chip b { color: var(--ink); font-weight: 650; }
+.callout { fill: var(--ink); font-size: 15px; font-weight: 650; paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.callout-sub { fill: var(--ink-2); font-size: 12.5px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.callout-num { fill: var(--ink); font-family: var(--display) !important; font-stretch: 115%; font-size: 22px; font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.callout-ln { stroke: var(--ink-2); stroke-width: 1; }
+.callout-dot { fill: var(--ink); stroke: var(--bg); stroke-width: 2; }
+.bracket { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.bracket-h { fill: none; stroke: var(--ink-2); stroke-width: 1.2; }
+.gap-up { fill: var(--coral); opacity: .17; }
+.gap-dn { fill: var(--teal); opacity: .13; }
+.sw.k-gap { background: var(--coral); opacity: .4; }
+.sep-lbl { fill: var(--ink-2); font-size: 12.5px; font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.vote-dot { stroke: var(--bg); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; transition: opacity .15s; }
+.vote-dot.hold { fill: var(--teal); }
+.vote-dot.hike { fill: var(--brass); }
+.vote-dot.hot { opacity: .72; }
+.vote-lbl { fill: var(--ink-2); font-size: 12.5px; paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.vote-lbl.hike { fill: var(--ink); font-weight: 650; }
+/* bigger marks and labels: this is projected in a room */
+.ln { stroke-width: 2.5; }
+.ln.ctx { stroke-width: 1.9; }
+.tick { font-size: 11.5px; }
+.ann { font-size: 11.5px; }
+.ref-lbl { font-size: 12.5px; }
+.end-lbl { font-size: 13.5px; }
+.val { font-size: 13.5px; }
+.val-big { font-family: var(--display) !important; font-stretch: 115%; font-size: 22px; font-weight: 500; }
+.cat { font-size: 13px; }
+
+/* 03 decision: two big options */
+.choice { display: flex; flex-wrap: wrap; gap: 10px; }
+.opt {
+  position: relative; display: grid; gap: 1px; min-width: 196px; padding: 11px 20px 11px 46px; text-align: left;
+  border: 1.5px solid var(--axis); border-radius: 14px; background: transparent; color: var(--ink); cursor: pointer;
+  transition: border-color .2s, background-color .2s, transform .2s, box-shadow .2s;
+}
+.opt::before { content: ""; position: absolute; left: 16px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%; border: 2px solid var(--ink-2); }
+.opt .o-k { font-family: var(--display); font-stretch: 110%; font-weight: 650; font-size: 1.12em; line-height: 1.2; }
+.opt .o-v { font-size: .84em; color: var(--ink-2); }
+.opt:hover { border-color: var(--ink-2); transform: translateY(-2px); box-shadow: var(--shadow); }
+.opt[aria-pressed="true"]::before { border-color: currentColor; background: radial-gradient(circle, currentColor 0 3.5px, transparent 4px); }
+.opt.hike[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: var(--on-accent); }
+.opt.hold[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--on-accent); }
+.opt[aria-pressed="true"] .o-v { color: inherit; opacity: .85; }
+
+/* 06 markets: the toggled chart is the page */
+.mk-views { position: relative; display: flex; flex-direction: column; min-width: 0; }
+.mk-view { flex: 1 1 0; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.mk-view.stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px clamp(20px, 3vw, 48px); }
+.mk-view > .chart-wrap.fill { flex: 1 1 0; }
+.mk-note { order: -1; margin-bottom: 2px; font-family: var(--display); font-stretch: 108%; font-weight: 600; font-size: clamp(16px, .6vw + 11px, 23px); line-height: 1.25; color: var(--ink); }
+
+/* 07 inflation */
+.stat-pair { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 24px; }
+.stat-pair > span { display: inline-flex; align-items: baseline; gap: 8px; font-size: .92em; color: var(--ink-2); }
+.stat-pair b { font-family: var(--display); font-stretch: 122%; font-weight: 280; font-size: clamp(36px, 2.4vw + 14px, 66px); line-height: .95; letter-spacing: -.02em; color: var(--ink); }
+
+/* 08 AI risk */
+.ai-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, .9fr); gap: 18px clamp(20px, 3vw, 56px); }
+.ai-big { justify-content: center; gap: 12px; }
+.big-num { font-family: var(--display); font-stretch: 125%; font-weight: 250; font-size: clamp(64px, 5.2vw + 18px, 150px); line-height: .88; letter-spacing: -.035em; color: var(--ink); }
+.ai-line { margin: 0; max-width: 32ch; color: var(--ink-2); }
+.ai-line.strong { color: var(--ink); font-family: var(--display); font-stretch: 108%; font-weight: 600; font-size: 1.2em; }
+
+/* 09 Taylor rule */
+.ty-grid { display: grid; grid-template-columns: minmax(0, 1fr) clamp(270px, 22vw, 350px); gap: 18px clamp(20px, 2.6vw, 44px); }
+.ty-panel { display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; padding-right: 2px; }
+.ty-ro { display: grid; gap: 4px; }
+.ty-ro .ro-big { font-size: clamp(48px, 3.4vw + 14px, 88px); }
+.ty-panel .formula { margin: 0; color: var(--ink-2); }
+.f-note { color: var(--muted); }
+
+/* 10 our call: risks pinned to the chart */
+.watch-box { position: absolute; right: 12px; z-index: 2; width: min(340px, 36%); display: grid; gap: 8px; padding: 12px 16px 14px; border: 1px solid var(--hair); border-radius: 12px; background: var(--raise); background: color-mix(in srgb, var(--raise) 92%, transparent); box-shadow: var(--shadow); }
+.watch-box.up { top: 4px; border-top: 3px solid var(--coral); }
+.watch-box.down { bottom: 34px; border-bottom: 3px solid var(--teal); }
+.wb-h { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.wb-i { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 12px; font-size: .9em; }
+.wb-i b { color: var(--ink); font-weight: 600; }
+.wb-i span { color: var(--ink-2); font-family: var(--mono); font-size: .82em; }
+
+/* cover */
+.cover.stage { justify-content: center; }
+.cover .cover-grid { align-items: stretch; }
+.cover-copy { align-self: center; }
+.cover-chart { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+#coverChart { flex: 1 1 0; height: auto; min-height: 260px; }
+.overlay-play { position: absolute; right: 18px; top: 4px; z-index: 2; background: var(--bg); }
+.overlay-legend { position: absolute; right: 22px; bottom: 34px; pointer-events: none; }
+
+/* small screens: chapters scroll, charts get a fixed height, overlays flow under the chart */
+@media (max-width: 900px), (max-height: 600px) {
+  .scene.stage { height: auto; min-height: 0; }
+  .stage > .chart-wrap.fill, .stage > .duo, .stage > .mk-views, .stage > .ty-grid, .stage > .ai-grid, .stage > .cover-grid,
+  .mk-view, .mk-view > .chart-wrap.fill, .cell > .chart-wrap.fill { flex: none; }
+  .chart.fill, #coverChart { flex: none; height: clamp(280px, 56vh, 460px); }
+  .chips, .watch-box { position: static; width: auto; max-width: none; margin-top: 10px; box-shadow: none; }
+  .chart-ro.tr { position: static; order: -1; justify-items: start; text-align: left; margin-bottom: 6px; }
+  .ty-panel { overflow: visible; }
+}
+@media (max-width: 900px) {
+  .duo, .ai-grid, .ty-grid, .mk-view.stack { grid-template-columns: minmax(0, 1fr); }
+  .chart.fill, #coverChart { height: clamp(260px, 50vh, 400px); }
+  .overlay-legend { position: static; margin-top: 8px; }
+}
+@media (max-width: 560px) {
+  .chip { padding: 5px 11px; }
+  .opt { min-width: 0; flex: 1 1 140px; }
+  .headline { font-size: 22px; }
+}
 </style>
 </head>
 <body>
 <div class="halo" aria-hidden="true"></div>
 
 <header class="topbar">
-  <a class="brand" href="#top" aria-label="Team NY Fed briefing: back to the cover"><b>Team NY Fed</b><small>FNCE 613 · Fed Challenge</small></a>
+  <a class="brand" href="#top" aria-label="Team Big Apple: back to the cover"><b>Team Big Apple</b><small>KK Ananth · Shardul Kachare · Stephanie Demo · Grace Alexander · Alvin Wu</small></a>
   <nav class="rail" aria-label="Chapters">
     <ol id="railList">
       <li><a href="#recap"><span class="n">01</span><span class="t">Recap</span></a></li>
       <li><a href="#mandate"><span class="n">02</span><span class="t">Mandate</span></a></li>
       <li><a href="#decision"><span class="n">03</span><span class="t">Decision</span></a></li>
       <li><a href="#economy"><span class="n">04</span><span class="t">Economy</span></a></li>
-      <li><a href="#jobs"><span class="n">05</span><span class="t">Jobs</span></a></li>
-      <li><a href="#participation"><span class="n">06</span><span class="t">Participation</span></a></li>
-      <li><a href="#markets"><span class="n">07</span><span class="t">Markets</span></a></li>
-      <li><a href="#inflation"><span class="n">08</span><span class="t">Inflation</span></a></li>
-      <li><a href="#implications"><span class="n">09</span><span class="t">Implications</span></a></li>
-      <li><a href="#taylor"><span class="n">10</span><span class="t">Taylor rule</span></a></li>
-      <li><a href="#outlook"><span class="n">11</span><span class="t">Outlook</span></a></li>
-      <li><a href="#closing"><span class="n">12</span><span class="t">Closing</span></a></li>
-      <li><a href="#sources"><span class="t always">Sources</span></a></li>
+      <li><a href="#labor"><span class="n">05</span><span class="t">Labor</span></a></li>
+      <li><a href="#markets"><span class="n">06</span><span class="t">Markets</span></a></li>
+      <li><a href="#inflation"><span class="n">07</span><span class="t">Inflation</span></a></li>
+      <li><a href="#ai"><span class="n">08</span><span class="t">AI risk</span></a></li>
+      <li><a href="#taylor"><span class="n">09</span><span class="t">Taylor rule</span></a></li>
+      <li><a href="#closing"><span class="n">10</span><span class="t">Our call</span></a></li>
     </ol>
   </nav>
   <div class="tools">
+    <a class="tool-link" href="#sources">Sources</a>
     <button class="icon-btn" id="fsBtn" type="button" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme (T)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" stroke="none"/></svg></button>
   </div>
@@ -469,702 +624,236 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
 <main id="main">
 
 <!-- ===================== COVER ===================== -->
-<section class="scene" id="top" data-n="" data-label="Cover">
+<section class="scene stage cover" id="top" data-n="" data-label="Cover">
   <div class="cover-grid">
-    <div>
-      <p class="kicker">December 8–9, 2026 FOMC · Federal Reserve Bank of New York</p>
-      <p class="team"><span class="team-lbl">Team</span> <span>KK Ananth</span>, <span>Shardul Kachare</span>, <span>Stephanie Demo</span>, <span>Grace Alexander</span>, <span>Alvin Wu</span></p>
+    <div class="cover-copy">
+      <p class="kicker">Federal Reserve Bank of New York · December 8–9 FOMC</p>
+      <p class="team-m">KK Ananth, Shardul Kachare, Stephanie Demo, Grace Alexander, Alvin Wu</p>
       <p class="hero-num" aria-label="Plus 25 basis points">+25<span class="u">bp</span></p>
-      <h1 class="cover-title">Raise by 25 basis points. New target range: <b>4.00%–4.25%</b>.</h1>
-      <p class="lede">Inflation is still above target and core inflation momentum is sticky. Q3 GDP and domestic demand show the economy can likely absorb one more small step.</p>
-      <div class="cta">
-        <a class="btn primary" href="#recap">Start the briefing <span aria-hidden="true">→</span></a>
-        <a class="btn" href="#closing">Skip to our recommendation</a>
-      </div>
+      <h1 class="cover-title">Raise the target range to <b>4.00%–4.25%</b></h1>
+      <div class="cta"><a class="btn primary" href="#recap">Start <span aria-hidden="true">→</span></a></div>
     </div>
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Federal funds target range since 2015</span><span class="fig-sub">%, upper and lower limits</span></div>
-      <div class="legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Our December proposal</span></div>
-      <div class="chart-wrap">
-        <div class="chart" id="coverChart"></div>
-        <div class="chart-ro" id="coverRO" aria-live="off"><span class="d"></span><span class="r"></span></div>
-      </div>
-      <div class="fig-foot">
-        <button class="play" type="button" id="coverPlay" aria-pressed="false"><svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true" hidden><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg><span class="pl-lbl">Play</span></button>
-        <span>Replays the path from liftoff in 2015 to our December step.</span>
-        <button class="tbl-btn" type="button">Data table</button>
-      </div>
-      <div class="tbl" hidden></div>
-    </figure>
+    <div class="cover-chart">
+      <div class="chart" id="coverChart"></div>
+      <div class="chart-ro" id="coverRO"><span class="d"></span><span class="r"></span></div>
+      <div class="legend overlay-legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Our call</span></div>
+      <button class="play overlay-play" type="button" id="coverPlay" aria-pressed="false"><svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true" hidden><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg><span class="pl-lbl">Play</span></button>
+    </div>
   </div>
-  <p class="disclaimer">FNCE 613 Fed Challenge, classroom exercise. The 25 bp hike is a proposed classroom position, not official Federal Reserve policy. This page is not affiliated with the Federal Reserve.</p>
 </section>
 
 <!-- ===================== 01 RECAP ===================== -->
-<section class="scene" id="recap" data-n="01" data-label="Recap" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">01</span>October FOMC recap</p>
-      <h2 class="title">FOMC held the target range at 3.75%–4.00%.</h2>
-      <p class="hint">Hover a vote, or move along the rate path.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">Vote, October 28</span>
-      <span class="ro-big">10–2</span>
-      <span class="ro-line"><b>2</b> dissents preferred <b>+25 bp</b></span>
-    </div>
-  </header>
-  <div class="g3">
-    <article class="block">
-      <h3>What happened?</h3>
-      <div class="votes" id="votes" role="group" aria-label="FOMC vote: 10 to hold, 2 dissents preferring a 25 basis point increase"></div>
-      <div class="legend"><span><i class="sw round k-teal"></i>Hold · 10</span><span><i class="sw round k-brass"></i>Preferred +25 bp · 2</span></div>
-      <ul class="list" style="margin-top:10px"><li>Vote: 10–2.</li><li>Two dissents preferred a 25 bp increase.</li></ul>
-    </article>
-    <article class="block">
-      <h3>What the statement said</h3>
-      <ul class="list statement">
-        <li>Economic activity is expanding at a <mark>strong pace</mark>.</li>
-        <li>Domestic spending is <mark>resilient</mark>; productivity growth is <mark>strong</mark>; capital investment is <mark>robust</mark>.</li>
-        <li>Inflation remains <mark>elevated</mark>.</li>
-      </ul>
-    </article>
-    <article class="block">
-      <h3>Why this matters for December</h3>
-      <ul class="list">
-        <li>The starting point is already restrictive policy.</li>
-        <li>The question is whether inflation is sticky enough to justify one more move.</li>
-      </ul>
-    </article>
+<section class="scene stage" id="recap" data-n="01" data-label="Recap" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">01</span>October: held at <span class="nw">3.75%–4.00%</span>, with two votes to hike</h2>
   </div>
-  <figure class="fig">
-    <div class="fig-cap"><span class="fig-title">Federal funds target range, 2024 to today</span><span class="fig-sub">%, upper and lower limits</span></div>
-    <div class="chart sm" id="recapChart"></div>
-    <div class="fig-foot"><span>Three cuts in late 2025, a hike on Sep 17, 2026, then a hold on Oct 28.</span><button class="tbl-btn" type="button">Data table</button></div>
-    <div class="tbl" hidden></div>
-  </figure>
-  <p class="src">Source: Federal Reserve FOMC statement, October 28, 2026 (<a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm" target="_blank" rel="noopener">federalreserve.gov</a>). Target range: FRED DFEDTARL, DFEDTARU.</p>
+  <div class="chart-wrap fill">
+    <div class="chart fill" id="recapChart"></div>
+    <div class="chips" style="left:58px; bottom:40px">
+      <span class="chip-h">The statement</span>
+      <span class="chip"><b>Activity</b>strong pace</span>
+      <span class="chip"><b>Spending</b>resilient</span>
+      <span class="chip"><b>Investment</b>robust</span>
+      <span class="chip"><b>Inflation</b>elevated</span>
+    </div>
+  </div>
 </section>
 
 <!-- ===================== 02 MANDATE ===================== -->
-<section class="scene" id="mandate" data-n="02" data-label="Mandate" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">02</span>Fed's dual mandate &amp; dilemma going into December</p>
-      <h2 class="title long">A small hike can be justified if the inflation risk still dominates the growth slowdown risk.</h2>
-      <p class="hint">Press Play or drag the timeline. Hover either chart and both follow.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-big" id="mDate">Oct 2026</span>
-      <span class="ro-line"><b id="mCore">3.1%</b> core PCE, y/y</span>
-      <span class="ro-line"><b id="mUn">4.1%</b> unemployment</span>
-      <span class="ro-line"><b id="mFF">3.75%–4.00%</b> fed funds target</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Time range</span>
-    <div class="seg" id="mRange" role="group" aria-label="Time range">
-      <button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button>
+<section class="scene stage" id="mandate" data-n="02" data-label="Mandate" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">02</span>The inflation risk still dominates</h2>
+    <div class="controls">
+      <div class="legend"><span><i class="lk k-teal"></i>Core PCE</span><span><i class="lk k-ctx"></i>PCE</span><span><i class="lk k-coral"></i>Unemployment</span></div>
+      <div class="seg" id="mRange" role="group" aria-label="Time range"><button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button></div>
     </div>
   </div>
-  <div class="g2">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Price stability: return inflation to 2%</span><span class="fig-sub">PCE price index, % change from a year earlier</span></div>
-      <div class="legend"><span><i class="lk k-teal"></i>Core PCE</span><span><i class="lk k-ctx"></i>PCE (headline)</span><span><i class="lk dash"></i>2% target</span></div>
-      <div class="chart md" id="mInfl"></div>
-      <div class="fig-foot"><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Maximum employment: keep labor conditions as strong as possible over time</span><span class="fig-sub">Unemployment rate, %</span></div>
-      <div class="chart md" id="mUnChart"></div>
-      <div class="fig-foot"><span>Blank month: October 2025 was not collected during the federal shutdown.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
+  <div class="chart-wrap fill">
+    <div class="chart fill" id="mChart"></div>
+    <div class="chart-ro tr"><span class="d" id="mDate">Oct 2026</span><span class="r"><b id="mCore">3.1%</b> core PCE · <b id="mUn">4.1%</b> unemployment · <b id="mFF">3.75%–4.00%</b> fed funds</span></div>
+    <div class="chart-tools"><button class="tbl-btn" type="button">Data</button></div>
+    <div class="tbl overlay-tbl" hidden></div>
   </div>
   <div class="scrub">
     <button class="play" type="button" id="mPlay" aria-pressed="false"><svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true" hidden><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg><span class="pl-lbl">Play</span></button>
-    <div class="scrub-track"><input type="range" id="mSlider" aria-label="Month shown on both charts" step="1"><div class="scrub-ticks" id="mTicks" aria-hidden="true"></div></div>
+    <div class="scrub-track"><input type="range" id="mSlider" aria-label="Month shown on the chart" step="1"><div class="scrub-ticks" id="mTicks" aria-hidden="true"></div></div>
   </div>
-  <div class="g3">
-    <article class="block"><h3>Inflation side</h3><ul class="list"><li>Sep PCE inflation: <b>3.6%</b> y/y; core PCE: <b>3.1%</b> y/y.</li><li>Oct core CPI rose <b>0.3%</b> for the third straight month.</li></ul></article>
-    <article class="block"><h3>Growth / demand side</h3><ul class="list"><li>Q3 real GDP: <b>3.4%</b> SAAR.</li><li>Real final sales to private domestic purchasers: <b>4.9%</b> SAAR.</li></ul></article>
-    <article class="block"><h3>What makes this a dilemma?</h3><ul class="list"><li>Inflation is still above target.</li><li>Activity and domestic demand remain solid.</li><li>But policy lags mean more tightening could bite later.</li></ul></article>
-  </div>
-  <p class="src">Source: Federal Reserve October FOMC; BEA Q3 GDP, September PCE; BLS October CPI (<a href="https://www.federalreserve.gov" target="_blank" rel="noopener">federalreserve.gov</a>, <a href="https://www.bea.gov" target="_blank" rel="noopener">bea.gov</a>, <a href="https://www.bls.gov" target="_blank" rel="noopener">bls.gov</a>). Charts: FRED PCEPI, PCEPILFE, UNRATE; fed funds: DFEDTAR, DFEDTARL, DFEDTARU.</p>
 </section>
 
 <!-- ===================== 03 DECISION ===================== -->
-<section class="scene" id="decision" data-n="03" data-label="Decision" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">03</span>NY Fed's proposed decision</p>
-      <h2 class="title">Raise by 25 basis points</h2>
-      <p class="hint">Switch between our call and a pause to compare the two paths.</p>
-    </div>
-    <div class="readout" aria-live="polite">
-      <span class="ro-lbl" id="dLbl">New target range</span>
-      <span class="ro-big accent" id="dRange">4.00%–4.25%</span>
-      <span class="ro-line" id="dNote"><b>+25 bp</b> from 3.75%–4.00%</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Scenario</span>
-    <div class="seg accent" id="dSeg" role="group" aria-label="Scenario">
-      <button type="button" data-v="hike" aria-pressed="true">Raise 25 bp · our call</button><button type="button" data-v="hold" aria-pressed="false">Pause</button>
+<section class="scene stage" id="decision" data-n="03" data-label="Decision" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">03</span>Our call for December</h2>
+    <div class="choice" id="dChoice" role="group" aria-label="December decision">
+      <button type="button" class="opt hike" data-v="hike" aria-pressed="true"><span class="o-k">Raise 25 bp</span><span class="o-v">to 4.00%–4.25%</span></button>
+      <button type="button" class="opt hold" data-v="hold" aria-pressed="false"><span class="o-k">Pause</span><span class="o-v">stay at 3.75%–4.00%</span></button>
     </div>
   </div>
-  <div class="gside">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Federal funds target range, with the December step</span><span class="fig-sub">%, upper and lower limits</span></div>
-      <div class="legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Proposed +25 bp</span><span><i class="sw dash-box"></i>Pause</span></div>
-      <div class="chart" id="dChart"></div>
-      <div class="fig-foot"><span>The faded stretch is the current range until the December meeting.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <div class="panel">
-      <article class="block" data-scn="hike">
-        <h3>Why a marginal hike is defensible</h3>
-        <ul class="list">
-          <li>Inflation is still above target and core inflation momentum is sticky.</li>
-          <li>Q3 GDP and domestic demand show the economy can likely absorb one more small step.</li>
-          <li>A marginal increase helps prevent premature easing of financial conditions and reinforces inflation credibility.</li>
-        </ul>
-      </article>
-      <article class="block dim" data-scn="hold">
-        <h3>What would make us pause instead?</h3>
-        <ul class="list">
-          <li>Clear evidence of softer demand. <a href="#economy">Demand data →</a></li>
-          <li>A broader labor-market deterioration. <a href="#jobs">Labor data →</a></li>
-          <li>Faster disinflation in core measures. <a href="#implications">Core inflation →</a></li>
-        </ul>
-      </article>
-    </div>
+  <div class="chart-wrap fill">
+    <div class="chart fill" id="dChart"></div>
+    <div class="chips" id="dWhy" style="left:58px; bottom:40px"></div>
   </div>
-  <p class="src">Source: Federal Reserve October 28 FOMC; BEA Q3 GDP and September PCE; BLS October CPI. 25 bp hike is a proposed classroom position, not official Fed policy. Target range: FRED DFEDTARL, DFEDTARU.</p>
 </section>
 
 <!-- ===================== 04 ECONOMY ===================== -->
-<section class="scene" id="economy" data-n="04" data-label="Economy" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">04</span>State of the U.S. economy</p>
-      <h2 class="title long">Growth is supported by consumption and investment; strong domestic demand limits the case for immediate easing.</h2>
-      <p class="hint">Hover any bar. Switch quarters to see what drove growth.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">Q3 real GDP, SAAR</span>
-      <span class="ro-big">3.4%</span>
-      <span class="ro-line"><b>4.9%</b> private domestic final sales¹</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Contributions for</span>
-    <div class="seg" id="eQ" role="group" aria-label="Quarter shown in the contributions chart">
-      <button type="button" data-v="Q4 2025" aria-pressed="false">Q4 '25</button><button type="button" data-v="Q1 2026" aria-pressed="false">Q1 '26</button><button type="button" data-v="Q2 2026" aria-pressed="false">Q2 '26</button><button type="button" data-v="Q3 2026" aria-pressed="true">Q3 '26</button>
-    </div>
+<section class="scene stage" id="economy" data-n="04" data-label="Economy" hidden>
+  <div class="stage-top">
+    <span class="chap-only"><span class="chap">04</span>Economy</span>
+    <div class="seg" id="eQ" role="group" aria-label="Quarter"><button type="button" data-v="Q4 2025" aria-pressed="false">Q4 '25</button><button type="button" data-v="Q1 2026" aria-pressed="false">Q1 '26</button><button type="button" data-v="Q2 2026" aria-pressed="false">Q2 '26</button><button type="button" data-v="Q3 2026" aria-pressed="true">Q3 '26</button></div>
   </div>
-  <div class="g2">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Economic demand remained resilient</span><span class="fig-sub">Annualized real growth, %</span></div>
+  <div class="duo">
+    <div class="cell">
+      <span class="cell-cap" id="eWfTitle">What added up to Q3 2026 growth</span>
+      <div class="legend"><span><i class="sw k-teal"></i>Adds</span><span><i class="sw k-coral"></i>Subtracts</span><span><i class="sw k-ink"></i>Real GDP growth</span></div>
+      <div class="chart fill" id="eWf"></div>
+    </div>
+    <div class="cell">
+      <span class="cell-cap">Demand stayed strong</span>
       <div class="legend"><span><i class="sw k-ctx"></i>Q2 2026</span><span><i class="sw k-teal"></i>Q3 2026</span></div>
-      <div class="chart md" id="eDemand"></div>
-      <div class="fig-foot"><span>¹ Consumption + private fixed investment.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title" id="eWfTitle">Q3 2026 contributions to real GDP growth</span><span class="fig-sub">Percentage points, annualized</span></div>
-      <div class="legend"><span><i class="sw k-teal"></i>Adds to growth</span><span><i class="sw k-coral"></i>Subtracts</span><span><i class="sw k-ink"></i>Real GDP growth</span></div>
-      <div class="chart md" id="eWf"></div>
-      <div class="fig-foot"><span>Contributions add up to GDP growth, up to rounding.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
+      <div class="chart fill" id="eDemand"></div>
+    </div>
   </div>
-  <p class="src">Source: BEA Q3 GDP advance estimate, Oct 29 2026 (<a href="https://www.bea.gov/news/2026/gdp-advance-estimate-3rd-quarter-2026" target="_blank" rel="noopener">bea.gov</a>); GDP contributions: BEA via FRED (DPCERY2Q224SBEA, A007RY2Q224SBEA, A014RY2Q224SBEA, A822RY2Q224SBEA, A019RY2Q224SBEA). ¹ Consumption + private fixed investment.</p>
 </section>
 
-<!-- ===================== 05 JOBS ===================== -->
-<section class="scene" id="jobs" data-n="05" data-label="Jobs" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">05</span>State of the U.S. labor market: maintaining a “low-hire, low-fire” equilibrium</p>
-      <h2 class="title">Unemployment holding steady around 4%</h2>
-      <p class="hint">Hover the line and pick a range. Switch between the nation and New York.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">Unemployment rate, Oct 2026</span>
-      <span class="ro-big">4.1%</span>
-      <span class="ro-line"><b>4.2%</b> in September</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Time range</span>
-    <div class="seg" id="jRange" role="group" aria-label="Time range">
-      <button type="button" data-v="12" aria-pressed="false">1Y</button><button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button>
+<!-- ===================== 05 LABOR ===================== -->
+<section class="scene stage" id="labor" data-n="05" data-label="Labor" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">05</span><span id="lHead">Unemployment holding steady around 4%</span></h2>
+    <div class="controls">
+      <div class="seg" id="lView" role="group" aria-label="Measure"><button type="button" data-v="un" aria-pressed="true">Unemployment</button><button type="button" data-v="part" aria-pressed="false">Participation</button></div>
+      <div class="seg" id="lRange" role="group" aria-label="Time range"><button type="button" data-v="12" aria-pressed="false">1Y</button><button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button></div>
     </div>
   </div>
-  <div class="gside">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Civilian unemployment rate</span><span class="fig-sub">%, seasonally adjusted</span></div>
-      <div class="chart" id="jChart"></div>
-      <div class="fig-foot"><span>Blank month: October 2025 was not collected during the federal shutdown.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <div class="panel">
-      <div class="seg" id="jGeo" role="group" aria-label="Geography"><button type="button" data-v="nation" aria-pressed="true">Nation</button><button type="button" data-v="ny" aria-pressed="false">New York</button></div>
-      <article class="block" data-geo="nation">
-        <h3>Nation</h3>
-        <ul class="list">
-          <li>Unemployment is stable, around <b>4.1%</b></li>
-          <li>Layoffs are low</li>
-          <li>Hiring and job-switching are subdued</li>
-          <li>Average hourly earnings are up <b>3.1%</b> over the year, roughly in line with core PCE inflation</li>
-        </ul>
-      </article>
-      <article class="block" data-geo="ny" hidden>
-        <h3>New York</h3>
-        <p class="sub-h">Wall Street</p>
-        <div class="tiles">
-          <div class="tile"><span class="v">207,400</span><span class="l">securities jobs in 2025, a record</span></div>
-          <div class="tile"><span class="v">+5,300</span><span class="l">more jobs on pace for 2026</span></div>
-          <div class="tile"><span class="v">$45.9B</span><span class="l">first-half pretax profits, up 51.3%</span></div>
-        </div>
-        <p style="margin-top:10px">That means profits and pay are booming, with only modest job growth.</p>
-        <p class="sub-h">NYC private employment</p>
-        <div class="tiles">
-          <div class="tile"><span class="v">−16,300</span><span class="l">so far this year</span></div>
-          <div class="tile"><span class="v">−32,000</span><span class="l">over 12 months, excluding health care</span></div>
-        </div>
-      </article>
-    </div>
+  <div class="chart-wrap fill">
+    <div class="chart fill" id="lUn"></div>
+    <div class="chart fill" id="lPart" hidden></div>
+    <div class="chart-tools"><button class="tbl-btn" type="button">Data</button></div>
+    <div class="tbl overlay-tbl" hidden></div>
   </div>
-  <p class="src">Source: BLS (<a href="https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm" target="_blank" rel="noopener">bls.gov</a>; FRED UNRATE). New York: NY State Comptroller, NYC securities industry report 2026 (<a href="https://www.osc.ny.gov/files/reports/osdc/2026/pdf/nyc-securities-industry-2026.pdf" target="_blank" rel="noopener">osc.ny.gov</a>); <a href="https://www.roic.ai/news/wall-street-profits-surge-51-as-ai-boom-fuels-record-pace-10-06-2026" target="_blank" rel="noopener">roic.ai</a>, Oct 6 2026.</p>
 </section>
 
-<!-- ===================== 06 PARTICIPATION ===================== -->
-<section class="scene" id="participation" data-n="06" data-label="Participation" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">06</span>State of the U.S. labor market: cooling labor force participation rate</p>
-      <h2 class="title">Participation rate shifting down</h2>
-      <p class="hint">Hover the line. Try “Since 2000” for the longer aging trend.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">Participation rate, Oct 2026</span>
-      <span class="ro-big">61.9%</span>
-      <span class="ro-line"><b id="pPre">63.3%</b> before the pandemic (Feb 2020)</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Time range</span>
-    <div class="seg" id="pRange" role="group" aria-label="Time range">
-      <button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="false">5Y</button><button type="button" data-v="120" aria-pressed="true">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button>
+<!-- ===================== 06 MARKETS ===================== -->
+<section class="scene stage" id="markets" data-n="06" data-label="Markets" hidden>
+  <div class="stage-top">
+    <span class="chap-only"><span class="chap">06</span>Markets since the Oct 28 FOMC</span>
+    <div class="controls">
+      <div class="seg" id="mkSeg" role="group" aria-label="Market shown"><button type="button" data-v="rates" aria-pressed="true">Treasury yields</button><button type="button" data-v="credit" aria-pressed="false">Credit spreads</button><button type="button" data-v="stocks" aria-pressed="false">Stocks &amp; VIX</button><button type="button" data-v="dollar" aria-pressed="false">Dollar</button></div>
+      <div class="seg" id="mkWin" role="group" aria-label="Time window"><button type="button" data-v="63" aria-pressed="false">3M</button><button type="button" data-v="126" aria-pressed="true">6M</button><button type="button" data-v="all" aria-pressed="false">Since Jul 2025</button></div>
     </div>
   </div>
-  <div class="gside">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Labor force participation rate</span><span class="fig-sub">%, seasonally adjusted; shading = 2020 recession</span></div>
-      <div class="chart" id="pChart"></div>
-      <div class="fig-foot"><span>Blank month: October 2025 was not collected during the federal shutdown.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <div class="panel">
-      <article class="block">
-        <h3>Population shifts</h3>
-        <p>Population shifts (aging labor force) put downward pressure on participation without affecting the unemployment rate.</p>
-      </article>
-      <article class="block">
-        <h3>Involuntary part-time work</h3>
-        <div class="tiles">
-          <div class="tile"><span class="v">4.8M</span><span class="l">involuntary part-time, up 339,000</span></div>
-          <div class="tile"><span class="v">27.6%</span><span class="l">of the jobless are long-term unemployed</span></div>
-        </div>
-        <p style="margin-top:10px">Involuntary part-time work jumped by 339,000 to 4.8 million, and long-term unemployed make up 27.6% of the jobless.</p>
-      </article>
+  <div class="mk-views" id="mkLeft">
+    <div class="mk-view" data-mk="rates">
+      <div class="legend"><span><i class="lk k-teal"></i>10-year</span><span><i class="lk k-coral"></i>10-year real (TIPS)</span><span><i class="lk k-ctx"></i>2-year</span></div>
+      <div class="chart-wrap fill"><div class="chart fill" id="mkRates"></div><div class="mk-note" id="mkNrates"></div></div>
     </div>
+    <div class="mk-view stack" data-mk="credit" hidden>
+      <div class="cell"><span class="sub-cap">Investment-grade spread, bp</span><div class="chart-wrap fill"><div class="chart fill" id="mkIG"></div><div class="mk-note" id="mkNig"></div></div></div>
+      <div class="cell"><span class="sub-cap">High-yield spread, bp</span><div class="chart-wrap fill"><div class="chart fill" id="mkHY"></div><div class="mk-note" id="mkNhy"></div></div></div>
+    </div>
+    <div class="mk-view stack" data-mk="stocks" hidden>
+      <div class="cell"><div class="legend"><span><i class="lk k-teal"></i>S&amp;P 500</span><span><i class="lk k-coral"></i>Nasdaq Composite</span><span class="sub-cap">Oct 28 = 100</span></div><div class="chart-wrap fill"><div class="chart fill" id="mkEq"></div><div class="mk-note" id="mkNeq"></div></div></div>
+      <div class="cell"><span class="sub-cap">VIX</span><div class="chart-wrap fill"><div class="chart fill" id="mkVix"></div><div class="mk-note" id="mkNvix"></div></div></div>
+    </div>
+    <div class="mk-view" data-mk="dollar" hidden>
+      <span class="sub-cap">Nominal broad dollar index</span>
+      <div class="chart-wrap fill"><div class="chart fill" id="mkUsd"></div><div class="mk-note" id="mkNusd"></div></div>
+    </div>
+    <div class="chart-tools"><button class="tbl-btn" type="button">Data</button></div>
+    <div class="tbl overlay-tbl" hidden></div>
   </div>
-  <p class="src">Source: BLS (<a href="https://www.bls.gov/charts/employment-situation/civilian-labor-force-participation-rate.htm" target="_blank" rel="noopener">bls.gov</a>; FRED CIVPART). Shading: February–April 2020 recession (NBER).</p>
 </section>
 
-<!-- ===================== 07 FINANCIAL MARKETS ===================== -->
-<section class="scene" id="markets" data-n="07" data-label="Markets" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">07</span>Financial markets: what has changed since October 28?</p>
-      <h2 class="title long">Financial markets have tightened since October, but credit remains broadly functional.</h2>
-      <p class="hint">Switch between rates, credit, stocks and the dollar. The table compares Oct 28, our Nov 17 write-up and the latest close.</p>
-    </div>
-    <div class="readout" aria-live="polite">
-      <span class="ro-lbl" id="mkLbl">10-year Treasury yield, Nov 20</span>
-      <span class="ro-big" id="mkBig">4.92%</span>
-      <span class="ro-line" id="mkNote"><b>−13 bp</b> since Oct 28</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Market</span>
-    <div class="seg" id="mkSeg" role="group" aria-label="Market shown">
-      <button type="button" data-v="rates" aria-pressed="true">Treasury yields</button><button type="button" data-v="credit" aria-pressed="false">Credit spreads</button><button type="button" data-v="stocks" aria-pressed="false">Stocks &amp; VIX</button><button type="button" data-v="dollar" aria-pressed="false">Dollar</button>
-    </div>
-    <span class="ctl-lbl">Window</span>
-    <div class="seg" id="mkWin" role="group" aria-label="Time window">
-      <button type="button" data-v="63" aria-pressed="false">3M</button><button type="button" data-v="126" aria-pressed="true">6M</button><button type="button" data-v="all" aria-pressed="false">Since Jul 2025</button>
-    </div>
+<!-- ===================== 07 INFLATION ===================== -->
+<section class="scene stage" id="inflation" data-n="07" data-label="Inflation" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">07</span>Inflation is persistent</h2>
+    <div class="stat-pair"><span><b id="iP">3.6%</b>PCE</span><span><b id="iC">3.1%</b>core PCE</span><span class="sub-cap">Sep, y/y</span></div>
   </div>
-  <div class="gside">
-    <div class="fig" id="mkLeft">
-      <figure class="fig" data-mk="rates">
-        <div class="fig-cap"><span class="fig-title">Treasury yields</span><span class="fig-sub">%, daily · hover for the 10-year breakeven</span></div>
-        <div class="legend"><span><i class="lk k-teal"></i>10-year</span><span><i class="lk k-coral"></i>10-year real (TIPS)</span><span><i class="lk k-ctx"></i>2-year</span></div>
-        <div class="chart" id="mkRates"></div>
-      </figure>
-      <figure class="fig" data-mk="credit" hidden>
-        <div class="fig-cap"><span class="fig-title">Corporate bond spreads over Treasuries</span><span class="fig-sub">Option-adjusted spread, basis points, daily</span></div>
-        <span class="fig-sub">Investment grade</span>
-        <div class="chart xs" id="mkIG"></div>
-        <span class="fig-sub">High yield</span>
-        <div class="chart xs" id="mkHY"></div>
-      </figure>
-      <figure class="fig" data-mk="stocks" hidden>
-        <div class="fig-cap"><span class="fig-title">Stocks, rebased to Oct 28 = 100</span><span class="fig-sub">daily closes</span></div>
-        <div class="legend"><span><i class="lk k-teal"></i>S&amp;P 500</span><span><i class="lk k-coral"></i>Nasdaq Composite</span></div>
-        <div class="chart md" id="mkEq"></div>
-        <span class="fig-sub">VIX volatility index</span>
-        <div class="chart xs" id="mkVix"></div>
-      </figure>
-      <figure class="fig" data-mk="dollar" hidden>
-        <div class="fig-cap"><span class="fig-title">Nominal broad U.S. dollar index</span><span class="fig-sub">Jan 2006 = 100, daily</span></div>
-        <div class="chart" id="mkUsd"></div>
-      </figure>
-      <div class="fig-foot"><span>Dashed lines mark the Oct 28 FOMC and our Nov 17 write-up.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
+  <div class="duo">
+    <div class="cell">
+      <span class="cell-cap">October CPI: every category rose</span>
+      <div class="chart fill" id="iCats"></div>
     </div>
-    <div class="panel">
-      <article class="block">
-        <h3>October FOMC: starting point</h3>
-        <ul class="list">
-          <li><b>Markets anticipated tightening:</b> fed funds futures priced an estimated 88% probability of a 25 bp December hike; the median NY Fed Desk survey respondent expected another hike in March 2027.</li>
-          <li><b>Credit remained broadly available:</b> solid corporate bond issuance, bank lending standards slightly easier than historical norms, and generally available consumer credit, despite emerging stress among riskier borrowers.</li>
-        </ul>
-      </article>
-      <article class="block">
-        <h3>What the moves told us, through Nov 17</h3>
-        <ul class="list">
-          <li>The 10-year real yield rose 22 bp, suggesting the increase in long-term yields was not driven by rising inflation expectations.</li>
-          <li>Riskier financing is becoming more expensive, but credit remained broadly available.</li>
-          <li>A meaningful repricing in stocks, led by technology, but no established evidence yet that the decline has materially impaired households' present value of lifetime resources (PVLR) or consumption.</li>
-        </ul>
-        <p class="since" id="mkSince"></p>
-      </article>
-    </div>
-  </div>
-  <figure class="fig">
-    <div class="fig-cap"><span class="fig-title">What has changed since October 28</span><span class="fig-sub">Closing levels; latest is Nov 20 unless noted</span></div>
-    <div class="tbl open" id="mkTable"></div>
-  </figure>
-  <article class="block">
-    <h3>Emerging risk: AI infrastructure financing</h3>
-    <div class="tiles">
-      <div class="tile"><span class="v">$680B+</span><span class="l">AI-related debt issued through October 2026, about 5× all of 2023</span></div>
-      <div class="tile"><span class="v">$1.1T+</span><span class="l">outstanding public AI-related debt</span></div>
-      <div class="tile"><span class="v">31%</span><span class="l">of nonfinancial investment-grade issuance, vs. under 6% in 2023</span></div>
-    </div>
-    <ul class="list" style="margin-top:12px">
-      <li>Complex leases, guarantees and financing arrangements increase interconnectedness among technology firms, banks, insurers and private credit lenders.</li>
-      <li>AI capex supports growth but creates financial vulnerabilities if investment returns disappoint. A risk to monitor, not evidence of a current systemic crisis.</li>
-    </ul>
-  </article>
-  <p class="src">Source: FRED, daily: DGS10, DFII10, DGS2 (Treasury yields), BAMLC0A0CM, BAMLH0A0HYM2 (ICE BofA option-adjusted spreads), SP500, NASDAQCOM, VIXCLS, DTWEXBGS; breakeven = 10-year nominal − 10-year real yield. Market pricing and desk survey: Minutes of the FOMC, October 27–28, 2026. AI financing: Federal Reserve, Financial Stability Report, November 2026, pp. 23–25.</p>
-</section>
-
-<!-- ===================== 08 INFLATION ===================== -->
-<section class="scene" id="inflation" data-n="08" data-label="Inflation" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">08</span>Inflation: drivers and outlook, impact of AI</p>
-      <h2 class="title">Inflation is persistent</h2>
-      <p class="hint">Left: October CPI by category. Right: PCE, the Fed's target measure, split into goods and services.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">September PCE, y/y</span>
-      <span class="ro-big">3.6%</span>
-      <span class="ro-line"><b>3.1%</b> core PCE</span>
-    </div>
-  </header>
-  <div class="g2">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">October: price pressures across categories</span><span class="fig-sub">CPI, monthly price increase, %</span></div>
-      <div class="chart md" id="iCats"></div>
-      <div class="fig-foot"><span>Categories overlap; monthly changes.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">PCE inflation: goods vs. services</span><span class="fig-sub">% change from a year earlier</span></div>
+    <div class="cell">
+      <span class="cell-cap">PCE inflation: goods vs. services</span>
       <div class="legend"><span><i class="lk k-teal"></i>Services</span><span><i class="lk k-coral"></i>Goods</span><span><i class="lk dash"></i>2% target</span></div>
-      <div class="chart md" id="iGS"></div>
-      <div class="fig-foot"><span id="iGSnote"></span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-  </div>
-  <div class="g2">
-    <article class="block">
-      <h3>Two sources of pressure</h3>
-      <ul class="list">
-        <li><b>Demand:</b> consumer spending and business investment remain resilient.</li>
-        <li><b>Supply:</b> tariffs, energy and equipment capacity constraints can raise costs.</li>
-      </ul>
-    </article>
-    <div class="bottomline">
-      <span class="lbl">Bottom line</span>
-      <p>Broad category increases do not prove demand caused inflation; they do show it is more than an isolated energy move.</p>
+      <div class="chart fill" id="iGS"></div>
     </div>
   </div>
-  <p class="src">Source: BLS October 2026 CPI (<a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">bls.gov</a>); BEA September PCE (<a href="https://www.bea.gov/news/2026/personal-income-and-outlays-september-2026" target="_blank" rel="noopener">bea.gov</a>; FRED DSERRG3M086SBEA, DGDSRG3M086SBEA, DNRGRG3M086SBEA, DFXARG3M086SBEA). Categories overlap; monthly changes.</p>
 </section>
 
-<!-- ===================== 09 IMPLICATIONS ===================== -->
-<section class="scene" id="implications" data-n="09" data-label="Implications" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">09</span>Inflation: implications for our decision</p>
-      <h2 class="title long">A single marginal increase is a risk-management move—not the start of a new hiking cycle.</h2>
-      <p class="hint">Switch between core PCE and core CPI. The dashed line is the monthly pace that adds up to 2% a year.</p>
-    </div>
-    <div class="readout" aria-live="polite">
-      <span class="ro-lbl" id="iLbl">Core PCE, Sep 2026, m/m</span>
-      <span class="ro-big" id="iBig">0.3%</span>
-      <span class="ro-line"><b id="iAnn">2.9%</b> 3-month annualized</span>
-      <span class="ro-line" id="iYoyLine"><b id="iYoy">3.1%</b> year over year</span>
-    </div>
-  </header>
-  <div class="controls">
-    <span class="ctl-lbl">Measure</span>
-    <div class="seg" id="iSeg" role="group" aria-label="Inflation measure">
-      <button type="button" data-v="pce" aria-pressed="true">Core PCE · Apr–Sep</button><button type="button" data-v="cpi" aria-pressed="false">Core CPI · May–Oct</button>
+<!-- ===================== 08 AI RISK ===================== -->
+<section class="scene stage" id="ai" data-n="08" data-label="AI risk" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">08</span>Emerging risk: AI infrastructure financing</h2>
+  </div>
+  <div class="ai-grid">
+    <div class="cell"><span class="cell-cap">AI-related debt issuance</span><div class="chart fill" id="aiIss"></div></div>
+    <div class="cell"><span class="cell-cap">AI share of nonfinancial investment-grade issuance</span><div class="chart fill" id="aiShare"></div></div>
+    <div class="cell ai-big">
+      <span class="big-num">$1.1T+</span>
+      <span class="cell-cap">outstanding public AI-related debt</span>
+      <p class="ai-line">Leases, guarantees and private credit tie tech firms to banks and insurers.</p>
+      <p class="ai-line strong">A risk to monitor, not a crisis.</p>
     </div>
   </div>
-  <div class="gside">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">Sticky core inflation</span><span class="fig-sub" id="iSub">Core PCE, monthly change, %</span></div>
-      <div class="legend"><span><i class="sw k-teal"></i><span id="iLegName">Core PCE, m/m</span></span><span><i class="lk dash"></i>2% a year ≈ 0.17% a month</span></div>
-      <div class="chart" id="iMoM"></div>
-      <div class="fig-foot"><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <div class="panel">
-      <article class="block">
-        <h3>Evidence supporting a 25 bp hike</h3>
-        <ul class="list">
-          <li>Inflation is still above target.</li>
-          <li>Core PCE rose <b>0.3%</b> m/m in August and September; core CPI rose 0.3% for three straight months.</li>
-          <li>Domestic demand remains resilient.</li>
-          <li>Two FOMC members already preferred hiking in October.</li>
-        </ul>
-      </article>
-      <article class="block">
-        <h3>Why not hold instead?</h3>
-        <ul class="list">
-          <li>Policy works with lags.</li>
-          <li>Some inflation is supply-driven and not solved by rates.</li>
-          <li>September real PCE was roughly flat.</li>
-        </ul>
-      </article>
-      <article class="block">
-        <h3>Our judgment</h3>
-        <ul class="list"><li>It keeps pressure on inflation while the economy is still absorbing current rates.</li></ul>
-      </article>
-    </div>
-  </div>
-  <p class="src">Source: BEA core PCE price index (FRED PCEPILFE) and BLS core CPI (FRED CPILFESL), through September and October 2026; BEA Q3 GDP, September PCE; Federal Reserve October 28 FOMC statement; New York Fed SCE November 9.</p>
 </section>
 
-<!-- ===================== 10 TAYLOR RULE ===================== -->
-<section class="scene" id="taylor" data-n="10" data-label="Taylor rule" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">10</span>Technical component: a Taylor-rule check</p>
-      <h2 class="title long">A standard policy rule puts the federal funds rate above today's 3.75%–4.00% range.</h2>
-      <p class="hint">Move the assumptions. The prescribed rate, the arithmetic and the history chart all update.</p>
+<!-- ===================== 09 TAYLOR RULE ===================== -->
+<section class="scene stage" id="taylor" data-n="09" data-label="Taylor rule" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">09</span>A Taylor rule points higher</h2>
+    <div class="legend"><span><i class="lk k-teal"></i>Fed funds target, midpoint</span><span><i class="lk k-coral"></i>Rule prescription</span><span><i class="sw k-gap"></i>Gap</span></div>
+  </div>
+  <div class="ty-grid">
+    <div class="chart-wrap fill">
+      <div class="chart fill" id="tyChart"></div>
+      <div class="chart-tools"><button class="tbl-btn" type="button">Data</button></div>
+      <div class="tbl overlay-tbl" hidden></div>
     </div>
-    <div class="readout" aria-live="polite">
-      <span class="ro-lbl" id="tyLbl">Taylor (1993) rule, today</span>
-      <span class="ro-big" id="tyBig">4.98%</span>
-      <span class="ro-line" id="tyGap"><b>+110 bp</b> versus the current 3.875% midpoint</span>
-      <span class="ro-line" id="tySmooth"><b>4.04%</b> with gradual adjustment (ρ = 0.85)</span>
-    </div>
-  </header>
-  <div class="gside">
-    <figure class="fig">
-      <div class="fig-cap"><span class="fig-title">What the rule prescribed vs. where the Fed set rates</span><span class="fig-sub">%, monthly, since 2015</span></div>
-      <div class="legend"><span><i class="lk k-teal"></i>Fed funds target, midpoint</span><span><i class="lk k-coral"></i>Rule prescription</span></div>
-      <div class="chart" id="tyChart"></div>
-      <div class="fig-foot"><span>The history line uses 12-month inflation, today's r* and u*, and no smoothing.</span><button class="tbl-btn" type="button">Data table</button></div>
-      <div class="tbl" hidden></div>
-    </figure>
-    <div class="panel">
-      <article class="block calc">
-        <h3>Assumptions</h3>
+    <aside class="ty-panel" aria-label="Taylor rule assumptions">
+      <div class="ty-ro" aria-live="polite">
+        <span class="ro-lbl" id="tyLbl">Taylor (1993) rule, today</span>
+        <span class="ro-big" id="tyBig">4.98%</span>
+        <span class="ro-line" id="tyGap"><b>+111 bp</b> vs. today's 3.875%</span>
+        <span class="ro-line" id="tySmooth"><b>4.04%</b> moving gradually</span>
+      </div>
+      <div class="calc">
         <div class="row"><label for="tyR">Neutral real rate, r*</label><output id="tyRv" for="tyR">1.2%</output></div>
         <input type="range" id="tyR" min="0" max="2.5" step="0.1" value="1.2">
-        <div class="row"><label for="tyU">Natural rate of unemployment, u*</label><output id="tyUv" for="tyU">4.2%</output></div>
+        <div class="row"><label for="tyU">Natural unemployment, u*</label><output id="tyUv" for="tyU">4.2%</output></div>
         <input type="range" id="tyU" min="3.5" max="5" step="0.1" value="4.2">
-        <div class="row"><label for="tyRho">Gradualism: weight on today's rate, ρ</label><output id="tyRhov" for="tyRho">0.85</output></div>
+        <div class="row"><label for="tyRho">Gradualism, ρ</label><output id="tyRhov" for="tyRho">0.85</output></div>
         <input type="range" id="tyRho" min="0" max="0.95" step="0.05" value="0.85">
         <div class="controls">
-          <div class="seg" id="tyPi" role="group" aria-label="Inflation measure"><button type="button" data-v="core" aria-pressed="true">Core PCE</button><button type="button" data-v="headline" aria-pressed="false">Headline PCE</button></div>
-          <div class="seg" id="tyRule" role="group" aria-label="Policy rule"><button type="button" data-v="0.5" aria-pressed="true">Taylor (1993)</button><button type="button" data-v="1" aria-pressed="false">Balanced approach</button></div>
+          <div class="seg" id="tyPi" role="group" aria-label="Inflation measure"><button type="button" data-v="core" aria-pressed="true">Core PCE</button><button type="button" data-v="headline" aria-pressed="false">Headline</button></div>
+          <div class="seg" id="tyRule" role="group" aria-label="Policy rule"><button type="button" data-v="0.5" aria-pressed="true">Taylor 1993</button><button type="button" data-v="1" aria-pressed="false">Balanced</button></div>
         </div>
-      </article>
-      <article class="block">
-        <h3>The arithmetic, today</h3>
-        <p class="formula" id="tyFormula"></p>
-      </article>
-      <article class="block">
-        <h3>Intuition</h3>
-        <p id="tyIntuition"></p>
-        <p class="note">r* and u* cannot be observed, and estimates differ by a point or more. The rule is a benchmark for judgment, not an autopilot.</p>
-      </article>
-    </div>
+      </div>
+      <p class="formula" id="tyFormula"></p>
+    </aside>
   </div>
-  <p class="src">Rule: Taylor (1993), i = r* + π + 0.5(π − 2) + 0.5 × gap; the balanced-approach rule puts 1.0 on the gap. Output gap from unemployment by Okun's law: gap = 2 × (u* − u). Defaults are the FOMC's September 2026 longer-run medians: fed funds 3.2%, so r* = 3.2 − 2 = 1.2, and unemployment 4.2%. Gradual adjustment: ρ × today's midpoint + (1 − ρ) × rule. Data: FRED PCEPILFE, PCEPI, UNRATE, DFEDTAR, DFEDTARL, DFEDTARU, FEDTARMDLR, UNRATEMDLR.</p>
 </section>
 
-<!-- ===================== 11 OUTLOOK & RISKS ===================== -->
-<section class="scene" id="outlook" data-n="11" data-label="Outlook" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">11</span>Outlook and risks: the baseline and what could move it</p>
-      <h2 class="title long">The FOMC's September median already had one more hike before the end of 2026.</h2>
-      <p class="hint">Dashed points are the FOMC's September median projections. Each risk card opens the chapter with its evidence.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">FOMC median, end-2026 fed funds</span>
-      <span class="ro-big">4.1%</span>
-      <span class="ro-line">that is <b>4.00%–4.25%</b>, one step above today</span>
-    </div>
-  </header>
-  <div class="legend"><span><i class="lk k-teal"></i>Actual</span><span><i class="lk k-proj"></i>FOMC September median</span><span><i class="lk dash"></i>Target or longer-run level</span></div>
-  <div class="small-multiples">
-    <figure class="fig"><div class="fig-cap"><span class="fig-title">Core PCE inflation</span><span class="fig-sub" id="olCoreSub">y/y</span></div><div class="chart sm" id="olCore"></div></figure>
-    <figure class="fig"><div class="fig-cap"><span class="fig-title">Unemployment rate</span><span class="fig-sub" id="olUnSub">%</span></div><div class="chart sm" id="olUn"></div></figure>
-    <figure class="fig"><div class="fig-cap"><span class="fig-title">Real GDP growth</span><span class="fig-sub" id="olGdpSub">SAAR</span></div><div class="chart sm" id="olGdp"></div></figure>
-    <figure class="fig"><div class="fig-cap"><span class="fig-title">Fed funds rate</span><span class="fig-sub" id="olFfSub">%</span></div><div class="chart sm" id="olFf"></div></figure>
+<!-- ===================== 10 OUR CALL (outlook + closing) ===================== -->
+<section class="scene stage" id="closing" data-n="10" data-label="Our call" hidden>
+  <div class="stage-top">
+    <h2 class="headline"><span class="chap">10</span>+25 bp now, then let the data decide</h2>
+    <div class="legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Our call</span><span><i class="lk k-proj"></i>FOMC September median</span></div>
   </div>
-  <div class="fig" id="olTblFig">
-    <div class="fig-foot"><span>Projections: inflation and GDP Q4/Q4, unemployment Q4 average, fed funds year-end.</span><button class="tbl-btn" type="button">Data table</button></div>
-    <div class="tbl" hidden></div>
+  <div class="chart-wrap fill">
+    <div class="chart fill" id="cChart"></div>
+    <div class="watch-box up" id="cUp"></div>
+    <div class="watch-box down" id="cDown"></div>
   </div>
-  <div class="g2">
-    <article class="block">
-      <h3>Market pricing</h3>
-      <ul class="list">
-        <li>Fed funds futures: an estimated <b>88%</b> probability of a 25 bp December hike (October FOMC minutes).</li>
-        <li>NY Fed Desk survey: the median respondent expected another hike in <b>March 2027</b>.</li>
-        <li id="ol2y">2-year Treasury: <b>4.63%</b> on Nov 20, vs. 4.80% on Nov 17 and 4.67% on Oct 28.</li>
-      </ul>
-    </article>
-    <article class="block">
-      <h3>The baseline, in one line</h3>
-      <p>The FOMC's medians have core PCE inflation easing from 3.4% at the end of 2026 to 2.5% in 2027 and 2.2% in 2028, with unemployment at 4.1% and the funds rate at 4.1% through 2027.</p>
-    </article>
-  </div>
-  <div class="risk-map" aria-label="Risks around the baseline">
-    <span class="rm-h"></span><span class="rm-h">Upside: hotter than the baseline</span><span class="rm-h">Downside: weaker than the baseline</span>
-    <span class="rm-cat">Economic</span>
-    <div class="rm-cell">
-      <a class="risk" href="#implications"><span class="rt">▲ Sticky core inflation</span><span class="re">Core PCE +0.3% m/m in August and September; core CPI +0.3% three months running.</span><span class="rl">Upside · economic · see 09</span></a>
-      <a class="risk" href="#economy"><span class="rt">▲ Strong domestic demand</span><span class="re">Private domestic final sales +4.9% SAAR in Q3.</span><span class="rl">Upside · economic · see 04</span></a>
-    </div>
-    <div class="rm-cell">
-      <a class="risk" href="#implications"><span class="rt">▼ Policy lags, flat spending</span><span class="re">September real PCE roughly flat; more tightening could bite later.</span><span class="rl">Downside · economic · see 09</span></a>
-      <a class="risk" href="#jobs"><span class="rt">▼ A low-hire labor market</span><span class="re">Hiring subdued; NYC private employment down 16,300 this year.</span><span class="rl">Downside · economic · see 05</span></a>
-    </div>
-    <span class="rm-cat">Financial</span>
-    <div class="rm-cell">
-      <a class="risk" href="#markets"><span class="rt">▲ AI investment boom</span><span class="re">AI capex supports growth; $680B+ of AI-related debt issued through October.</span><span class="rl">Upside · financial · see 07</span></a>
-    </div>
-    <div class="rm-cell">
-      <a class="risk" href="#markets"><span class="rt">▼ Equity selloff hits spending</span><span class="re" data-fill="eq">S&amp;P 500 −10.8% since Oct 28; VIX 35.9 on Nov 20. Would challenge the hike if consumption or investment falls.</span><span class="rl">Downside · financial · see 07</span></a>
-      <a class="risk" href="#markets"><span class="rt">▼ Credit stress, AI financing</span><span class="re" data-fill="credit">High-yield spreads +62 bp since Oct 28. AI-related stress could spread to banks, insurers or private credit.</span><span class="rl">Downside · financial · see 07</span></a>
-    </div>
-    <span class="rm-cat">International</span>
-    <div class="rm-cell">
-      <a class="risk" href="#inflation"><span class="rt">▲ Tariffs and energy</span><span class="re">PCE goods prices +3.9% y/y; energy +5.4% in September alone.</span><span class="rl">Upside · international · see 08</span></a>
-    </div>
-    <div class="rm-cell">
-      <a class="risk" href="#economy"><span class="rt">▼ Trade drag, firmer dollar</span><span class="re" data-fill="usd">Net exports subtracted 3.32 pp from Q3 growth; the broad dollar is +1.4% since Oct 28.</span><span class="rl">Downside · international · see 04</span></a>
-    </div>
-  </div>
-  <p class="src">Source: FOMC Summary of Economic Projections, September 16, 2026 (FRED FEDTARMD, UNRATEMD, JCXFEMD, PCECTPIMD, GDPC1MD and the longer-run medians). Actuals: BEA, BLS and the Federal Reserve via FRED. Market pricing: October FOMC minutes; 2-year yield FRED DGS2. Risks are drawn from chapters 04–09 and our markets write-up.</p>
 </section>
 
-<!-- ===================== 12 CLOSING ===================== -->
-<section class="scene" id="closing" data-n="12" data-label="Closing" hidden>
-  <header class="scene-head">
-    <div>
-      <p class="kicker"><span class="n">12</span>Closing recommendation</p>
-      <h2 class="title">Raise by 25 bp to 4.00%–4.25%</h2>
-      <p class="hint">Below: the four readings that would change our view, with the latest data. Hover the sparklines.</p>
-    </div>
-    <div class="readout">
-      <span class="ro-lbl">Team NY Fed recommendation</span>
-      <span class="ro-big accent">+25 bp</span>
-      <span class="ro-line">to <b>4.00%–4.25%</b></span>
-    </div>
-  </header>
-  <div class="g3">
-    <article class="block">
-      <h3>Summary rationale</h3>
-      <ul class="list">
-        <li>Inflation remains above target and broad enough to warrant additional restraint.</li>
-        <li>GDP and domestic demand remain resilient.</li>
-        <li>A marginal move preserves anti-inflation credibility without signalling an aggressive path.</li>
-      </ul>
-    </article>
-    <article class="block">
-      <h3>Acknowledge the risk</h3>
-      <p>If subsequent data show softer demand or weaker labor conditions, the Committee should pause after this move.</p>
-    </article>
-    <article class="block">
-      <h3>What could change our view?</h3>
-      <p>Faster core disinflation, weaker payrolls, higher unemployment, or a sharper drop in real spending.</p>
-    </article>
-  </div>
-  <div class="watch" id="watch">
-    <article class="wt" data-k="core">
-      <div class="wt-top"><span class="l">Core PCE inflation</span><span class="w" data-f="when"></span></div>
-      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
-      <div class="spark" data-f="spark"></div>
-      <p class="trig">Would change our view: <b>faster core disinflation</b></p>
-    </article>
-    <article class="wt" data-k="pay">
-      <div class="wt-top"><span class="l">Payroll growth</span><span class="w" data-f="when"></span></div>
-      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
-      <div class="spark" data-f="spark"></div>
-      <p class="trig">Would change our view: <b>weaker payrolls</b></p>
-    </article>
-    <article class="wt" data-k="un">
-      <div class="wt-top"><span class="l">Unemployment rate</span><span class="w" data-f="when"></span></div>
-      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
-      <div class="spark" data-f="spark"></div>
-      <p class="trig">Would change our view: <b>higher unemployment</b></p>
-    </article>
-    <article class="wt" data-k="rpce">
-      <div class="wt-top"><span class="l">Real consumer spending</span><span class="w" data-f="when"></span></div>
-      <div class="v" data-f="val"></div><div class="d" data-f="delta"></div>
-      <div class="spark" data-f="spark"></div>
-      <p class="trig">Would change our view: <b>a sharper drop in real spending</b></p>
-    </article>
-  </div>
-  <p class="src">Source: Team NY Fed classroom proposal. Inputs: Federal Reserve Oct 28 FOMC; BEA GDP/PCE; BLS CPI/employment. Watch list: FRED PCEPILFE, PAYEMS, UNRATE, PCEC96; sparklines show the last 24 months.</p>
-</section>
-
-<!-- ===================== SOURCES ===================== -->
+<!-- ===================== SOURCES (reached from the Sources link) ===================== -->
 <section class="scene" id="sources" data-n="" data-label="Sources" hidden>
   <header class="scene-head">
     <div>
-      <p class="kicker">Sources &amp; methods</p>
-      <h2 class="title">Where every number comes from</h2>
-      <p class="hint">Every chart in the briefing also has a data table under it.</p>
+      <p class="kicker"><a href="#top" class="back-link">← Back to the briefing</a></p>
+      <h2 class="title">Sources and methods</h2>
     </div>
   </header>
   <div class="g2">
@@ -1172,30 +861,23 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
       <h3>Official releases</h3>
       <ul class="list">
         <li>Federal Reserve, FOMC statement, October 28, 2026: <a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+        <li>Federal Reserve, Summary of Economic Projections, September 16, 2026: <a href="https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260916.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+        <li>Federal Reserve, Financial Stability Report, November 2026, pp. 23–25: <a href="https://www.federalreserve.gov/publications/financial-stability-report.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
         <li>BEA, GDP advance estimate, Q3 2026 (Oct 29, 2026): <a href="https://www.bea.gov/news/2026/gdp-advance-estimate-3rd-quarter-2026" target="_blank" rel="noopener">bea.gov</a></li>
         <li>BEA, Personal income and outlays, September 2026: <a href="https://www.bea.gov/news/2026/personal-income-and-outlays-september-2026" target="_blank" rel="noopener">bea.gov</a></li>
         <li>BLS, Consumer Price Index, October 2026: <a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">bls.gov</a></li>
         <li>BLS charts: <a href="https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm" target="_blank" rel="noopener">unemployment rate</a>, <a href="https://www.bls.gov/charts/employment-situation/civilian-labor-force-participation-rate.htm" target="_blank" rel="noopener">participation rate</a></li>
-        <li>New York State Comptroller, NYC securities industry report, 2026: <a href="https://www.osc.ny.gov/files/reports/osdc/2026/pdf/nyc-securities-industry-2026.pdf" target="_blank" rel="noopener">osc.ny.gov</a></li>
-        <li>roic.ai, Wall Street profits, October 6, 2026: <a href="https://www.roic.ai/news/wall-street-profits-surge-51-as-ai-boom-fuels-record-pace-10-06-2026" target="_blank" rel="noopener">roic.ai</a></li>
-        <li>New York Fed, Survey of Consumer Expectations, November 9, 2026 (cited in 09)</li>
-        <li>Federal Reserve, Minutes of the FOMC, October 27–28, 2026 (market pricing, desk survey): <a href="https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
-        <li>Federal Reserve, Summary of Economic Projections, September 16, 2026: <a href="https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260916.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
-        <li>Federal Reserve, Financial Stability Report, November 2026, pp. 23–25: <a href="https://www.federalreserve.gov/publications/financial-stability-report.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
       </ul>
     </article>
     <article class="block">
       <h3>Methods</h3>
       <ul class="list">
-        <li>Chart series come from FRED, Federal Reserve Bank of St. Louis, retrieved November 24, 2026.</li>
-        <li>Year over year is the 12-month percent change in a price index; month over month is the 1-month change; 3-month annualized is (index ÷ index three months earlier)<sup>4</sup> − 1.</li>
-        <li>A 2% annual rate works out to about 0.165% a month: 1.02<sup>1/12</sup> − 1.</li>
-        <li>GDP growth and contributions are seasonally adjusted annual rates from BEA; contributions add up to growth, up to rounding.</li>
-        <li>October 2025 household-survey and CPI data were not collected during the federal government shutdown, so those months are blank.</li>
-        <li>On the rate charts, December's step is our proposal (or the pause alternative), placed at the December meeting.</li>
-        <li>Markets (07): daily closes through Nov 20 (Nasdaq Nov 19); 10-year breakeven = nominal − real (TIPS) yield; stocks rebased to Oct 28 = 100; ICE BofA option-adjusted spreads shown in basis points.</li>
-        <li>Taylor rule (10): i = r* + π + 0.5(π − 2) + w × 2(u* − u), with w = 0.5 (Taylor 1993) or 1.0 (balanced approach); the factor 2 converts the unemployment gap to an output gap (Okun's law). Defaults use the FOMC's September longer-run medians.</li>
-        <li>Projections (11): FOMC September medians; inflation and GDP are Q4/Q4, unemployment the Q4 average, fed funds the year-end level.</li>
+        <li>Chart series come from FRED, Federal Reserve Bank of St. Louis, retrieved November 24, 2026. Markets data run through Nov 20 (Nasdaq Nov 19).</li>
+        <li>Year over year is the 12-month percent change in a price index; month over month is the 1-month change.</li>
+        <li>October 2025 household-survey data were not collected during the federal government shutdown, so that month is blank.</li>
+        <li>Markets (06): 10-year breakeven = nominal − real (TIPS) yield; stocks rebased to Oct 28 = 100; ICE BofA option-adjusted spreads in basis points.</li>
+        <li>Taylor rule (09): i = r* + π + 0.5(π − 2) + w × 2(u* − u), with w = 0.5 (Taylor 1993) or 1.0 (balanced approach); the factor 2 converts the unemployment gap to an output gap (Okun's law). Defaults use the FOMC's September longer-run medians: fed funds 3.2% (so r* = 1.2) and unemployment 4.2%. Gradual: ρ × today's midpoint + (1 − ρ) × rule.</li>
+        <li>Projections (10): FOMC September medians; fed funds at year-end. December's step on the rate charts is our proposal (or the pause alternative), placed at the December meeting.</li>
       </ul>
     </article>
   </div>
@@ -1205,44 +887,38 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
       <table>
         <thead><tr><th>Series</th><th>What it is</th><th>Used in</th><th>Latest</th></tr></thead>
         <tbody>
-          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code></td><td>Federal funds target range, lower and upper limit</td><td>Cover, 01, 02, 03, 10, 11</td><td>Nov 23, 2026</td></tr>
-          <tr><td><code>DFEDTAR</code></td><td>Federal funds target rate, before December 2008</td><td>02</td><td>Dec 15, 2008</td></tr>
-          <tr><td><code>PCEPI</code></td><td>PCE price index</td><td>02, 10</td><td>Sep 2026</td></tr>
-          <tr><td><code>PCEPILFE</code></td><td>PCE price index excluding food and energy</td><td>02, 09, 10, 11, 12</td><td>Sep 2026</td></tr>
-          <tr><td><code>UNRATE</code></td><td>Unemployment rate</td><td>02, 05, 10, 11, 12</td><td>Oct 2026</td></tr>
-          <tr><td><code>CIVPART</code></td><td>Labor force participation rate</td><td>06</td><td>Oct 2026</td></tr>
-          <tr><td><code>DGS10</code>, <code>DFII10</code>, <code>DGS2</code></td><td>Treasury yields: 10-year, 10-year real (TIPS), 2-year</td><td>07, 11</td><td>Nov 20, 2026</td></tr>
-          <tr><td><code>BAMLC0A0CM</code>, <code>BAMLH0A0HYM2</code></td><td>ICE BofA option-adjusted spreads: investment grade, high yield</td><td>07, 11</td><td>Nov 20, 2026</td></tr>
-          <tr><td><code>SP500</code>, <code>NASDAQCOM</code>, <code>VIXCLS</code></td><td>S&amp;P 500, Nasdaq Composite, VIX</td><td>07, 11</td><td>Nov 20, 2026 (Nasdaq Nov 19)</td></tr>
-          <tr><td><code>DTWEXBGS</code></td><td>Nominal broad U.S. dollar index</td><td>07, 11</td><td>Nov 20, 2026</td></tr>
-          <tr><td><code>CPILFESL</code></td><td>CPI excluding food and energy</td><td>09</td><td>Oct 2026</td></tr>
-          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>08</td><td>Sep 2026</td></tr>
-          <tr><td><code>DNRGRG3M086SBEA</code>, <code>DFXARG3M086SBEA</code></td><td>PCE price indexes for energy and for food</td><td>08</td><td>Sep 2026</td></tr>
-          <tr><td><code>A191RL1Q225SBEA</code></td><td>Real GDP, annualized percent change</td><td>04, 11</td><td>Q3 2026</td></tr>
-          <tr><td><code>DPCERY2Q224SBEA</code>, <code>A007RY2Q224SBEA</code>, <code>A014RY2Q224SBEA</code>, <code>A822RY2Q224SBEA</code>, <code>A019RY2Q224SBEA</code></td><td>Contributions to real GDP growth: consumption, fixed investment, inventories, government, net exports</td><td>04</td><td>Q3 2026</td></tr>
-          <tr><td><code>FEDTARMD</code>, <code>UNRATEMD</code>, <code>PCECTPIMD</code>, <code>JCXFEMD</code>, <code>GDPC1MD</code>, <code>FEDTARMDLR</code>, <code>UNRATEMDLR</code>, <code>GDPC1MDLR</code></td><td>FOMC Summary of Economic Projections, medians</td><td>10, 11</td><td>Sep 16, 2026</td></tr>
-          <tr><td><code>PAYEMS</code></td><td>Total nonfarm payrolls</td><td>12</td><td>Oct 2026</td></tr>
-          <tr><td><code>PCEC96</code></td><td>Real personal consumption expenditures</td><td>12</td><td>Sep 2026</td></tr>
+          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code>, <code>DFEDTAR</code></td><td>Federal funds target range (target rate before December 2008)</td><td>Cover, 01, 02, 03, 09, 10</td><td>Nov 23, 2026</td></tr>
+          <tr><td><code>PCEPI</code>, <code>PCEPILFE</code></td><td>PCE price index, total and excluding food and energy</td><td>02, 07, 09, 10</td><td>Sep 2026</td></tr>
+          <tr><td><code>UNRATE</code>, <code>CIVPART</code></td><td>Unemployment rate, labor force participation rate</td><td>02, 05, 09, 10</td><td>Oct 2026</td></tr>
+          <tr><td><code>A191RL1Q225SBEA</code>, <code>DPCERY2Q224SBEA</code>, <code>A007RY2Q224SBEA</code>, <code>A014RY2Q224SBEA</code>, <code>A822RY2Q224SBEA</code>, <code>A019RY2Q224SBEA</code></td><td>Real GDP growth and contributions: consumption, fixed investment, inventories, government, net exports</td><td>04</td><td>Q3 2026</td></tr>
+          <tr><td><code>DGS10</code>, <code>DFII10</code>, <code>DGS2</code></td><td>Treasury yields: 10-year, 10-year real (TIPS), 2-year</td><td>06</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>BAMLC0A0CM</code>, <code>BAMLH0A0HYM2</code></td><td>ICE BofA option-adjusted spreads: investment grade, high yield</td><td>06, 10</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>SP500</code>, <code>NASDAQCOM</code>, <code>VIXCLS</code></td><td>S&amp;P 500, Nasdaq Composite, VIX</td><td>06, 10</td><td>Nov 20, 2026 (Nasdaq Nov 19)</td></tr>
+          <tr><td><code>DTWEXBGS</code></td><td>Nominal broad U.S. dollar index</td><td>06</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>07, 10</td><td>Sep 2026</td></tr>
+          <tr><td><code>FEDTARMD</code>, <code>FEDTARMDLR</code>, <code>UNRATEMDLR</code></td><td>FOMC Summary of Economic Projections, medians</td><td>09, 10</td><td>Sep 16, 2026</td></tr>
+          <tr><td><code>PAYEMS</code>, <code>PCEC96</code></td><td>Nonfarm payrolls, real personal consumption expenditures</td><td>10</td><td>Oct / Sep 2026</td></tr>
         </tbody>
       </table>
     </div>
   </article>
   <article class="block">
-    <h3>Getting around</h3>
+    <h3>Other figures</h3>
     <ul class="list">
-      <li><b>← →</b> or Page Up / Page Down move between chapters; <b>1–9</b> jump to a chapter, <b>0</b> to the cover.</li>
-      <li><b>F</b> toggles full screen for presenting; <b>T</b> switches between the dark and light themes.</li>
-      <li>Charts respond to hover or tap. Tab to a chart and use the arrow keys to step through months.</li>
+      <li>October FOMC statement wording and vote (01): FOMC statement, October 28, 2026.</li>
+      <li>October CPI categories (07): BLS, October 2026 CPI release.</li>
+      <li>Private domestic final sales (04, 10): BEA, Q3 2026 advance estimate.</li>
+      <li>AI financing figures (08): Federal Reserve, Financial Stability Report, November 2026, pp. 23–25.</li>
     </ul>
   </article>
-  <p class="disclaimer">Team NY Fed is a student team in FNCE 613. This briefing is a classroom exercise: the 25 bp hike is a proposed classroom position, not official Federal Reserve policy, and this page is not affiliated with or endorsed by the Federal Reserve.</p>
+  <p class="disclaimer">Team Big Apple is a student team. This briefing is a classroom exercise: the 25 bp hike is our proposed position, not official Federal Reserve policy, and this page is not affiliated with or endorsed by the Federal Reserve.</p>
 </section>
 
 </main>
 
 <footer class="botbar">
   <button class="nav-btn" id="prevBtn" type="button"><span aria-hidden="true">←</span><span class="nb-n"></span><span class="nb-t"></span></button>
-  <div class="mid"><div class="progress" id="progress" aria-hidden="true"><i></i></div><span class="keys">← → move · 0–9 jump · F full screen · T theme</span></div>
+  <div class="mid"><div class="progress" id="progress" aria-hidden="true"><i></i></div><span class="keys">← → move · F full screen · T theme</span></div>
   <button class="nav-btn" id="nextBtn" type="button"><span class="nb-n"></span><span class="nb-t"></span><span aria-hidden="true">→</span></button>
 </footer>
 
@@ -1354,7 +1030,7 @@ const GDP_PARTS = [
 ];
 const DEMAND = [
   { name: 'Real GDP', short: 'Real GDP', q2: 2.2, q3: 3.4 },
-  { name: 'Private domestic final sales¹', short: 'Private final sales¹', q2: 4.6, q3: 4.9 }
+  { name: 'Private domestic final sales', short: 'Private final sales', q2: 4.6, q3: 4.9 }
 ];
 // BLS October 2026 CPI, monthly % change (from the deck)
 const CPI_CATS = [
@@ -1537,7 +1213,7 @@ function setupTable(fig, build) {
     cols.forEach(c => H_('th', null, c, tr));
     rows.forEach(r => { const row = H_('tr', null, null, bd); r.forEach(cell => H_('td', null, cell, row)); });
   };
-  btn.addEventListener('click', () => { const open = box.hidden; if (open) render(); box.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Hide table' : 'Data table'; });
+  btn.addEventListener('click', () => { const open = box.hidden; if (open) render(); box.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Hide data' : 'Data'; });
   fig._refresh = () => { if (!box.hidden) render(); };
 }
 function segBind(seg, fn) {
@@ -1624,6 +1300,7 @@ function LineChart(host, cfg) {
       T_(svg, { x: end ? m.l + pw - 4 : m.l + 6, y: y - 6, 'text-anchor': end ? 'end' : 'start', class: 'ref-lbl' }, r.label);
     });
     const gS = S_('g', {}, svg);
+    if (cfg.between) betweenFill(gS, shown);
     cfg.series.forEach(s => {
       const pts = shown(s);
       if (s.proj) {
@@ -1641,6 +1318,7 @@ function LineChart(host, cfg) {
     }
     P.ts = cfg.snap ? [...new Set(cfg.series.flatMap(s => shown(s).filter(p => p.v != null).map(p => p.t)))].sort((a, b) => a - b) : null;
     if (cfg.endLabels) endLabels(gS, shown, m, ph);
+    if (st.reveal == null) annotate(gS, m, pw, ph);
     curG = S_('g', {}, svg);
     S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
     bind();
@@ -1659,6 +1337,51 @@ function LineChart(host, cfg) {
       if (Math.abs(l.ty - l.y) > 3) S_('line', { x1: l.x + 5, y1: l.y, x2: lx - 1, y2: l.ty, class: 'leader endfx' }, g);
       const tEl = T_(g, { x: lx, y: l.ty + 4, class: 'end-lbl endfx' }, cfg.fmt(l.p.v));
       if (cfg.endNames) { const ts = S_('tspan', { class: 'end-name', dx: '5' }, tEl); ts.textContent = l.s.short || l.s.name; }
+    });
+  }
+  // Shade the gap between two series: where series a is above series b (gap-up) and where it is below (gap-dn).
+  function betweenFill(g, shown) {
+    const A = cfg.series[cfg.between.a], B = cfg.series[cfg.between.b];
+    const pts = shown(A).filter(p => p.v != null && B.byT.get(p.t) != null);
+    const quad = (ta, tb, a0, a1, b0, b1) => 'M' + [[ta, a0], [tb, a1], [tb, b1], [ta, b0]].map(([t, v]) => xS(t).toFixed(1) + ',' + yS(v).toFixed(1)).join('L') + 'Z';
+    let up = '', dn = '';
+    for (let i = 1; i < pts.length; i++) {
+      const p = pts[i - 1], q = pts[i]; if (q.t - p.t !== 1) continue;
+      const a0 = p.v, a1 = q.v, b0 = B.byT.get(p.t), b1 = B.byT.get(q.t), d0 = a0 - b0, d1 = a1 - b1;
+      if (d0 >= 0 && d1 >= 0) up += quad(p.t, q.t, a0, a1, b0, b1);
+      else if (d0 <= 0 && d1 <= 0) dn += quad(p.t, q.t, a0, a1, b0, b1);
+      else {   // the lines cross inside this month: split at the crossing
+        const k = d0 / (d0 - d1), tm = p.t + k, vm = a0 + (a1 - a0) * k;
+        const s1 = quad(p.t, tm, a0, vm, b0, vm), s2 = quad(tm, q.t, vm, a1, vm, b1);
+        if (d0 > 0) { up += s1; dn += s2; } else { dn += s1; up += s2; }
+      }
+    }
+    if (up) S_('path', { d: up, class: 'gap-up fade' }, g);
+    if (dn) S_('path', { d: dn, class: 'gap-dn fade' }, g);
+  }
+  // Emphasis drawn on the chart itself, hidden while a Play runs: callouts (a leader from a point to a short label)
+  // and brackets (a dashed span between two values at one date, labeled in the right margin).
+  function annotate(g, m, pw, ph) {
+    const list = o => (typeof o === 'function' ? o() : o) || [];
+    list(cfg.brackets).forEach(b => {
+      if (b.t < P.t0 || b.t > P.t1 || b.v0 == null || b.v1 == null) return;
+      const x = xS(b.t), ya = yS(b.v0), yb = yS(b.v1), mid = (ya + yb) / 2;
+      S_('path', { d: `M${(x - 5).toFixed(1)},${ya.toFixed(1)}H${(x + 5).toFixed(1)}M${x.toFixed(1)},${ya.toFixed(1)}V${yb.toFixed(1)}`, class: 'bracket endfx' }, g);
+      if (Math.abs(ya - yb) < (b.sub ? 46 : 28)) return;      // no room between the end labels: keep just the span
+      T_(g, { x: x + 10, y: mid + (b.sub ? 0 : 7), class: 'callout-num endfx' }, b.text);
+      if (b.sub) T_(g, { x: x + 10, y: mid + 16, class: 'callout-sub endfx' }, b.sub);
+    });
+    if (pw < 460) return;       // callouts need room; on phones the chart stands on its own
+    list(cfg.callouts).forEach(c => {
+      if (c.t < P.t0 || c.t > P.t1 || c.v == null) return;
+      const px = xS(c.t), py = yS(c.v), up = (c.dy || 0) < 0, a = c.anchor || 'start';
+      const ex = Math.max(m.l + 4, Math.min(m.l + pw - 4, px + (c.dx || 0)));
+      const ey = Math.max(m.t + (up ? (c.sub ? 36 : 20) : 0), Math.min(m.t + ph - (up ? 0 : (c.sub ? 36 : 20)), py + (c.dy || 0)));
+      S_('line', { x1: px, y1: py, x2: ex, y2: ey, class: 'callout-ln endfx' }, g);
+      S_('circle', { cx: px, cy: py, r: 3.5, class: 'callout-dot endfx' }, g);
+      const y1 = up ? ey - 6 - (c.sub ? 16 : 0) : ey + 16;
+      T_(g, { x: ex, y: y1, 'text-anchor': a, class: 'callout endfx' }, c.text);
+      if (c.sub) T_(g, { x: ex, y: y1 + 16, 'text-anchor': a, class: 'callout-sub endfx' }, c.sub);
     });
   }
   function tAt(px) {
@@ -1718,11 +1441,21 @@ function BandChart(host, cfg) {
   const st = { scn: cfg.scenario || null, reveal: null, cursor: null };
   let svg = null, xS, yS, P, curG;
   const c = chartBase(host, draw);
+  // Options beyond the basics: interim: false (draw nothing after the latest data), propEnd (where the December
+  // step ends), sep (FOMC median projection dots, with an optional callout) and votes (a small dot plot of the
+  // latest FOMC vote).
+  function sepPts() { return cfg.sep.pts.map(([x, v]) => ({ x, v, title: 'End of ' + Math.floor(x), note: 'FOMC median projection, September' })).concat(cfg.sep.lr != null ? [{ x: cfg.x1 - 0.15, v: cfg.sep.lr, title: 'Longer run', note: 'FOMC median, longer run' }] : []); }
   function infoAt(x) {
     if (x <= FF_END_X) { const f = ffAt(x); return f ? { lo: f.lo, hi: f.hi, note: 'In effect since ' + fmtDate(f.d), cls: 'teal' } : null; }
+    if (cfg.propEnd && x > cfg.propEnd) {
+      if (!cfg.sep) return null;
+      let best = null; sepPts().filter(p => p.x > cfg.propEnd).forEach(p => { if (!best || Math.abs(p.x - x) < Math.abs(best.x - x)) best = p; });
+      if (!best) return null;
+      return { lo: best.v, hi: best.v, x: best.x, title: best.title, label: 'median', note: best.note, cls: 'proj' };
+    }
     if (!st.scn || x < PROP_X) return { lo: CUR.lo, hi: CUR.hi, note: 'Current range, until the December meeting', cls: 'teal' };
     return st.scn === 'hike'
-      ? { lo: PROP.lo, hi: PROP.hi, note: 'Team NY Fed proposal: +25 bp', cls: 'brass' }
+      ? { lo: PROP.lo, hi: PROP.hi, note: 'Our proposal: +25 bp', cls: 'brass' }
       : { lo: CUR.lo, hi: CUR.hi, note: 'Alternative: pause in December', cls: 'teal' };
   }
   function bandD(segs) {
@@ -1770,11 +1503,12 @@ function BandChart(host, cfg) {
       S_('path', { d: segs.map((s, i) => (i ? 'L' : 'M') + xS(s.a).toFixed(1) + ',' + yS((s.lo + s.hi) / 2).toFixed(1) + 'L' + xS(s.b).toFixed(1) + ',' + yS((s.lo + s.hi) / 2).toFixed(1)).join(''), class: 'band-mid' }, g);
     }
     const gP = S_('g', {}, svg);   // the December step and its label
+    const pEnd = Math.min(cfg.propEnd || cfg.x1, cfg.x1);
     if (cfg.x1 > FF_END_X && r > FF_END_X) {
-      const b = Math.min(st.scn ? PROP_X : cfg.x1, r, cfg.x1);
-      if (b > FF_END_X) S_('path', { d: bandD([{ a: FF_END_X, b, lo: CUR.lo, hi: CUR.hi }]), class: 'band-interim' }, g);
+      const b = Math.min(st.scn ? PROP_X : pEnd, r, cfg.x1);
+      if (b > FF_END_X && cfg.interim !== false) S_('path', { d: bandD([{ a: FF_END_X, b, lo: CUR.lo, hi: CUR.hi }]), class: 'band-interim' }, g);
       if (st.scn && r > PROP_X) {
-        const b2 = Math.min(r, cfg.x1);
+        const b2 = Math.min(r, pEnd);
         const lo = st.scn === 'hike' ? PROP.lo : CUR.lo, hi = st.scn === 'hike' ? PROP.hi : CUR.hi;
         S_('path', { d: bandD([{ a: PROP_X, b: b2, lo, hi }]), class: st.scn === 'hike' ? 'band-prop' : 'band-hold' }, gP);
         if (r >= cfg.x1 && W >= (cfg.propLabelMinW || 0)) {
@@ -1785,33 +1519,96 @@ function BandChart(host, cfg) {
         }
       }
     }
+    const gE = S_('g', {}, svg);   // FOMC median projections, after the December step
+    if (cfg.sep && r >= cfg.x1) {
+      const sp = cfg.sep.pts;
+      S_('path', { d: sp.map(([x, v], i) => (i ? 'L' : 'M') + xS(x).toFixed(1) + ',' + yS(v).toFixed(1)).join(''), class: 'ln proj' }, gE);
+      sp.forEach(([x, v], i) => {
+        S_('circle', { cx: xS(x), cy: yS(v), r: 4.5, class: 'dot proj' }, gE);
+        if (i) T_(gE, { x: xS(x), y: yS(v) - 12, 'text-anchor': 'middle', class: 'sep-lbl' }, v.toFixed(1) + '%');
+      });
+      if (cfg.sep.lr != null) {
+        const y = yS(cfg.sep.lr);
+        S_('line', { x1: xS(cfg.x1 - 0.3), x2: xS(cfg.x1), y1: y, y2: y, class: 'ln proj' }, gE);
+        T_(gE, { x: xS(cfg.x1), y: y + 18, 'text-anchor': 'end', class: 'sep-lbl' }, 'Longer run ' + cfg.sep.lr.toFixed(1) + '%');
+      }
+      const co = cfg.sep.callout;
+      if (co && pw >= 520) {
+        const px = xS(sp[0][0]), py = yS(sp[0][1]), up = co.dy < 0;
+        const ex = Math.max(m.l + 4, px + co.dx), ey = up ? Math.max(m.t + 36, py + co.dy) : Math.min(m.t + ph - 36, py + co.dy);
+        const y1 = up ? ey - 22 : ey + 16;
+        S_('line', { x1: px, y1: py, x2: ex, y2: ey, class: 'callout-ln' }, gE);
+        T_(gE, { x: ex, y: y1, 'text-anchor': co.anchor || 'end', class: 'callout' }, co.text);
+        if (co.sub) T_(gE, { x: ex, y: y1 + 16, 'text-anchor': co.anchor || 'end', class: 'callout-sub' }, co.sub);
+      }
+    }
     if (c.intro && !reduceMotion) {
       if (!st.propOnly && g.animate) {
-        // sweep the rate history in from left to right, then bring in the December step
+        // sweep the rate history in from left to right, then bring in the December step and the projections
         const id = 'bc' + Math.random().toString(36).slice(2, 9);
         const cp = S_('clipPath', { id }, svg), cr = S_('rect', { x: m.l - 2, y: 0, width: pw + 4, height: H }, cp);
         g.setAttribute('clip-path', `url(#${id})`);
         cr.style.transformOrigin = `${m.l}px 0px`;
         if (cr.animate) cr.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 2000, delay: 300, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'backwards' });
         if (gP.animate) gP.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1200, delay: 2000, easing: 'ease-out', fill: 'backwards' });
+        if (gE.animate) gE.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1200, delay: 2900, easing: 'ease-out', fill: 'backwards' });
       } else if (gP.animate) {
         gP.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: 100, easing: 'ease-out', fill: 'backwards' });
       }
     }
-    st.propOnly = false;
     curG = S_('g', {}, svg);
     S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
     bind();
+    if (cfg.votes) drawVotes(cfg.votes, W);
+    st.propOnly = false;
     if (st.cursor != null) drawCursor(st.cursor, null, false, false);
   }
-  function xAt(px) { const lim = st.reveal == null ? cfg.x1 : Math.min(cfg.x1, st.reveal); return Math.max(cfg.x0, Math.min(lim, xS.inv(px))); }
+  // The latest FOMC vote as a small dot plot right after the data: one dot per voter, at the range each preferred.
+  function drawVotes(v, W) {
+    const g = S_('g', {}, svg), xa = xS(v.x0), room = Math.max(40, P.m.l + P.pw - xa);
+    const n = Math.max(v.hold, v.hike), sp = Math.max(10, Math.min(15, room / n)), rad = Math.min(5.5, sp * 0.4);
+    const per = Math.max(1, Math.floor((room - 2 * rad) / sp) + 1), rowH = 2 * rad + 3, dots = [];
+    const put = (k, rg, cls, dir) => {
+      const y0 = yS((rg.lo + rg.hi) / 2);
+      for (let i = 0; i < k; i++) dots.push(S_('circle', { cx: xa + rad + (i % per) * sp, cy: y0 + dir * Math.floor(i / per) * rowH, r: rad, class: 'vote-dot ' + cls }, g));
+      return [y0, y0 + dir * (Math.ceil(k / per) - 1) * rowH];
+    };
+    const [hold0, holdEnd] = put(v.hold, CUR, 'hold', 1), [hike0, hikeEnd] = put(v.hike, PROP, 'hike', -1);
+    const fit = el => { try { const w = el.getComputedTextLength(); if (xa + w > W - 4) el.setAttribute('x', Math.max(4, W - 4 - w)); } catch (e) { /* not rendered */ } };
+    const short = room < 130;
+    const lbls = [T_(g, { x: xa, y: holdEnd + rad + 17, class: 'vote-lbl' }, v.hold + (short ? ' hold' : ' voted to hold')),
+      T_(g, { x: xa, y: hikeEnd - rad - 9, class: 'vote-lbl hike' }, v.hike + (short ? ' hike' : ' preferred +25 bp')),
+      T_(g, { x: xa, y: hikeEnd - rad - 27, class: 'ann' }, v.label || 'Oct 28 vote')];
+    lbls.forEach(fit);
+    const top = hikeEnd - rad - 40, bot = holdEnd + rad + 22;
+    const hit = S_('rect', { x: xa - 6, y: top, width: Math.max(0, W - xa + 6), height: bot - top, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${v.label || 'October 28 vote'}: ${v.hold} voted to hold at ${rng(CUR.lo, CUR.hi)}, ${v.hike} preferred raising to ${rng(PROP.lo, PROP.hi)}.` }, g);
+    const on = ev => {
+      if (ev && ev.stopPropagation) ev.stopPropagation();
+      curG.replaceChildren(); dots.forEach(d => d.classList.add('hot'));
+      const r = hit.getBoundingClientRect();
+      showTip(v.label || 'Oct 28 vote', [{ cls: 'teal', value: String(v.hold), label: 'hold at ' + rng(CUR.lo, CUR.hi) }, { cls: 'brass', value: String(v.hike), label: 'raise to ' + rng(PROP.lo, PROP.hi) }],
+        ev && ev.clientX != null ? ev.clientX : r.left, ev && ev.clientY != null ? ev.clientY : r.top + 12, 'Two dissents in favor of a 25 bp hike');
+    };
+    const off = () => { dots.forEach(d => d.classList.remove('hot')); hideTip(); };
+    hit.addEventListener('pointermove', on); hit.addEventListener('pointerdown', on); hit.addEventListener('pointerleave', off);
+    hit.addEventListener('focus', () => on()); hit.addEventListener('blur', off);
+    if (c.intro && !reduceMotion) {
+      dots.forEach((d, i) => d.animate && d.animate([{ opacity: 0, transform: 'scale(.2)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: 2100 + i * 110, easing: 'cubic-bezier(.2,.8,.3,1.25)', fill: 'backwards' }));
+      lbls.forEach(e => e.animate && e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 2100 + dots.length * 110, easing: 'ease-out', fill: 'backwards' }));
+    }
+  }
+  function xAt(px) {
+    let lim = st.reveal == null ? cfg.x1 : Math.min(cfg.x1, st.reveal);
+    if (cfg.interim === false && !st.scn) lim = Math.min(lim, FF_END_X);   // nothing drawn after the latest data
+    return Math.max(cfg.x0, Math.min(lim, xS.inv(px)));
+  }
   function drawCursor(x, ev, tipOn, emit) {
     if (!curG) return;
     curG.replaceChildren(); st.cursor = x;
-    const px = xS(x), inf = infoAt(x);
+    const inf = infoAt(x), px = xS(inf && inf.x != null ? inf.x : x);
     S_('line', { x1: px, x2: px, y1: P.m.t, y2: P.m.t + P.ph, class: 'xhair' }, curG);
     if (inf) S_('circle', { cx: px, cy: yS((inf.lo + inf.hi) / 2), r: 4.5, class: 'dot ' + inf.cls }, curG);
-    if (tipOn && inf) { const r = svg.getBoundingClientRect(); showTip(fmtT(Math.floor(x * 12 + 1e-6)), [{ cls: inf.cls, value: rng(inf.lo, inf.hi), label: 'target range' }], ev ? ev.clientX : r.left + px, ev ? ev.clientY : r.top + P.m.t + 10, inf.note); }
+    if (tipOn && inf) { const r = svg.getBoundingClientRect(); showTip(inf.title || fmtT(Math.floor(x * 12 + 1e-6)), [{ cls: inf.cls, value: rng(inf.lo, inf.hi), label: inf.label || 'target range' }], ev ? ev.clientX : r.left + px, ev ? ev.clientY : r.top + P.m.t + 10, inf.note); }
     if (emit && cfg.onCursor) cfg.onCursor(x, inf);
   }
   function bind() {
@@ -1848,7 +1645,7 @@ function DemandChart(host) {
       S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: v === 0 ? 'zero' : 'grid' }, svg);
       T_(svg, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, v + '%');
     }
-    const band = pw / DEMAND.length, bw = Math.min(24, band / 4), gap = 6, bars = [];
+    const band = pw / DEMAND.length, bw = Math.min(46, band / 4), gap = 8, bars = [];
     DEMAND.forEach((g, gi) => {
       const cx = m.l + band * (gi + 0.5);
       [['q2', 'Q2 2026', 'ctx', 'Q2'], ['q3', 'Q3 2026', 'teal', 'Q3']].forEach(([k, lbl, cls, sh], bi) => {
@@ -1875,7 +1672,7 @@ function Waterfall(host, getQ) {
     const total = run, ext = [0, total];
     steps.forEach(s => ext.push(s.a, s.b));
     const nt = niceTicks(Math.min(...ext), Math.max(...ext), 5);
-    const m = { l: 44, r: 8, t: 22, b: 30 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const m = { l: 44, r: 8, t: 58, b: 30 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
     const yS = lin(nt.lo, nt.hi, m.t + ph, m.t), dec = decFor(nt.step);
     const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': `${qk} contributions to real GDP growth: ` + steps.map(s => `${s.name} ${sgn(s.v, 2)}`).join(', ') + `; real GDP ${q.gdp.toFixed(1)}%.` }, host);
     svg.style.cursor = 'default';
@@ -1884,7 +1681,7 @@ function Waterfall(host, getQ) {
       S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: Math.abs(v) < 1e-9 ? 'zero' : 'grid' }, svg);
       T_(svg, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, tickF(v, dec));
     });
-    const n = steps.length + 1, band = pw / n, bw = Math.min(24, band * 0.42), useShort = band < 80, bars = [];
+    const n = steps.length + 1, band = pw / n, bw = Math.min(42, band * 0.5), useShort = band < 80, bars = [];
     steps.forEach((s, i) => {
       const x = m.l + band * (i + 0.5) - bw / 2, cls = s.v >= 0 ? 'teal' : 'coral';
       const bar = S_('path', { d: vbar(x, bw, yS(s.a), yS(s.b)), class: 'bar bar-' + cls }, svg); bar.dataset.base = yS(s.a); bars.push(bar);
@@ -1895,6 +1692,12 @@ function Waterfall(host, getQ) {
       const hit = S_('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${s.name}: ${sgn(s.v, 2)} percentage points` }, svg);
       hoverMark(hit, bar, () => [s.name + ', ' + qk, [{ cls, value: sgn(s.v, 2) + ' pp', label: 'contribution' }, { value: s.b.toFixed(2) + ' pp', label: 'running total' }]]);
     });
+    // consumption and fixed investment together: what private demand added
+    const pd = steps[0].v + steps[1].v, bxa = m.l + band * 0.5 - bw / 2, bxb = m.l + band * 1.5 + bw / 2;
+    const by = Math.min(yS(Math.max(steps[0].a, steps[0].b)), yS(Math.max(steps[1].a, steps[1].b))) - 28;
+    const pdT = T_(svg, { x: (bxa + bxb) / 2, y: by - 9, 'text-anchor': 'middle', class: 'callout' }, 'Private demand ' + sgn(pd, 2) + ' pp');
+    try { const w = pdT.getComputedTextLength(); pdT.setAttribute('x', Math.max(m.l + w / 2, Math.min(W - 4 - w / 2, (bxa + bxb) / 2))); } catch (e) { /* not rendered */ }
+    bars[1]._fx.push(S_('path', { d: `M${bxa.toFixed(1)},${(by + 7).toFixed(1)}V${by.toFixed(1)}H${bxb.toFixed(1)}V${(by + 7).toFixed(1)}`, class: 'bracket-h' }, svg), pdT);
     const x = m.l + band * (n - 0.5) - bw / 2;
     const tb = S_('path', { d: vbar(x, bw, yS(0), yS(total)), class: 'bar bar-ink' }, svg); tb.dataset.base = yS(0); bars.push(tb);
     tb._fx = [T_(svg, { x: x + bw / 2, y: total >= 0 ? yS(total) - 7 : yS(total) + 15, 'text-anchor': 'middle', class: 'val' }, q.gdp.toFixed(1) + '%')];
@@ -1906,11 +1709,11 @@ function Waterfall(host, getQ) {
   return c;
 }
 
-function HBars(host, items) {
+function HBars(host, items, o = {}) {
   const c = chartBase(host, draw);
   function draw(W, H) {
     const narrow = W < 460;
-    const m = { l: narrow ? 86 : 118, r: 46, t: 4, b: 24 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const m = { l: narrow ? 86 : 118, r: 46, t: o.ref ? 26 : 4, b: 24 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
     const nt = niceTicks(0, Math.max(1, ...items.map(d => d.v)), Math.max(3, Math.min(6, Math.round(pw / 80))));
     const xS = lin(0, nt.hi, m.l, m.l + pw), dec = decFor(nt.step);
     const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': 'October CPI monthly increases: ' + items.map(d => `${d.name} ${d.v}%`).join(', ') }, host);
@@ -1920,7 +1723,7 @@ function HBars(host, items) {
       S_('line', { x1: x, x2: x, y1: m.t, y2: m.t + ph, class: v === 0 ? 'zero' : 'grid' }, svg);
       T_(svg, { x, y: H - 6, 'text-anchor': 'middle', class: 'tick' }, v.toFixed(dec) + '%');
     });
-    const slot = ph / items.length, bh = Math.min(22, slot * 0.6), bars = [];
+    const slot = ph / items.length, bh = Math.min(34, slot * 0.62), bars = [];
     items.forEach((d, i) => {
       const y = m.t + slot * (i + 0.5) - bh / 2;
       const bar = S_('path', { d: hbar(y, bh, xS(0), xS(d.v)), class: 'bar bar-teal' }, svg); bar.dataset.base = xS(0); bars.push(bar);
@@ -1930,6 +1733,11 @@ function HBars(host, items) {
       const hit = S_('rect', { x: 0, y: m.t + slot * i, width: W, height: slot, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${d.name}: ${d.v.toFixed(1)}%` }, svg);
       hoverMark(hit, bar, () => [d.name, [{ cls: 'teal', value: '+' + d.v.toFixed(1) + '%', label: 'October, month over month' }]]);
     });
+    if (o.ref) {   // a reference pace drawn over the bars, e.g. the monthly rate that adds up to 2% a year
+      const x = Math.round(xS(o.ref.v)) + 0.5, lbl = T_(svg, { x: x + 6, y: m.t - 9, class: 'ref-lbl' }, o.ref.label);
+      S_('line', { x1: x, x2: x, y1: m.t - 18, y2: m.t + ph, class: 'ref' }, svg);
+      if (c.intro && !reduceMotion && lbl.animate) lbl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: BAR_DELAY + items.length * BAR_GAP + BAR_MS, fill: 'backwards' });
+    }
     if (c.intro) animBars(bars, true);
   }
   return c;
@@ -2002,16 +1810,44 @@ function Spark(host, data, o) {
 }
 
 /* ================= scenes ================= */
-const fmtPct1 = v => fx(v) + '%';
-const lastN = (s, n) => s.slice(Math.max(0, s.length - n));
+const pct1 = v => fx(v) + '%';
+function chips(el, title, items) {
+  el.replaceChildren();
+  if (title) H_('span', 'chip-h', title, el);
+  items.forEach(([k, v]) => { const c = H_('span', 'chip', null, el); H_('b', null, k, c); if (v) c.append(v); });
+}
+function tableOverlay(wrap, build) { setupTable(wrap, build); }
+
+// Simple column chart for a handful of hero comparisons (AI chapter)
+function Columns(host, items, o) {
+  const c = chartBase(host, draw);
+  function draw(W, H) {
+    const m = { l: 46, r: 12, t: 34, b: 30 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const nt = niceTicks(0, o.max, 4), yS = lin(0, nt.hi, m.t + ph, m.t);
+    const svg = S_('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, class: 'csvg', role: 'img', 'aria-label': o.aria }, host);
+    svg.style.cursor = 'default';
+    nt.ticks.forEach(v => { const y = Math.round(yS(v)) + 0.5; S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: v === 0 ? 'zero' : 'grid' }, svg); T_(svg, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, o.tick(v)); });
+    const band = pw / items.length, bw = Math.min(64, band * 0.42), bars = [];
+    items.forEach((d, i) => {
+      const x = m.l + band * (i + 0.5) - bw / 2;
+      const bar = S_('path', { d: vbar(x, bw, yS(0), yS(d.v), 5), class: 'bar bar-' + d.cls }, svg); bar.dataset.base = yS(0); bars.push(bar);
+      bar._fx = [T_(svg, { x: x + bw / 2, y: yS(d.v) - 10, 'text-anchor': 'middle', class: 'val val-big' }, d.text)];
+      T_(svg, { x: x + bw / 2, y: H - 8, 'text-anchor': 'middle', class: 'cat' }, d.label);
+      const hit = S_('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': d.label + ': ' + d.text }, svg);
+      hoverMark(hit, bar, () => [d.label, [{ cls: d.cls, value: d.text, label: o.unit }]]);
+    });
+    if (c.intro) animBars(bars, false, { gap: 450 });
+  }
+  return c;
+}
 
 function initCover(sc) {
   const ro = $('#coverRO'), dEl = ro.querySelector('.d'), rEl = ro.querySelector('.r');
-  const setRO = (dateTxt, inf) => { dEl.textContent = dateTxt; rEl.replaceChildren(); if (inf) { H_('b', null, rng(inf.lo, inf.hi), rEl); rEl.append(inf.cls === 'brass' ? ' proposed' : ' target range'); } };
+  const setRO = (dateTxt, inf) => { dEl.textContent = dateTxt; rEl.replaceChildren(); if (inf) { H_('b', null, rng(inf.lo, inf.hi), rEl); rEl.append(inf.cls === 'brass' ? ' our call' : ' target range'); } };
   const def = () => setRO('Dec 2026', { lo: PROP.lo, hi: PROP.hi, cls: 'brass' });
   const ch = reg('top', BandChart($('#coverChart'), {
-    x0: 2015, x1: 2027.25, y0: 0, y1: 6, yStep: 1, scenario: 'hike', propLabelMinW: 640,
-    aria: 'Federal funds target range from 2015 to November 2026: near zero until 2016, up to 2.25–2.50% in 2018, back to zero in 2020, a peak of 5.25–5.50% in 2023, 3.75–4.00% today, and our proposed December step to 4.00–4.25%.',
+    x0: 2015, x1: 2027.25, y0: 0, y1: 6, yStep: 1, scenario: 'hike', propLabelMinW: 99999,
+    aria: 'Federal funds target range from 2015 to November 2026, with our proposed December step to 4.00–4.25%.',
     onCursor: (x, inf) => setRO(fmtT(Math.floor(x * 12 + 1e-6)), inf), onLeave: def
   }));
   def();
@@ -2020,24 +1856,15 @@ function initCover(sc) {
     frame: k => { const x = 2015 + (2027.25 - 2015) * k; ch.setReveal(x); setRO(fmtT(Math.floor(x * 12 + 1e-6)), ch.infoAt(x)); },
     end: () => { ch.setReveal(null); def(); }
   });
-  setupTable(sc.querySelector('.fig'), () => ({ cols: ['Effective', 'Target range'], rows: [['December 2026 (our proposal)', rng(PROP.lo, PROP.hi)]].concat(FF.filter(f => f.x >= 2015).map(f => [fmtDate(f.d), rng(f.lo, f.hi)]).reverse()) }));
 }
 
 function initRecap(sc) {
-  const votes = $('#votes');
-  for (let i = 0; i < 12; i++) {
-    const hike = i >= 10, v = H_('span', 'vote ' + (hike ? 'hike' : 'hold'), null, votes);
-    v.tabIndex = 0; v.setAttribute('role', 'img'); v.setAttribute('aria-label', hike ? 'Dissent: preferred a 25 basis point increase' : 'Voted to hold');
-    const show = ev => { const r = v.getBoundingClientRect(); showTip('October 28 vote', [{ cls: hike ? 'brass' : 'teal', value: hike ? 'Dissent' : 'Hold', label: hike ? 'preferred +25 bp' : 'at 3.75%–4.00%' }], ev && ev.clientX != null ? ev.clientX : r.right, ev && ev.clientY != null ? ev.clientY : r.bottom); };
-    v.addEventListener('pointermove', show); v.addEventListener('pointerdown', show); v.addEventListener('pointerleave', hideTip);
-    v.addEventListener('focus', () => show()); v.addEventListener('blur', hideTip);
-  }
   reg('recap', BandChart($('#recapChart'), {
-    x0: 2024, x1: FF_END_X, y0: 3, y1: 6, yStep: 0.5, scenario: null,
-    ann: [{ x: dx('2026-09-17'), label: 'Sep 17: +25 bp', anchor: 'end', row: 0 }, { x: dx('2026-10-28'), label: 'Oct 28: hold', anchor: 'end', row: 1 }],
-    aria: 'Federal funds target range since 2024: 5.25–5.50% until September 2024, cut to 4.25–4.50% by December 2024, three more cuts in late 2025 to 3.50–3.75%, then a hike to 3.75–4.00% on September 17, 2026.'
+    x0: 2024.5, x1: 2027.5, y0: 3, y1: 6, yStep: 0.5, scenario: null, interim: false,
+    ann: [{ x: dx('2026-09-17'), label: 'Sep 17: +25 bp', anchor: 'end', row: 0 }, { x: dx('2026-10-28'), label: 'Oct 28: hold', anchor: 'start', row: 1 }],
+    votes: { x0: dx('2026-12-04'), hold: 10, hike: 2, label: 'Oct 28 vote' },
+    aria: 'Federal funds target range since 2024, ending at 3.75–4.00% after the October 28 hold, with the 12 votes shown as dots: 10 to hold, 2 preferring a 25 basis point hike.'
   }));
-  setupTable(sc.querySelector('.fig'), () => ({ cols: ['Effective', 'Target range'], rows: FF.filter(f => f.x >= 2023.5).map(f => [fmtDate(f.d), rng(f.lo, f.hi)]).reverse() }));
 }
 
 function initMandate(sc) {
@@ -2052,17 +1879,17 @@ function initMandate(sc) {
     const u = at(S.unrate, t); $('#mUn').textContent = u == null ? 'n/a' : fx(u) + '%';
     const f = ffAt((t + 0.5) / 12); $('#mFF').textContent = f ? rng(f.lo, f.hi) : 'n/a';
   };
-  const infl = reg('mandate', LineChart($('#mInfl'), {
-    series: [{ name: 'Core PCE', short: 'Core', cls: 'teal', role: 'primary', data: S.coreY }, { name: 'PCE (headline)', short: 'PCE', cls: 'ctx', role: 'context', data: S.pceY }],
-    refs: [{ v: 2, label: '2% target' }], win, fmt: fmtPct1, endLabels: true,
-    aria: 'PCE and core PCE inflation, percent change from a year earlier, against the 2% target. Core PCE was 3.1% in September 2026.',
-    onCursor: t => { un.setCursor(t); read(t); }
-  }));
-  const un = reg('mandate', LineChart($('#mUnChart'), {
-    series: [{ name: 'Unemployment rate', cls: 'teal', role: 'primary', data: S.unrate }],
-    win, fmt: fmtPct1, endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
-    aria: 'Unemployment rate. 4.1% in October 2026.',
-    onCursor: t => { infl.setCursor(t); read(t); }
+  const cL = lastPt(S.coreY), uL = lastPt(S.unrate);
+  const ch = reg('mandate', LineChart($('#mChart'), {
+    series: [{ name: 'Core PCE inflation, y/y', short: 'Core PCE', cls: 'teal', role: 'primary', data: S.coreY },
+      { name: 'PCE inflation, y/y', short: 'PCE', cls: 'ctx', role: 'context', data: S.pceY },
+      { name: 'Unemployment rate', short: 'Unemployment', cls: 'coral', role: 'primary', data: S.unrate }],
+    refs: [{ v: 2, label: '2% inflation target' }],
+    win, fmt: pct1, endLabels: true, endNames: true, endPad: 124, notes: SHUTDOWN, gaps: true,
+    brackets: () => [{ t: cL.t, v0: 2, v1: cL.v, text: '+' + (cL.v - 2).toFixed(1) + ' pts', sub: 'above target' }],
+    callouts: () => [{ t: uL.t, v: uL.v, text: 'Jobs: near maximum employment', sub: 'FOMC long-run estimate ' + SEP.unLR.toFixed(1) + '%', dx: -28, dy: -62, anchor: 'end' }],
+    aria: 'Core and headline PCE inflation and the unemployment rate on one chart, with the 2% inflation target and the 4.2% long-run unemployment rate.',
+    onCursor: t => read(t)
   }));
   const buildTicks = () => {
     ticks.replaceChildren();
@@ -2070,160 +1897,78 @@ function initMandate(sc) {
     const step = [1, 2, 5, 10].find(s => (w / (span / 12)) * s >= 48) || 10;
     for (let y = Math.ceil(win[0] / 12); y * 12 <= win[1]; y++) {
       if (y % step) continue;
-      const k = (y * 12 - win[0]) / span, sp = H_('span', null, String(y), ticks);
-      sp.style.left = `calc(7px + (100% - 14px) * ${k.toFixed(4)})`;
+      const sp = H_('span', null, String(y), ticks);
+      sp.style.left = `calc(7px + (100% - 14px) * ${((y * 12 - win[0]) / span).toFixed(4)})`;
     }
   };
   const setSlider = () => { slider.min = win[0]; slider.max = tEnd; slider.value = tEnd; buildTicks(); };
-  const reveal = t => { infl.setReveal(t); un.setReveal(t); infl.setCursor(t); un.setCursor(t); read(t); };
+  const reveal = t => { ch.setReveal(t); ch.setCursor(t); read(t); };
   const pl = Player($('#mPlay'), {
     duration: () => Math.min(9000, Math.max(4500, (win[1] - win[0]) * 55)),
     frame: k => { const t = Math.round(win[0] + (win[1] - win[0]) * k); if (t !== lastT) { lastT = t; slider.value = t; reveal(t); } },
-    end: () => { lastT = null; slider.value = tEnd; infl.setReveal(null); un.setReveal(null); infl.setCursor(tEnd); un.setCursor(tEnd); read(tEnd); }
+    end: () => { lastT = null; slider.value = tEnd; ch.setReveal(null); ch.setCursor(tEnd); read(tEnd); }
   });
-  slider.addEventListener('input', () => {
-    pl.stop(false);
-    const t = +slider.value;
-    if (t >= tEnd) { infl.setReveal(null); un.setReveal(null); infl.setCursor(t); un.setCursor(t); read(t); } else reveal(t);
-  });
-  segBind($('#mRange'), v => {
-    pl.stop(false);
-    win = v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd];
-    infl.intro = un.intro = !reduceMotion;
-    infl.setWindow(win); un.setWindow(win); setSlider(); read(tEnd);
-    $$('.fig', sc).forEach(f => f._refresh && f._refresh());
-  });
+  slider.addEventListener('input', () => { pl.stop(false); const t = +slider.value; if (t >= tEnd) { ch.setReveal(null); ch.setCursor(t); read(t); } else reveal(t); });
+  segBind($('#mRange'), v => { pl.stop(false); win = v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd]; ch.intro = !reduceMotion; ch.setWindow(win); setSlider(); read(tEnd); });
   if ('ResizeObserver' in window) new ResizeObserver(buildTicks).observe(ticks);
   setSlider(); read(tEnd);
-  const figs = $$('.fig', sc);
-  setupTable(figs[0], () => { const rows = []; for (let t = win[1]; t >= win[0]; t--) { const a = at(S.coreY, t), b = at(S.pceY, t); if (a == null && b == null) continue; rows.push([fmtT(t), a == null ? '—' : a.toFixed(2) + '%', b == null ? '—' : b.toFixed(2) + '%']); } return { cols: ['Month', 'Core PCE, y/y', 'PCE, y/y'], rows }; });
-  setupTable(figs[1], () => { const rows = []; for (let t = win[1]; t >= win[0]; t--) { const a = at(S.unrate, t); rows.push([fmtT(t), a == null ? 'not collected' : a.toFixed(1) + '%']); } return { cols: ['Month', 'Unemployment rate'], rows }; });
+  tableOverlay(sc.querySelector('.chart-wrap'), () => { const rows = []; for (let t = win[1]; t >= win[0]; t--) { const a = at(S.coreY, t), b = at(S.pceY, t), u = at(S.unrate, t); rows.push([fmtT(t), a == null ? '—' : a.toFixed(2) + '%', b == null ? '—' : b.toFixed(2) + '%', u == null ? '—' : u.toFixed(1) + '%']); } return { cols: ['Month', 'Core PCE', 'PCE', 'Unemployment'], rows }; });
 }
 
 function initDecision(sc) {
   const ch = reg('decision', BandChart($('#dChart'), {
     x0: 2024.5, x1: 2027.25, y0: 3, y1: 6, yStep: 0.5, scenario: 'hike',
-    aria: 'Federal funds target range from mid-2024 with the December decision: our proposal raises it from 3.75–4.00% to 4.00–4.25%; the pause alternative keeps it at 3.75–4.00%.'
+    aria: 'Federal funds target range since mid-2024 with the December decision: raise to 4.00–4.25% or pause at 3.75–4.00%.'
   }));
-  segBind($('#dSeg'), v => {
-    ch.setScenario(v);
-    const hike = v === 'hike';
-    $('#dLbl').textContent = hike ? 'New target range' : 'Target range stays';
-    const big = $('#dRange'); big.textContent = hike ? rng(PROP.lo, PROP.hi) : rng(CUR.lo, CUR.hi); big.classList.toggle('accent', hike);
-    const note = $('#dNote'); note.replaceChildren();
-    if (hike) { H_('b', null, '+25 bp', note); note.append(' from ' + rng(CUR.lo, CUR.hi)); } else { H_('b', null, 'No change', note); note.append(' from October'); }
-    $$('.panel .block', sc).forEach(b => b.classList.toggle('dim', b.dataset.scn !== v));
-    const f = sc.querySelector('.fig'); if (f._refresh) f._refresh();
-  });
-  setupTable(sc.querySelector('.fig'), () => {
-    const hike = $('#dSeg [aria-pressed="true"]').dataset.v === 'hike';
-    return { cols: ['Effective', 'Target range'], rows: [[hike ? 'December 2026 (our proposal)' : 'December 2026 (pause)', hike ? rng(PROP.lo, PROP.hi) : rng(CUR.lo, CUR.hi)]].concat(FF.filter(f => f.x >= 2024).map(f => [fmtDate(f.d), rng(f.lo, f.hi)]).reverse()) };
-  });
+  const WHY = {
+    hike: ['Why raise', [['Inflation', 'above target, core sticky'], ['Demand', 'can absorb one more small step'], ['Credibility', 'no premature easing of conditions']]],
+    hold: ['We would pause if', [['Demand', 'clearly softens'], ['Jobs', 'deteriorate more broadly'], ['Core inflation', 'cools faster']]]
+  };
+  const paint = v => { chips($('#dWhy'), WHY[v][0], WHY[v][1]); $$('#dChoice .opt').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v))); };
+  $('#dChoice').addEventListener('click', ev => { const b = ev.target.closest('.opt'); if (!b) return; ch.setScenario(b.dataset.v); paint(b.dataset.v); });
+  paint('hike');
 }
 
 function initEconomy(sc) {
   reg('economy', DemandChart($('#eDemand')));
   let q = 'Q3 2026';
   const wf = reg('economy', Waterfall($('#eWf'), () => q));
-  const figs = $$('.fig', sc);
-  segBind($('#eQ'), v => { q = v; $('#eWfTitle').textContent = v + ' contributions to real GDP growth'; wf.intro = !reduceMotion; wf.draw(true); if (figs[1]._refresh) figs[1]._refresh(); });
-  setupTable(figs[0], () => ({ cols: ['Measure', 'Q2 2026', 'Q3 2026'], rows: DEMAND.map(d => [d.name, d.q2.toFixed(1) + '%', d.q3.toFixed(1) + '%']) }));
-  setupTable(figs[1], () => { const g = GDP_Q[q]; return { cols: ['Component (' + q + ')', 'Contribution, pp'], rows: GDP_PARTS.map((p, i) => [p.name, sgn(g.c[i], 2)]).concat([['Real GDP growth, %', g.gdp.toFixed(1)]]) }; });
+  segBind($('#eQ'), v => { q = v; $('#eWfTitle').textContent = 'What added up to ' + v + ' growth'; wf.intro = !reduceMotion; wf.draw(true); });
 }
 
-function initJobs(sc) {
-  const tEnd = lastPt(S.unrate).t;
-  const ch = reg('jobs', LineChart($('#jChart'), {
-    series: [{ name: 'Unemployment rate', cls: 'teal', role: 'primary', data: S.unrate }],
-    win: [tEnd - 59, tEnd], fmt: fmtPct1, endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
-    aria: 'Unemployment rate. 4.1% in October 2026, after 4.2% in September.'
-  }));
-  const fig = sc.querySelector('.fig');
-  segBind($('#jRange'), v => { ch.intro = !reduceMotion; ch.setWindow(v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd]); if (fig._refresh) fig._refresh(); });
-  segBind($('#jGeo'), v => { $$('[data-geo]', sc).forEach(b => { b.hidden = b.dataset.geo !== v; }); });
-  setupTable(fig, () => { const [a, b] = ch.bounds(), rows = []; for (let t = b; t >= a; t--) { const v = at(S.unrate, t); rows.push([fmtT(t), v == null ? 'not collected' : v.toFixed(1) + '%']); } return { cols: ['Month', 'Unemployment rate'], rows }; });
-}
-
-function initParticipation(sc) {
-  const tEnd = lastPt(S.civpart).t, pre = at(S.civpart, M(2020, 2));
-  $('#pPre').textContent = fx(pre) + '%';
-  const ch = reg('participation', LineChart($('#pChart'), {
-    series: [{ name: 'Participation rate', cls: 'teal', role: 'primary', data: S.civpart }],
-    win: [tEnd - 119, tEnd], fmt: fmtPct1, endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
-    refs: [{ v: pre, label: 'Feb 2020: ' + fx(pre) + '%', align: 'end' }],
-    shades: [{ t0: M(2020, 2), t1: M(2020, 4), label: 'Recession' }],
-    aria: 'Labor force participation rate. 61.9% in October 2026, below 63.3% in February 2020.'
-  }));
-  const fig = sc.querySelector('.fig');
-  segBind($('#pRange'), v => { ch.intro = !reduceMotion; ch.setWindow(v === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+v) + 1, tEnd]); if (fig._refresh) fig._refresh(); });
-  setupTable(fig, () => { const [a, b] = ch.bounds(), rows = []; for (let t = b; t >= a; t--) { const v = at(S.civpart, t); rows.push([fmtT(t), v == null ? 'not collected' : v.toFixed(1) + '%']); } return { cols: ['Month', 'Participation rate'], rows }; });
-}
-
-function initInflation(sc) {
-  reg('inflation', HBars($('#iCats'), CPI_CATS));
-  const tEnd = lastPt(S.servY).t;
-  reg('inflation', LineChart($('#iGS'), {
-    series: [{ name: 'Services', cls: 'teal', role: 'primary', data: S.servY }, { name: 'Goods', cls: 'coral', role: 'primary', data: S.goodsY }],
-    refs: [{ v: 2, label: '2% target' }], win: [M(2019, 1), tEnd], fmt: fmtPct1, endLabels: true, endNames: true, endPad: 104, zero: true,
-    aria: 'PCE inflation for goods and for services, percent change from a year earlier, since 2019. In September 2026 services were 3.5% and goods 3.9%.'
-  }));
-  const mm = (s, t) => (at(s, t) / at(s, t - 1) - 1) * 100;
-  const e = (ENERGY[1] / ENERGY[0] - 1) * 100, f = (FOOD[1] / FOOD[0] - 1) * 100;
-  $('#iGSnote').textContent = `September, month over month: services ${sgn(mm(D.serv, tEnd), 2)}%, goods ${sgn(mm(D.goods, tEnd), 2)}%, energy ${sgn(e, 2)}%, food ${sgn(f, 2)}%.`;
-  const figs = $$('.fig', sc);
-  setupTable(figs[0], () => ({ cols: ['Category', 'October, m/m'], rows: CPI_CATS.map(d => [d.name, d.v.toFixed(1) + '%']) }));
-  setupTable(figs[1], () => { const rows = []; for (let t = tEnd; t >= M(2019, 1); t--) rows.push([fmtT(t), at(S.servY, t).toFixed(2) + '%', at(S.goodsY, t).toFixed(2) + '%']); return { cols: ['Month', 'Services, y/y', 'Goods, y/y'], rows }; });
-}
-
-function initImplications(sc) {
-  let mode = 'pce';
-  const ch = reg('implications', MoMChart($('#iMoM'), () => mode));
-  const fig = sc.querySelector('.fig');
-  const read = () => {
-    const s = mode === 'pce' ? S.coreM : S.cpiCoreM, idx = mode === 'pce' ? D.core : D.cpiCore, name = mode === 'pce' ? 'Core PCE' : 'Core CPI', lp = lastPt(s);
-    $('#iLbl').textContent = name + ', ' + fmtT(lp.t) + ', m/m';
-    $('#iBig').textContent = fx(lp.v) + '%';
-    $('#iAnn').textContent = pctF(annualized(idx, lp.t, 3));
-    const yoy = annualized(idx, lp.t, 12);
-    $('#iYoyLine').hidden = yoy == null;
-    if (yoy != null) $('#iYoy').textContent = pctF(yoy);
-    $('#iSub').textContent = name + ', monthly change, %';
-    $('#iLegName').textContent = name + ', m/m';
+function initLabor(sc) {
+  const tEnd = lastPt(S.unrate).t, pre = at(S.civpart, M(2020, 2));
+  const win = n => n === 'all' ? [M(2000, 1), tEnd] : [tEnd - (+n) + 1, tEnd];
+  const uL = lastPt(S.unrate), pL = lastPt(S.civpart);
+  let view = 'un', range = { un: '60', part: '120' };
+  const C = {
+    un: reg('labor', LineChart($('#lUn'), {
+      series: [{ name: 'Unemployment rate', cls: 'teal', role: 'primary', data: S.unrate }], win: win(60), fmt: pct1,
+      endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
+      callouts: () => [{ t: uL.t, v: uL.v, text: 'Low hiring, low firing', sub: 'layoffs low, job-switching subdued', dx: -40, dy: 74, anchor: 'end' }],
+      aria: 'Unemployment rate, 4.1% in October 2026.' })),
+    part: reg('labor', LineChart($('#lPart'), {
+      series: [{ name: 'Participation rate', cls: 'teal', role: 'primary', data: S.civpart }], win: win(120), fmt: pct1,
+      endLabels: true, area: true, gaps: true, notes: SHUTDOWN,
+      refs: [{ v: pre, label: 'Feb 2020: ' + fx(pre) + '%', align: 'end' }], shades: [{ t0: M(2020, 2), t1: M(2020, 4), label: 'Recession' }],
+      callouts: () => [{ t: pL.t, v: pL.v, text: 'An aging workforce pulls it down', sub: 'involuntary part-time: 4.8M, +339K', dx: -30, dy: 96, anchor: 'end' }],
+      aria: 'Labor force participation rate, 61.9% in October 2026, below 63.3% in February 2020.' }))
   };
-  segBind($('#iSeg'), v => { mode = v; ch.intro = !reduceMotion; ch.draw(true); read(); if (fig._refresh) fig._refresh(); });
-  read();
-  setupTable(fig, () => ({ cols: ['Month', (mode === 'pce' ? 'Core PCE' : 'Core CPI') + ', m/m'], rows: momData(mode).slice().reverse().map(p => [fmtT(p.t), p.v.toFixed(2) + '%']) }));
+  const HEAD = { un: 'Unemployment holding steady around 4%', part: 'Participation rate shifting down' };
+  const pressRange = v => $$('#lRange button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+  segBind($('#lView'), v => {
+    view = v; $('#lUn').hidden = v !== 'un'; $('#lPart').hidden = v !== 'part'; $('#lHead').textContent = HEAD[v];
+    pressRange(range[v]); C[v].intro = !reduceMotion; C[v].setWindow(win(range[v]));
+  });
+  segBind($('#lRange'), v => { range[view] = v; C[view].intro = !reduceMotion; C[view].setWindow(win(v)); });
+  tableOverlay(sc.querySelector('.chart-wrap'), () => { const s = view === 'un' ? S.unrate : S.civpart, [a, b] = C[view].bounds(), rows = []; for (let t = b; t >= a; t--) { const v = at(s, t); rows.push([fmtT(t), v == null ? 'not collected' : v.toFixed(1) + '%']); } return { cols: ['Month', view === 'un' ? 'Unemployment rate' : 'Participation rate'], rows }; });
 }
 
-function initClosing(sc) {
-  const tile = k => $(`.wt[data-k="${k}"]`, sc);
-  const fill = (k, when, val, delta) => { const el = tile(k); el.querySelector('[data-f="when"]').textContent = when; el.querySelector('[data-f="val"]').textContent = val; el.querySelector('[data-f="delta"]').textContent = delta; return el.querySelector('[data-f="spark"]'); };
-  // core PCE inflation, y/y
-  let lp = lastPt(S.coreY), prev = at(S.coreY, lp.t - 1);
-  let host = fill('core', fmtT(lp.t) + ', y/y', fx(lp.v) + '%', `${arrow(lp.v - prev)} ${fx(Math.abs(lp.v - prev))} pt from ${MON[(lp.t - 1) % 12]}`);
-  reg('closing', Spark(host, lastN(S.coreY, 24), { name: 'core PCE, y/y', fmt: v => v.toFixed(2) + '%', aria: 'Core PCE inflation over the last 24 months; ' + fx(lp.v) + '% in ' + fmtT(lp.t) + '.' }));
-  // payrolls
-  lp = lastPt(S.payChg);
-  const avg3 = (at(S.payChg, lp.t) + at(S.payChg, lp.t - 1) + at(S.payChg, lp.t - 2)) / 3;
-  host = fill('pay', fmtT(lp.t) + ', monthly change', kF(lp.v), '3-month average: ' + kF(avg3));
-  reg('closing', Spark(host, lastN(S.payChg, 24), { name: 'nonfarm payrolls, monthly change', fmt: kF, zero: true, aria: 'Monthly payroll changes over the last 24 months; ' + kF(lp.v) + ' in ' + fmtT(lp.t) + '.' }));
-  // unemployment
-  lp = lastPt(S.unrate); prev = at(S.unrate, lp.t - 1);
-  host = fill('un', fmtT(lp.t), fx(lp.v) + '%', `${arrow(lp.v - prev)} ${fx(Math.abs(lp.v - prev))} pt from ${MON[(lp.t - 1) % 12]}`);
-  reg('closing', Spark(host, lastN(S.unrate, 24), { name: 'unemployment rate', fmt: v => v.toFixed(1) + '%', notes: SHUTDOWN, aria: 'Unemployment rate over the last 24 months; ' + fx(lp.v) + '% in ' + fmtT(lp.t) + '.' }));
-  // real PCE, m/m
-  lp = lastPt(S.rpceM); prev = at(S.rpceM, lp.t - 1);
-  host = fill('rpce', fmtT(lp.t) + ', m/m', sgn(lp.v, 1) + '%', `${MON[(lp.t - 1) % 12]}: ${sgn(prev, 1)}%`);
-  reg('closing', Spark(host, lastN(S.rpceM, 24), { name: 'real PCE, m/m', fmt: v => sgn(v, 2) + '%', zero: true, aria: 'Real consumer spending, monthly change, over the last 24 months; ' + sgn(lp.v, 1) + '% in ' + fmtT(lp.t) + '.' }));
-}
-
-/* ---- chapter 07: financial markets ---- */
 function initMarkets(sc) {
   const last = MK.y10.length - 1;
   let view = 'rates', win = 126;   // ~6 months of trading days
   const W = () => win === 'all' ? [0, last] : [Math.max(0, last - win + 1), last];
-  const marks = [{ t: I_OCT28, label: 'Oct 28 FOMC', anchor: 'end' }, { t: I_NOV17, label: 'Nov 17', anchor: 'start' }];
-  const base = () => ({ win: W(), xFmt: wdFmt, xTicks: wdTicks, snap: true, marks, endLabels: true });
+  const base = () => ({ win: W(), xFmt: wdFmt, xTicks: wdTicks, snap: true, marks: [{ t: I_OCT28, label: 'Oct 28 FOMC', anchor: 'end' }], endLabels: true });
   const pct2 = v => v.toFixed(2) + '%', bp0 = v => Math.round(v) + ' bp', one = v => v.toFixed(1);
   const C = {
     rates: LineChart($('#mkRates'), Object.assign(base(), {
@@ -2238,101 +1983,87 @@ function initMarkets(sc) {
     eq: LineChart($('#mkEq'), Object.assign(base(), {
       series: [{ name: 'S&P 500', short: 'S&P', cls: 'teal', role: 'primary', data: valid(MK.spX) },
         { name: 'Nasdaq Composite', short: 'Nasdaq', cls: 'coral', role: 'primary', data: valid(MK.ndqX) }],
-      refs: [{ v: 100, label: 'Oct 28 = 100', align: 'end' }], fmt: one, yUnit: '', endNames: true, endPad: 104,
+      refs: [{ v: 100, label: '' }], fmt: one, yUnit: '', endNames: true, endPad: 104,
       aria: 'S&P 500 and Nasdaq Composite, rebased to October 28 = 100.' })),
     vix: LineChart($('#mkVix'), Object.assign(base(), { series: [{ name: 'VIX', cls: 'teal', role: 'primary', data: valid(MK.vix) }], fmt: one, yUnit: '', aria: 'Daily VIX volatility index.' })),
     usd: LineChart($('#mkUsd'), Object.assign(base(), { series: [{ name: 'Broad dollar index', cls: 'teal', role: 'primary', data: valid(MK.usd) }], fmt: one, yUnit: '', aria: 'Daily nominal broad U.S. dollar index.' }))
   };
   Object.values(C).forEach(ch => reg('markets', ch));
+  // one line of emphasis per chart, computed from the latest closes
+  const L = s => lastI(s), widest = s => { const i = L(s); return valid(s).every(p => p.v <= s[i].v + 1e-9); };
+  $('#mkNrates').textContent = `Since Oct 28: 10-year ${sI(chgBp(MK.y10, I_OCT28, L(MK.y10), 100))} bp · real ${sI(chgBp(MK.real, I_OCT28, L(MK.real), 100))} bp · breakeven ${sI(chgBp(MK.be, I_OCT28, L(MK.be), 100))} bp`;
+  $('#mkNig').textContent = `${Math.round(MK.ig[L(MK.ig)].v)} bp, ${sI(chgBp(MK.ig, I_OCT28, L(MK.ig)))} since Oct 28`;
+  $('#mkNhy').textContent = `${Math.round(MK.hy[L(MK.hy)].v)} bp, ${sI(chgBp(MK.hy, I_OCT28, L(MK.hy)))} since Oct 28${widest(MK.hy) ? ' · widest since Jul 2025' : ''}`;
+  $('#mkNeq').textContent = `Since Oct 28: S&P 500 ${sgn(chgPct(MK.sp, I_OCT28, L(MK.sp)), 1)}% · Nasdaq ${sgn(chgPct(MK.ndq, I_OCT28, L(MK.ndq)), 1)}%`;
+  $('#mkNvix').textContent = `${MK.vix[L(MK.vix)].v.toFixed(1)} on ${wdShort(L(MK.vix))}, up from ${MK.vix[I_OCT28].v.toFixed(1)} on Oct 28`;
+  $('#mkNusd').textContent = `${sgn(chgPct(MK.usd, I_OCT28, L(MK.usd)), 1)}% since Oct 28`;
   const VIEWS = { rates: ['rates'], credit: ['ig', 'hy'], stocks: ['eq', 'vix'], dollar: ['usd'] };
   const left = $('#mkLeft');
-  function ro(lbl, big, parts) {
-    $('#mkLbl').textContent = lbl; $('#mkBig').textContent = big;
-    const n = $('#mkNote'); n.replaceChildren();
-    parts.forEach(p => { if (Array.isArray(p)) H_('b', null, p[0], n); else n.append(p); });
-  }
-  function readout() {
-    if (view === 'rates') { const i = lastI(MK.y10), j = lastI(MK.real); ro('10-year Treasury yield, ' + wdShort(i), MK.y10[i].v.toFixed(2) + '%', [[sI(chgBp(MK.y10, I_OCT28, i, 100)) + ' bp'], ' since Oct 28 · real yield ', [MK.real[j].v.toFixed(2) + '%'], ' (' + sI(chgBp(MK.real, I_OCT28, j, 100)) + ' bp)']); }
-    else if (view === 'credit') { const i = lastI(MK.hy), j = lastI(MK.ig); ro('High-yield spread, ' + wdShort(i), Math.round(MK.hy[i].v) + ' bp', [[sI(chgBp(MK.hy, I_OCT28, i)) + ' bp'], ' since Oct 28 · investment grade ', [Math.round(MK.ig[j].v) + ' bp'], ' (' + sI(chgBp(MK.ig, I_OCT28, j)) + ')']); }
-    else if (view === 'stocks') { const i = lastI(MK.sp), j = lastI(MK.ndq), k = lastI(MK.vix); ro('S&P 500 since Oct 28, to ' + wdShort(i), sgn(chgPct(MK.sp, I_OCT28, i), 1) + '%', ['Nasdaq ', [sgn(chgPct(MK.ndq, I_OCT28, j), 1) + '%'], ' to ' + wdShort(j) + ' · VIX ', [MK.vix[k].v.toFixed(1)]]); }
-    else { const i = lastI(MK.usd); ro('Broad dollar since Oct 28, to ' + wdShort(i), sgn(chgPct(MK.usd, I_OCT28, i), 1) + '%', ['index level ', [MK.usd[i].v.toFixed(1)]]); }
-  }
-  function show(v) {
+  segBind($('#mkSeg'), v => {
     view = v;
     $$('[data-mk]', sc).forEach(f => { f.hidden = f.dataset.mk !== v; });
     VIEWS[v].forEach(k => { C[k].intro = !reduceMotion; C[k].draw(true); });
-    readout(); if (left._refresh) left._refresh();
-  }
-  segBind($('#mkSeg'), show);
-  segBind($('#mkWin'), v => { win = v === 'all' ? 'all' : +v; Object.values(C).forEach(ch => { ch.intro = !reduceMotion; ch.setWindow(W()); }); if (left._refresh) left._refresh(); });
-  readout();
-
-  // what changed: Oct 28 | Nov 17 (our write-up) | latest | change since Oct 28
-  const L = lastI(MK.y10), big = v => Math.round(v).toLocaleString('en-US');
-  const ROWS = [['10-year Treasury', MK.y10, pct2, 'bp100'], ['10-year real (TIPS)', MK.real, pct2, 'bp100'], ['10-year breakeven', MK.be, pct2, 'bp100'], ['2-year Treasury', MK.y2, pct2, 'bp100'],
-    ['Investment-grade spread', MK.ig, bp0, 'bp'], ['High-yield spread', MK.hy, bp0, 'bp'], ['S&P 500', MK.sp, big, 'pct'], ['Nasdaq Composite', MK.ndq, big, 'pct'], ['VIX', MK.vix, one, 'pts'], ['Broad dollar index', MK.usd, one, 'pct']];
-  const chg = (s, kind, i) => kind === 'bp100' ? sI(chgBp(s, I_OCT28, i, 100)) + ' bp' : kind === 'bp' ? sI(chgBp(s, I_OCT28, i)) + ' bp' : kind === 'pct' ? sgn(chgPct(s, I_OCT28, i), 1) + '%' : sgn(s[i].v - s[I_OCT28].v, 1) + ' pts';
-  const tb = H_('table', null, null, $('#mkTable')), hr = H_('tr', null, null, H_('thead', null, null, tb)), bd = H_('tbody', null, null, tb);
-  ['Market', 'Oct 28', 'Nov 17 (our write-up)', 'Latest', 'Since Oct 28'].forEach(h => H_('th', null, h, hr));
-  ROWS.forEach(([name, s, f, kind]) => {
-    const i = lastI(s), row = H_('tr', null, null, bd);
-    [name, f(s[I_OCT28].v), f(s[I_NOV17].v), f(s[i].v) + (i !== L ? ' (' + wdShort(i) + ')' : ''), chg(s, kind, i)].forEach(c => H_('td', null, c, row));
+    if (left._refresh) left._refresh();
   });
-
-  // what moved after the write-up
-  const i = lastI(MK.sp), j = lastI(MK.ndq), h = lastI(MK.hy), k = lastI(MK.vix), y = lastI(MK.y10);
-  const move = (s, a, b) => { const p = chgPct(s, a, b); return (p < 0 ? 'fell ' : 'rose ') + Math.abs(p).toFixed(1) + '%'; };
-  const hyB = chgBp(MK.hy, I_NOV17, h), yB = chgBp(MK.y10, I_NOV17, y, 100);
-  const since = $('#mkSince'); since.replaceChildren(); H_('span', 'lbl', 'Since Nov 17', since);
-  since.append(` the S&P 500 ${move(MK.sp, I_NOV17, i)} and the Nasdaq ${move(MK.ndq, I_NOV17, j)} (to ${wdShort(j)}); high-yield spreads ${hyB >= 0 ? 'widened' : 'narrowed'} ${Math.abs(hyB)} bp; the VIX reached ${MK.vix[k].v.toFixed(1)}; and the 10-year yield ${yB < 0 ? 'fell' : 'rose'} ${Math.abs(yB)} bp to ${MK.y10[y].v.toFixed(2)}%.`);
-
-  // data table for whichever market is showing
+  segBind($('#mkWin'), v => { win = v === 'all' ? 'all' : +v; Object.values(C).forEach(ch => { ch.intro = !reduceMotion; ch.setWindow(W()); }); if (left._refresh) left._refresh(); });
   const TBL = { rates: [['10-year', MK.y10, pct2], ['Real', MK.real, pct2], ['Breakeven', MK.be, pct2], ['2-year', MK.y2, pct2]], credit: [['Investment grade', MK.ig, bp0], ['High yield', MK.hy, bp0]],
     stocks: [['S&P 500', MK.sp, v => v.toFixed(2)], ['Nasdaq', MK.ndq, v => v.toFixed(2)], ['VIX', MK.vix, v => v.toFixed(2)]], dollar: [['Broad dollar index', MK.usd, v => v.toFixed(2)]] };
-  setupTable(left, () => {
+  tableOverlay(left, () => {
     const [a, b] = W(), defs = TBL[view], rows = [];
     for (let t = b; t >= a; t--) { if (defs.every(d => d[1][t].v == null)) continue; rows.push([wdFmt(t)].concat(defs.map(([, s, f]) => s[t].v == null ? '—' : f(s[t].v)))); }
     return { cols: ['Date'].concat(defs.map(d => d[0])), rows };
   });
 }
 
-/* ---- chapter 10: Taylor rule (technical component) ---- */
+function initInflation(sc) {
+  $('#iP').textContent = pct1(lastPt(S.pceY).v); $('#iC').textContent = pct1(lastPt(S.coreY).v);
+  reg('inflation', HBars($('#iCats'), CPI_CATS, { ref: { v: PACE_2PCT, label: '2%-a-year pace' } }));
+  const tEnd = lastPt(S.servY).t, sL = lastPt(S.servY), gL = lastPt(S.goodsY);
+  reg('inflation', LineChart($('#iGS'), {
+    series: [{ name: 'Services', cls: 'teal', role: 'primary', data: S.servY }, { name: 'Goods', cls: 'coral', role: 'primary', data: S.goodsY }],
+    refs: [{ v: 2, label: '' }], win: [M(2019, 1), tEnd], fmt: pct1, endLabels: true, endNames: true, endPad: 104, zero: true,
+    callouts: () => [{ t: gL.t, v: gL.v, text: 'Goods: tariffs and energy', dx: -36, dy: -124, anchor: 'end' }, { t: sL.t - 5, v: at(S.servY, sL.t - 5), text: 'Services: resilient demand', dx: -24, dy: 150, anchor: 'end' }],
+    aria: 'PCE inflation for goods and for services since 2019. In September 2026 goods were 3.9% and services 3.5%.'
+  }));
+}
+
+function initAI(sc) {
+  reg('ai', Columns($('#aiIss'), [{ label: '2023, full year', v: 1, text: '1×', cls: 'ctx' }, { label: '2026 through Oct', v: 5, text: '≈5× · $680B+', cls: 'coral' }],
+    { max: 5.6, tick: v => v + '×', unit: 'AI-related debt issuance vs. 2023', aria: 'AI-related debt issuance through October 2026 is about five times all of 2023, more than $680 billion.' }));
+  reg('ai', Columns($('#aiShare'), [{ label: '2023', v: 6, text: '<6%', cls: 'ctx' }, { label: '2026', v: 31, text: '31%', cls: 'coral' }],
+    { max: 35, tick: v => v + '%', unit: 'of nonfinancial IG issuance', aria: 'AI-related borrowing is 31% of nonfinancial investment-grade issuance, versus under 6% in 2023.' }));
+}
+
 function initTaylor(sc) {
   const st = { r: +(SEP.ffLR - 2).toFixed(1), u: SEP.unLR, rho: 0.85, pi: 'core', w: 0.5 };
   const curMid = (CUR.lo + CUR.hi) / 2;
   const piS = () => st.pi === 'core' ? S.coreY : S.pceY;
   const rule = (pi, u) => st.r + pi + 0.5 * (pi - 2) + st.w * 2 * (st.u - u);
-  const t0 = M(2015, 1), tFF = M(2026, 11);
-  const hist = () => { const s = piS(), out = []; for (let t = t0; t <= lastPt(s).t; t++) { const p = at(s, t), u = at(S.unrate, t); out.push({ t, v: p == null || u == null ? null : rule(p, u) }); } return out; };
+  const t0 = M(2021, 1), tFF = M(2026, 11);
+  // monthly prescription; after the last inflation print, the latest inflation is carried forward
+  const hist = () => { const s = piS(), lp = lastPt(s), tE = Math.max(lp.t, lastPt(S.unrate).t), out = []; for (let t = t0; t <= tE; t++) { const p = t > lp.t ? lp.v : at(s, t), u = at(S.unrate, t); out.push({ t, v: p == null || u == null ? null : rule(p, u) }); } return out; };
   const ff = []; for (let t = t0; t <= tFF; t++) { const f = ffAt((t + 0.5) / 12); ff.push({ t, v: (f.lo + f.hi) / 2 }); }
+  let iStarNow = 0;
   const ch = reg('taylor', LineChart($('#tyChart'), {
     series: [{ name: 'Fed funds target, midpoint', short: 'Fed funds', cls: 'teal', role: 'primary', data: ff }, { name: 'Rule prescription', short: 'Rule', cls: 'coral', role: 'primary', data: hist() }],
-    win: [t0, tFF], fmt: v => v.toFixed(2) + '%', endLabels: true, endNames: true, endPad: 108, zero: true, notes: SHUTDOWN,
-    aria: 'Taylor-rule prescription compared with the federal funds target midpoint, monthly since 2015.' }));
-  const fig = sc.querySelector('.fig');
+    win: [t0, tFF], fmt: v => v.toFixed(2) + '%', endLabels: true, endNames: true, endPad: 116, zero: true, notes: SHUTDOWN,
+    between: { a: 1, b: 0 },
+    brackets: () => [{ t: lastPt(S.unrate).t, v0: curMid, v1: iStarNow, text: bp(iStarNow - curMid), sub: 'rule vs. today' }],
+    aria: 'Taylor-rule prescription compared with the federal funds target midpoint, monthly since 2021, with the gap between them shaded.' }));
   const bp = x => (x >= 0 ? '+' : '−') + Math.abs(Math.round(x * 100)) + ' bp';
   function update(redraw) {
     const lp = lastPt(piS()), pi = lp.v, ul = lastPt(S.unrate), u = ul.v;
     const iStar = rule(pi, u), smooth = st.rho * curMid + (1 - st.rho) * iStar, move = smooth - curMid, steps = Math.round(move / 0.25);
-    const piName = st.pi === 'core' ? 'core PCE' : 'headline PCE';
+    iStarNow = iStar;
     $('#tyRv').textContent = st.r.toFixed(1) + '%'; $('#tyUv').textContent = st.u.toFixed(1) + '%'; $('#tyRhov').textContent = st.rho.toFixed(2);
     $('#tyLbl').textContent = (st.w === 0.5 ? 'Taylor (1993) rule' : 'Balanced-approach rule') + ', today';
     $('#tyBig').textContent = iStar.toFixed(2) + '%';
-    const g = $('#tyGap'); g.replaceChildren(); H_('b', null, bp(iStar - curMid), g); g.append(' versus the current 3.875% midpoint');
-    const sm = $('#tySmooth'); sm.replaceChildren(); H_('b', null, smooth.toFixed(2) + '%', sm); sm.append(' with gradual adjustment (ρ = ' + st.rho.toFixed(2) + ')');
+    const g = $('#tyGap'); g.replaceChildren(); H_('b', null, bp(iStar - curMid), g); g.append(" vs. today's 3.875%");
+    const stepTxt = steps === 0 ? 'no change' : steps === 1 ? 'one 25 bp hike' : steps > 1 ? steps + ' hikes' : steps === -1 ? 'one 25 bp cut' : (-steps) + ' cuts';
+    const sm = $('#tySmooth'); sm.replaceChildren(); H_('b', null, smooth.toFixed(2) + '%', sm); sm.append(' moving gradually ≈ ' + stepTxt);
     const f2 = v => v.toFixed(2);
-    $('#tyFormula').innerHTML =
-      `i* = r* + π + 0.5 × (π − 2) + ${st.w.toFixed(1)} × 2 × (u* − u)<br>` +
-      `&nbsp;&nbsp; = <b>${st.r.toFixed(1)}</b> + <b>${f2(pi)}</b> + 0.5 × (${f2(pi)} − 2) + ${st.w.toFixed(1)} × 2 × (<b>${st.u.toFixed(1)}</b> − <b>${u.toFixed(1)}</b>)<br>` +
-      `&nbsp;&nbsp; = <b>${f2(iStar)}%</b><br>` +
-      `π = ${piName}, ${fmtT(lp.t)}, y/y; u = unemployment, ${fmtT(ul.t)}<br>` +
-      `Gradual: ${st.rho.toFixed(2)} × 3.875 + ${(1 - st.rho).toFixed(2)} × ${f2(iStar)} = <b>${f2(smooth)}%</b> (${bp(move)})`;
-    const infl = 0.5 * (pi - 2), lab = st.w * 2 * (st.u - u), gapU = u - st.u;
-    const uTxt = Math.abs(gapU) < 0.05 ? 'right at its long-run level' : `${Math.abs(gapU).toFixed(1)} point${Math.abs(gapU) >= 0.15 ? 's' : ''} ${gapU < 0 ? 'below' : 'above'} its long-run level`;
-    const stepTxt = steps === 0 ? 'no change' : steps === 1 ? 'one 25 bp hike' : steps > 1 ? steps + ' hikes of 25 bp' : steps === -1 ? 'one 25 bp cut' : (-steps) + ' cuts of 25 bp';
-    $('#tyIntuition').textContent = `Inflation is ${(pi - 2).toFixed(1)} points above the 2% target while unemployment is ${uTxt}, so the ${Math.abs(infl) >= Math.abs(lab) ? 'inflation' : 'labor-market'} term dominates. The rule asks for ${iStar.toFixed(2)}%, ${bp(iStar - curMid)} from today's midpoint. Policymakers usually adjust gradually: with a ${st.rho.toFixed(2)} weight on today's rate, the move is ${bp(move)}, which rounds to ${stepTxt}.`;
-    if (redraw) ch.setData(1, hist());
-    if (fig._refresh) fig._refresh();
+    $('#tyFormula').innerHTML = `i = r* + π + 0.5(π − 2) + ${st.w.toFixed(1)} × 2(u* − u)<br>= <b>${st.r.toFixed(1)}</b> + <b>${f2(pi)}</b> + 0.5(${f2(pi - 2)}) + ${st.w.toFixed(1)} × 2(<b>${f2(st.u - u)}</b>) = <b>${f2(iStar)}%</b><br><span class="f-note">π ${st.pi === 'core' ? 'core PCE' : 'PCE'} ${fmtT(lp.t)} · u ${fmtT(ul.t)}</span>`;
+    if (redraw) ch.setData(1, hist()); else ch.draw(true);
   }
   $('#tyR').addEventListener('input', e => { st.r = +e.target.value; update(true); });
   $('#tyU').addEventListener('input', e => { st.u = +e.target.value; update(true); });
@@ -2340,59 +2071,44 @@ function initTaylor(sc) {
   segBind($('#tyPi'), v => { st.pi = v; update(true); });
   segBind($('#tyRule'), v => { st.w = +v; update(true); });
   update(false);
-  setupTable(fig, () => { const r = hist(), rows = []; for (let t = tFF; t >= t0; t--) { const a = ff[t - t0] && ff[t - t0].v, b = r[t - t0] ? r[t - t0].v : null; rows.push([fmtT(t), a == null ? '—' : a.toFixed(3) + '%', b == null ? '—' : b.toFixed(2) + '%']); } return { cols: ['Month', 'Fed funds midpoint', 'Rule'], rows }; });
+  tableOverlay(sc.querySelector('.chart-wrap'), () => { const r = hist(), rows = []; for (let t = tFF; t >= t0; t--) { const a = ff[t - t0] && ff[t - t0].v, b = r[t - t0] ? r[t - t0].v : null; rows.push([fmtT(t), a == null ? '—' : a.toFixed(3) + '%', b == null ? '—' : b.toFixed(2) + '%']); } return { cols: ['Month', 'Fed funds midpoint', 'Rule'], rows }; });
 }
 
-/* ---- chapter 11: outlook (FOMC medians) and the risk map ---- */
-function initOutlook(sc) {
-  const w = [M(2024, 1), M(2028, 12)], yrs = SEP.years.slice(0, 3);
-  const proj = vals => yrs.map((y, i) => ({ t: M(y, 12), v: vals[i] }));
-  const notes = Object.assign({}, SHUTDOWN); yrs.forEach(y => { notes[M(y, 12)] = 'FOMC September median for ' + y; });
-  const mk = (id, name, hist, vals, ref, fmt, aria) => reg('outlook', LineChart($(id), {
-    series: [{ name, cls: 'teal', role: 'primary', data: hist }, { name: 'FOMC median (Sep)', proj: true, cls: 'proj', data: proj(vals) }],
-    refs: ref ? [ref] : [], win: w, fmt, snap: true, notes, aria }));
-  const f1 = v => v.toFixed(1) + '%';
-  const ffm = []; for (let t = w[0]; t <= M(2026, 11); t++) { const f = ffAt((t + 0.5) / 12); ffm.push({ t, v: (f.lo + f.hi) / 2 }); }
-  mk('#olCore', 'Core PCE inflation, y/y', S.coreY.filter(p => p.t >= w[0]), SEP.core, { v: 2, label: '2% target' }, f1, 'Core PCE inflation since 2024 and the FOMC median projections: 3.4% in 2026, 2.5% in 2027, 2.2% in 2028.');
-  mk('#olUn', 'Unemployment rate', S.unrate.filter(p => p.t >= w[0]), SEP.un, { v: SEP.unLR, label: 'Longer run ' + SEP.unLR.toFixed(1) + '%' }, f1, 'Unemployment since 2024 and the FOMC median projections: 4.1% each year.');
-  mk('#olGdp', 'Real GDP growth, SAAR', GDPQ.map(([t, v]) => ({ t, v })), SEP.gdp, { v: SEP.gdpLR, label: 'Longer run ' + SEP.gdpLR.toFixed(1) + '%' }, f1, 'Quarterly real GDP growth since 2024 and the FOMC median projections: 2.3%, 2.4% and 2.2%.');
-  mk('#olFf', 'Fed funds target, midpoint', ffm, SEP.ff, { v: SEP.ffLR, label: 'Longer run ' + SEP.ffLR.toFixed(1) + '%' }, v => v.toFixed(2) + '%', 'Fed funds target midpoint since 2024 and the FOMC median projections: 4.1%, 4.1% and 3.9%.');
-  const lc = lastPt(S.coreY), lu = lastPt(S.unrate);
-  $('#olCoreSub').textContent = `${fmtT(lc.t)} ${fx(lc.v)}% · median ${SEP.core.slice(0, 3).join(' → ')}`;
-  $('#olUnSub').textContent = `${fmtT(lu.t)} ${fx(lu.v)}% · median ${SEP.un.slice(0, 3).join(' → ')}`;
-  $('#olGdpSub').textContent = `Q3 2026 ${GDPQ[GDPQ.length - 1][1].toFixed(1)}% · median ${SEP.gdp.slice(0, 3).join(' → ')}`;
-  $('#olFfSub').textContent = `Now 3.875% · median ${SEP.ff.slice(0, 3).join(' → ')}`;
-  // market pricing and the risk cards use the latest market closes
-  const y = lastI(MK.y2), i = lastI(MK.sp), k = lastI(MK.vix), h = lastI(MK.hy), u = lastI(MK.usd);
-  const two = $('#ol2y'); two.replaceChildren(); two.append('2-year Treasury: '); H_('b', null, MK.y2[y].v.toFixed(2) + '%', two);
-  two.append(` on ${wdShort(y)}, vs. ${MK.y2[I_NOV17].v.toFixed(2)}% on Nov 17 and ${MK.y2[I_OCT28].v.toFixed(2)}% on Oct 28.`);
-  const fill = (key, text) => { const el = sc.querySelector(`[data-fill="${key}"]`); if (el) el.textContent = text; };
-  fill('eq', `S&P 500 ${sgn(chgPct(MK.sp, I_OCT28, i), 1)}% since Oct 28; VIX ${MK.vix[k].v.toFixed(1)} on ${wdShort(k)}. Would challenge the hike if consumption or investment falls.`);
-  fill('credit', `High-yield spreads ${sI(chgBp(MK.hy, I_OCT28, h))} bp since Oct 28. AI-related stress could spread to banks, insurers or private credit.`);
-  fill('usd', `Net exports subtracted 3.32 pp from Q3 growth; the broad dollar is ${sgn(chgPct(MK.usd, I_OCT28, u), 1)}% since Oct 28.`);
-  const tf = $('#olTblFig');
-  setupTable(tf, () => {
-    const c = v => v == null ? '—' : v.toFixed(1) + '%';
-    return { cols: ['FOMC median, September 2026', '2026', '2027', '2028', '2029', 'Longer run'], rows: [
-      ['Real GDP growth, Q4/Q4'].concat(SEP.gdp.map(c), [c(SEP.gdpLR)]),
-      ['Unemployment rate, Q4'].concat(SEP.un.map(c), [c(SEP.unLR)]),
-      ['PCE inflation, Q4/Q4'].concat(SEP.pce.map(c), [c(2)]),
-      ['Core PCE inflation, Q4/Q4'].concat(SEP.core.map(c), ['—']),
-      ['Fed funds rate, year-end'].concat(SEP.ff.map(c), [c(SEP.ffLR)])] };
-  });
+function initClosing(sc) {
+  reg('closing', BandChart($('#cChart'), {
+    x0: 2022, x1: 2029.45, y0: 0, y1: 7, yStep: 1, scenario: 'hike', propEnd: 2027.2, propLabelMinW: 99999,
+    sep: { pts: [[2026.96, SEP.ff[0]], [2027.96, SEP.ff[1]], [2028.96, SEP.ff[2]]], lr: SEP.ffLR,
+      callout: { text: 'FOMC median for end-2026: ' + SEP.ff[0].toFixed(1) + '%', sub: 'already implies one more hike', dx: -40, dy: 84, anchor: 'end' } },
+    aria: 'Federal funds target range since 2022, our proposed December step to 4.00–4.25%, and the FOMC September median path: 4.1% at the end of 2026 and 2027, 3.9% at the end of 2028, 3.2% in the longer run.'
+  }));
+  const box = (el, head, rows) => { el.replaceChildren(); H_('span', 'wb-h', head, el); rows.forEach(([k, v]) => { const r = H_('span', 'wb-i', null, el); H_('b', null, k, r); H_('span', null, v, r); }); };
+  const cm = lastPt(S.coreM), gy = lastPt(S.goodsY), pay = lastPt(S.payChg), ul = lastPt(S.unrate), rp = lastPt(S.rpceM);
+  const avg3 = (at(S.payChg, pay.t) + at(S.payChg, pay.t - 1) + at(S.payChg, pay.t - 2)) / 3;
+  box($('#cUp'), '▲ Upside: would argue for more', [
+    ['Core inflation stays hot', `${sgn(cm.v, 2)}% m/m, ${MON[cm.t % 12]}`],
+    ['Demand stays strong', '+4.9% SAAR, Q3'],
+    ['Tariffs and energy', `goods ${sgn(gy.v, 1)}% y/y`]]);
+  box($('#cDown'), '▼ Downside: would make us pause', [
+    ['Payrolls weaken', `${kF(pay.v)} ${MON[pay.t % 12]} · 3-mo ${kF(avg3)}`],
+    ['Unemployment rises', `${fx(ul.v)}%, ${MON[ul.t % 12]}`],
+    ['Real spending drops', `${sgn(rp.v, 1)}% m/m, ${MON[rp.t % 12]}`],
+    ['Markets crack', `S&P ${sgn(chgPct(MK.sp, I_OCT28, lastI(MK.sp)), 1)}% · HY ${sI(chgBp(MK.hy, I_OCT28, lastI(MK.hy)))} bp`]]);
 }
 
 /* ================= navigation ================= */
 const scenes = $$('.scene'), order = scenes.map(s => s.id), rail = $$('#railList a');
+const SEQ = order.filter(id => id !== 'sources');      // Sources is reached from its link, not the sequence
 const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), prog = $('#progress i');
-const inits = { top: initCover, recap: initRecap, mandate: initMandate, decision: initDecision, economy: initEconomy, jobs: initJobs, participation: initParticipation, markets: initMarkets, inflation: initInflation, implications: initImplications, taylor: initTaylor, outlook: initOutlook, closing: initClosing };
+const inits = { top: initCover, recap: initRecap, mandate: initMandate, decision: initDecision, economy: initEconomy, labor: initLabor, markets: initMarkets, inflation: initInflation, ai: initAI, taylor: initTaylor, closing: initClosing };
 const done = new Set();
-let cur = -1, booted = false;
-function setNav(btn, j) {
-  if (j < 0 || j >= scenes.length) { btn.disabled = true; return; }
-  btn.disabled = false; const s = scenes[j];
+let cur = -1, booted = false, lastSeq = 0;
+function setNav(btn, id) {
+  if (!id) { btn.disabled = true; return; }
+  const s = $('#' + id);
+  btn.disabled = false;
   btn.querySelector('.nb-n').textContent = s.dataset.n || '';
   btn.querySelector('.nb-t').textContent = s.dataset.label;
+  btn.dataset.go = id;
   btn.setAttribute('aria-label', (btn === prevBtn ? 'Previous: ' : 'Next: ') + s.dataset.label);
 }
 function show(i) {
@@ -2401,36 +2117,43 @@ function show(i) {
   players.forEach(p => p.stop(true)); hideTip();
   scenes.forEach((s, k) => { s.hidden = k !== i; });
   cur = i;
-  const sc = scenes[i];
+  const sc = scenes[i], q = SEQ.indexOf(sc.id);
   if (!done.has(sc.id)) { done.add(sc.id); if (inits[sc.id]) inits[sc.id](sc); }
-  (registry[sc.id] || []).forEach(ch => { ch.intro = booted && !reduceMotion; ch.draw(true); });
+  (registry[sc.id] || []).forEach(ch => { if (ch.host.offsetParent !== null) { ch.intro = booted && !reduceMotion; ch.draw(true); } });
   if (booted && !reduceMotion) { sc.classList.remove('enter'); void sc.offsetWidth; sc.classList.add('enter'); }
   window.scrollTo(0, 0);
   rail.forEach(a => { if (a.getAttribute('href') === '#' + sc.id) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); });
   const act = rail.find(a => a.hasAttribute('aria-current'));
   if (act && booted) act.scrollIntoView({ block: 'nearest', inline: 'center' });
-  prog.style.width = (i / (scenes.length - 1) * 100) + '%';
-  setNav(prevBtn, i - 1); setNav(nextBtn, i + 1);
+  else if (sc.id === 'top') $('.rail').scrollLeft = 0;
+  if (q >= 0) {
+    lastSeq = q;
+    prog.style.width = (q / (SEQ.length - 1) * 100) + '%';
+    setNav(prevBtn, SEQ[q - 1]); setNav(nextBtn, SEQ[q + 1]);
+  } else {   // on the Sources page: offer the way back
+    setNav(prevBtn, SEQ[lastSeq]); setNav(nextBtn, null);
+  }
   booted = true;
 }
 const idxFromHash = () => { const i = order.indexOf(decodeURIComponent(location.hash.slice(1))); return i < 0 ? 0 : i; };
 // Navigate directly, then mirror the chapter in the URL hash where the page allows it (sandboxed viewers may not).
-function go(i) {
-  i = Math.max(0, Math.min(scenes.length - 1, i));
+function go(id) {
+  const i = order.indexOf(id); if (i < 0) return;
   show(i);
   if (location.protocol === 'data:') return;   // sandboxed previews refuse hash changes
-  try { if (location.hash !== '#' + order[i]) location.hash = order[i]; } catch (e) { /* hash not writable here */ }
+  try { if (location.hash !== '#' + id) location.hash = id; } catch (e) { /* hash not writable here */ }
 }
+const step = d => { const sc = scenes[cur], q = SEQ.indexOf(sc.id); const n = q < 0 ? lastSeq : Math.max(0, Math.min(SEQ.length - 1, q + d)); go(SEQ[n]); };
 window.addEventListener('hashchange', () => show(idxFromHash()));
 document.addEventListener('click', ev => {
   const a = ev.target.closest && ev.target.closest('a[href^="#"]');
   if (!a) return;
-  const i = order.indexOf(a.getAttribute('href').slice(1));
-  if (i < 0) return;
-  ev.preventDefault(); go(i);
+  const id = a.getAttribute('href').slice(1);
+  if (order.indexOf(id) < 0) return;
+  ev.preventDefault(); go(id);
 });
-prevBtn.addEventListener('click', () => go(cur - 1));
-nextBtn.addEventListener('click', () => go(cur + 1));
+prevBtn.addEventListener('click', () => { if (prevBtn.dataset.go) go(prevBtn.dataset.go); });
+nextBtn.addEventListener('click', () => { if (nextBtn.dataset.go) go(nextBtn.dataset.go); });
 
 /* theme + full screen */
 const themeBtn = $('#themeBtn');
@@ -2446,9 +2169,9 @@ document.addEventListener('keydown', ev => {
   const tg = ev.target, tag = tg && tg.tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (tg && tg.isContentEditable)) return;
   const k = ev.key;
-  if (k === 'ArrowRight' || k === 'PageDown') { ev.preventDefault(); go(cur + 1); }
-  else if (k === 'ArrowLeft' || k === 'PageUp') { ev.preventDefault(); go(cur - 1); }
-  else if (/^[0-9]$/.test(k)) { go(+k); }
+  if (k === 'ArrowRight' || k === 'PageDown') { ev.preventDefault(); step(1); }
+  else if (k === 'ArrowLeft' || k === 'PageUp') { ev.preventDefault(); step(-1); }
+  else if (/^[0-9]$/.test(k) && SEQ[+k]) { go(SEQ[+k]); }
   else if (k === 'f' || k === 'F') { toggleFs(); }
   else if (k === 't' || k === 'T') { toggleTheme(); }
 });
