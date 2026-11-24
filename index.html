@@ -514,6 +514,8 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
 
 /* 03 decision: two big options */
 .choice { display: flex; flex-wrap: wrap; gap: 10px; }
+.choice-wrap { display: grid; gap: 6px; justify-items: end; }
+@media (max-width: 900px) { .choice-wrap { justify-items: start; } }
 .opt {
   position: relative; display: grid; gap: 1px; min-width: 196px; padding: 11px 20px 11px 46px; text-align: left;
   border: 1.5px solid var(--axis); border-radius: 14px; background: transparent; color: var(--ink); cursor: pointer;
@@ -602,16 +604,15 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   <a class="brand" href="#top" aria-label="Team Big Apple: back to the cover"><b>Team Big Apple</b><small>KK Ananth · Shardul Kachare · Stephanie Demo · Grace Alexander · Alvin Wu</small></a>
   <nav class="rail" aria-label="Chapters">
     <ol id="railList">
-      <li><a href="#recap"><span class="n">01</span><span class="t">Recap</span></a></li>
+      <li><a href="#decision"><span class="n">01</span><span class="t">Decision</span></a></li>
       <li><a href="#mandate"><span class="n">02</span><span class="t">Mandate</span></a></li>
-      <li><a href="#decision"><span class="n">03</span><span class="t">Decision</span></a></li>
-      <li><a href="#economy"><span class="n">04</span><span class="t">Economy</span></a></li>
-      <li><a href="#labor"><span class="n">05</span><span class="t">Labor</span></a></li>
-      <li><a href="#markets"><span class="n">06</span><span class="t">Markets</span></a></li>
-      <li><a href="#inflation"><span class="n">07</span><span class="t">Inflation</span></a></li>
-      <li><a href="#ai"><span class="n">08</span><span class="t">AI risk</span></a></li>
-      <li><a href="#taylor"><span class="n">09</span><span class="t">Taylor rule</span></a></li>
-      <li><a href="#closing"><span class="n">10</span><span class="t">Our call</span></a></li>
+      <li><a href="#economy"><span class="n">03</span><span class="t">Economy</span></a></li>
+      <li><a href="#labor"><span class="n">04</span><span class="t">Labor</span></a></li>
+      <li><a href="#markets"><span class="n">05</span><span class="t">Markets</span></a></li>
+      <li><a href="#inflation"><span class="n">06</span><span class="t">Inflation</span></a></li>
+      <li><a href="#ai"><span class="n">07</span><span class="t">AI risk</span></a></li>
+      <li><a href="#taylor"><span class="n">08</span><span class="t">Taylor rule</span></a></li>
+      <li><a href="#closing"><span class="n">09</span><span class="t">Our call</span></a></li>
     </ol>
   </nav>
   <div class="tools">
@@ -631,7 +632,7 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
       <p class="team-m">KK Ananth, Shardul Kachare, Stephanie Demo, Grace Alexander, Alvin Wu</p>
       <p class="hero-num" aria-label="Plus 25 basis points">+25<span class="u">bp</span></p>
       <h1 class="cover-title">Raise the target range to <b>4.00%–4.25%</b></h1>
-      <div class="cta"><a class="btn primary" href="#recap">Start <span aria-hidden="true">→</span></a></div>
+      <div class="cta"><a class="btn primary" href="#decision">Start <span aria-hidden="true">→</span></a></div>
     </div>
     <div class="cover-chart">
       <div class="chart" id="coverChart"></div>
@@ -642,20 +643,21 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 01 RECAP ===================== -->
-<section class="scene stage" id="recap" data-n="01" data-label="Recap" hidden>
+<!-- ===================== 01 DECISION: October's hold and our December call ===================== -->
+<section class="scene stage" id="decision" data-n="01" data-label="Decision" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">01</span>October: held at <span class="nw">3.75%–4.00%</span>, with two votes to hike</h2>
+    <h2 class="headline"><span class="chap">01</span>October: held, with two votes to hike</h2>
+    <div class="choice-wrap">
+      <span class="sub-cap">Our call for December</span>
+      <div class="choice" id="dChoice" role="group" aria-label="Our call for December">
+        <button type="button" class="opt hike" data-v="hike" aria-pressed="true"><span class="o-k">Raise 25 bp</span><span class="o-v">to 4.00%–4.25%</span></button>
+        <button type="button" class="opt hold" data-v="hold" aria-pressed="false"><span class="o-k">Pause</span><span class="o-v">stay at 3.75%–4.00%</span></button>
+      </div>
+    </div>
   </div>
   <div class="chart-wrap fill">
-    <div class="chart fill" id="recapChart"></div>
-    <div class="chips" style="left:58px; bottom:40px">
-      <span class="chip-h">The statement</span>
-      <span class="chip"><b>Activity</b>strong pace</span>
-      <span class="chip"><b>Spending</b>resilient</span>
-      <span class="chip"><b>Investment</b>robust</span>
-      <span class="chip"><b>Inflation</b>elevated</span>
-    </div>
+    <div class="chart fill" id="dChart"></div>
+    <div class="chips" id="dWhy" style="left:58px; bottom:40px"></div>
   </div>
 </section>
 
@@ -680,25 +682,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 03 DECISION ===================== -->
-<section class="scene stage" id="decision" data-n="03" data-label="Decision" hidden>
+<!-- ===================== 03 ECONOMY ===================== -->
+<section class="scene stage" id="economy" data-n="03" data-label="Economy" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">03</span>Our call for December</h2>
-    <div class="choice" id="dChoice" role="group" aria-label="December decision">
-      <button type="button" class="opt hike" data-v="hike" aria-pressed="true"><span class="o-k">Raise 25 bp</span><span class="o-v">to 4.00%–4.25%</span></button>
-      <button type="button" class="opt hold" data-v="hold" aria-pressed="false"><span class="o-k">Pause</span><span class="o-v">stay at 3.75%–4.00%</span></button>
-    </div>
-  </div>
-  <div class="chart-wrap fill">
-    <div class="chart fill" id="dChart"></div>
-    <div class="chips" id="dWhy" style="left:58px; bottom:40px"></div>
-  </div>
-</section>
-
-<!-- ===================== 04 ECONOMY ===================== -->
-<section class="scene stage" id="economy" data-n="04" data-label="Economy" hidden>
-  <div class="stage-top">
-    <span class="chap-only"><span class="chap">04</span>Economy</span>
+    <span class="chap-only"><span class="chap">03</span>Economy</span>
     <div class="seg" id="eQ" role="group" aria-label="Quarter"><button type="button" data-v="Q4 2025" aria-pressed="false">Q4 '25</button><button type="button" data-v="Q1 2026" aria-pressed="false">Q1 '26</button><button type="button" data-v="Q2 2026" aria-pressed="false">Q2 '26</button><button type="button" data-v="Q3 2026" aria-pressed="true">Q3 '26</button></div>
   </div>
   <div class="duo">
@@ -715,10 +702,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 05 LABOR ===================== -->
-<section class="scene stage" id="labor" data-n="05" data-label="Labor" hidden>
+<!-- ===================== 04 LABOR ===================== -->
+<section class="scene stage" id="labor" data-n="04" data-label="Labor" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">05</span><span id="lHead">Unemployment holding steady around 4%</span></h2>
+    <h2 class="headline"><span class="chap">04</span><span id="lHead">Unemployment holding steady around 4%</span></h2>
     <div class="controls">
       <div class="seg" id="lView" role="group" aria-label="Measure"><button type="button" data-v="un" aria-pressed="true">Unemployment</button><button type="button" data-v="part" aria-pressed="false">Participation</button></div>
       <div class="seg" id="lRange" role="group" aria-label="Time range"><button type="button" data-v="12" aria-pressed="false">1Y</button><button type="button" data-v="36" aria-pressed="false">3Y</button><button type="button" data-v="60" aria-pressed="true">5Y</button><button type="button" data-v="120" aria-pressed="false">10Y</button><button type="button" data-v="all" aria-pressed="false">Since 2000</button></div>
@@ -732,10 +719,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 06 MARKETS ===================== -->
-<section class="scene stage" id="markets" data-n="06" data-label="Markets" hidden>
+<!-- ===================== 05 MARKETS ===================== -->
+<section class="scene stage" id="markets" data-n="05" data-label="Markets" hidden>
   <div class="stage-top">
-    <span class="chap-only"><span class="chap">06</span>Markets since the Oct 28 FOMC</span>
+    <span class="chap-only"><span class="chap">05</span>Markets since the Oct 28 FOMC</span>
     <div class="controls">
       <div class="seg" id="mkSeg" role="group" aria-label="Market shown"><button type="button" data-v="rates" aria-pressed="true">Treasury yields</button><button type="button" data-v="credit" aria-pressed="false">Credit spreads</button><button type="button" data-v="stocks" aria-pressed="false">Stocks &amp; VIX</button><button type="button" data-v="dollar" aria-pressed="false">Dollar</button></div>
       <div class="seg" id="mkWin" role="group" aria-label="Time window"><button type="button" data-v="63" aria-pressed="false">3M</button><button type="button" data-v="126" aria-pressed="true">6M</button><button type="button" data-v="all" aria-pressed="false">Since Jul 2025</button></div>
@@ -763,10 +750,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 07 INFLATION ===================== -->
-<section class="scene stage" id="inflation" data-n="07" data-label="Inflation" hidden>
+<!-- ===================== 06 INFLATION ===================== -->
+<section class="scene stage" id="inflation" data-n="06" data-label="Inflation" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">07</span>Inflation is persistent</h2>
+    <h2 class="headline"><span class="chap">06</span>Inflation is persistent</h2>
     <div class="stat-pair"><span><b id="iP">3.6%</b>PCE</span><span><b id="iC">3.1%</b>core PCE</span><span class="sub-cap">Sep, y/y</span></div>
   </div>
   <div class="duo">
@@ -782,10 +769,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 08 AI RISK ===================== -->
-<section class="scene stage" id="ai" data-n="08" data-label="AI risk" hidden>
+<!-- ===================== 07 AI RISK ===================== -->
+<section class="scene stage" id="ai" data-n="07" data-label="AI risk" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">08</span>Emerging risk: AI infrastructure financing</h2>
+    <h2 class="headline"><span class="chap">07</span>Emerging risk: AI infrastructure financing</h2>
   </div>
   <div class="ai-grid">
     <div class="cell"><span class="cell-cap">AI-related debt issuance</span><div class="chart fill" id="aiIss"></div></div>
@@ -799,10 +786,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 09 TAYLOR RULE ===================== -->
-<section class="scene stage" id="taylor" data-n="09" data-label="Taylor rule" hidden>
+<!-- ===================== 08 TAYLOR RULE ===================== -->
+<section class="scene stage" id="taylor" data-n="08" data-label="Taylor rule" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">09</span>A Taylor rule points higher</h2>
+    <h2 class="headline"><span class="chap">08</span>A Taylor rule points higher</h2>
     <div class="legend"><span><i class="lk k-teal"></i>Fed funds target, midpoint</span><span><i class="lk k-coral"></i>Rule prescription</span><span><i class="sw k-gap"></i>Gap</span></div>
   </div>
   <div class="ty-grid">
@@ -835,10 +822,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   </div>
 </section>
 
-<!-- ===================== 10 OUR CALL (outlook + closing) ===================== -->
-<section class="scene stage" id="closing" data-n="10" data-label="Our call" hidden>
+<!-- ===================== 09 OUR CALL (outlook + closing) ===================== -->
+<section class="scene stage" id="closing" data-n="09" data-label="Our call" hidden>
   <div class="stage-top">
-    <h2 class="headline"><span class="chap">10</span>+25 bp now, then let the data decide</h2>
+    <h2 class="headline"><span class="chap">09</span>+25 bp now, then let the data decide</h2>
     <div class="legend"><span><i class="sw k-teal"></i>Target range</span><span><i class="sw k-brass"></i>Our call</span><span><i class="lk k-proj"></i>FOMC September median</span></div>
   </div>
   <div class="chart-wrap fill">
@@ -875,9 +862,9 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
         <li>Chart series come from FRED, Federal Reserve Bank of St. Louis, retrieved November 24, 2026. Markets data run through Nov 20 (Nasdaq Nov 19).</li>
         <li>Year over year is the 12-month percent change in a price index; month over month is the 1-month change.</li>
         <li>October 2025 household-survey data were not collected during the federal government shutdown, so that month is blank.</li>
-        <li>Markets (06): 10-year breakeven = nominal − real (TIPS) yield; stocks rebased to Oct 28 = 100; ICE BofA option-adjusted spreads in basis points.</li>
-        <li>Taylor rule (09): i = r* + π + 0.5(π − 2) + w × 2(u* − u), with w = 0.5 (Taylor 1993) or 1.0 (balanced approach); the factor 2 converts the unemployment gap to an output gap (Okun's law). Defaults use the FOMC's September longer-run medians: fed funds 3.2% (so r* = 1.2) and unemployment 4.2%. Gradual: ρ × today's midpoint + (1 − ρ) × rule.</li>
-        <li>Projections (10): FOMC September medians; fed funds at year-end. December's step on the rate charts is our proposal (or the pause alternative), placed at the December meeting.</li>
+        <li>Markets (05): 10-year breakeven = nominal − real (TIPS) yield; stocks rebased to Oct 28 = 100; ICE BofA option-adjusted spreads in basis points.</li>
+        <li>Taylor rule (08): i = r* + π + 0.5(π − 2) + w × 2(u* − u), with w = 0.5 (Taylor 1993) or 1.0 (balanced approach); the factor 2 converts the unemployment gap to an output gap (Okun's law). Defaults use the FOMC's September longer-run medians: fed funds 3.2% (so r* = 1.2) and unemployment 4.2%. Gradual: ρ × today's midpoint + (1 − ρ) × rule.</li>
+        <li>Projections (09): FOMC September medians; fed funds at year-end. December's step on the rate charts is our proposal (or the pause alternative), placed at the December meeting.</li>
       </ul>
     </article>
   </div>
@@ -887,17 +874,17 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
       <table>
         <thead><tr><th>Series</th><th>What it is</th><th>Used in</th><th>Latest</th></tr></thead>
         <tbody>
-          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code>, <code>DFEDTAR</code></td><td>Federal funds target range (target rate before December 2008)</td><td>Cover, 01, 02, 03, 09, 10</td><td>Nov 23, 2026</td></tr>
-          <tr><td><code>PCEPI</code>, <code>PCEPILFE</code></td><td>PCE price index, total and excluding food and energy</td><td>02, 07, 09, 10</td><td>Sep 2026</td></tr>
-          <tr><td><code>UNRATE</code>, <code>CIVPART</code></td><td>Unemployment rate, labor force participation rate</td><td>02, 05, 09, 10</td><td>Oct 2026</td></tr>
-          <tr><td><code>A191RL1Q225SBEA</code>, <code>DPCERY2Q224SBEA</code>, <code>A007RY2Q224SBEA</code>, <code>A014RY2Q224SBEA</code>, <code>A822RY2Q224SBEA</code>, <code>A019RY2Q224SBEA</code></td><td>Real GDP growth and contributions: consumption, fixed investment, inventories, government, net exports</td><td>04</td><td>Q3 2026</td></tr>
-          <tr><td><code>DGS10</code>, <code>DFII10</code>, <code>DGS2</code></td><td>Treasury yields: 10-year, 10-year real (TIPS), 2-year</td><td>06</td><td>Nov 20, 2026</td></tr>
-          <tr><td><code>BAMLC0A0CM</code>, <code>BAMLH0A0HYM2</code></td><td>ICE BofA option-adjusted spreads: investment grade, high yield</td><td>06, 10</td><td>Nov 20, 2026</td></tr>
-          <tr><td><code>SP500</code>, <code>NASDAQCOM</code>, <code>VIXCLS</code></td><td>S&amp;P 500, Nasdaq Composite, VIX</td><td>06, 10</td><td>Nov 20, 2026 (Nasdaq Nov 19)</td></tr>
-          <tr><td><code>DTWEXBGS</code></td><td>Nominal broad U.S. dollar index</td><td>06</td><td>Nov 20, 2026</td></tr>
-          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>07, 10</td><td>Sep 2026</td></tr>
-          <tr><td><code>FEDTARMD</code>, <code>FEDTARMDLR</code>, <code>UNRATEMDLR</code></td><td>FOMC Summary of Economic Projections, medians</td><td>09, 10</td><td>Sep 16, 2026</td></tr>
-          <tr><td><code>PAYEMS</code>, <code>PCEC96</code></td><td>Nonfarm payrolls, real personal consumption expenditures</td><td>10</td><td>Oct / Sep 2026</td></tr>
+          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code>, <code>DFEDTAR</code></td><td>Federal funds target range (target rate before December 2008)</td><td>Cover, 01, 02, 08, 09</td><td>Nov 23, 2026</td></tr>
+          <tr><td><code>PCEPI</code>, <code>PCEPILFE</code></td><td>PCE price index, total and excluding food and energy</td><td>02, 06, 08, 09</td><td>Sep 2026</td></tr>
+          <tr><td><code>UNRATE</code>, <code>CIVPART</code></td><td>Unemployment rate, labor force participation rate</td><td>02, 04, 08, 09</td><td>Oct 2026</td></tr>
+          <tr><td><code>A191RL1Q225SBEA</code>, <code>DPCERY2Q224SBEA</code>, <code>A007RY2Q224SBEA</code>, <code>A014RY2Q224SBEA</code>, <code>A822RY2Q224SBEA</code>, <code>A019RY2Q224SBEA</code></td><td>Real GDP growth and contributions: consumption, fixed investment, inventories, government, net exports</td><td>03</td><td>Q3 2026</td></tr>
+          <tr><td><code>DGS10</code>, <code>DFII10</code>, <code>DGS2</code></td><td>Treasury yields: 10-year, 10-year real (TIPS), 2-year</td><td>05</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>BAMLC0A0CM</code>, <code>BAMLH0A0HYM2</code></td><td>ICE BofA option-adjusted spreads: investment grade, high yield</td><td>05, 09</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>SP500</code>, <code>NASDAQCOM</code>, <code>VIXCLS</code></td><td>S&amp;P 500, Nasdaq Composite, VIX</td><td>05, 09</td><td>Nov 20, 2026 (Nasdaq Nov 19)</td></tr>
+          <tr><td><code>DTWEXBGS</code></td><td>Nominal broad U.S. dollar index</td><td>05</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>06, 09</td><td>Sep 2026</td></tr>
+          <tr><td><code>FEDTARMD</code>, <code>FEDTARMDLR</code>, <code>UNRATEMDLR</code></td><td>FOMC Summary of Economic Projections, medians</td><td>08, 09</td><td>Sep 16, 2026</td></tr>
+          <tr><td><code>PAYEMS</code>, <code>PCEC96</code></td><td>Nonfarm payrolls, real personal consumption expenditures</td><td>09</td><td>Oct / Sep 2026</td></tr>
         </tbody>
       </table>
     </div>
@@ -906,9 +893,9 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
     <h3>Other figures</h3>
     <ul class="list">
       <li>October FOMC statement wording and vote (01): FOMC statement, October 28, 2026.</li>
-      <li>October CPI categories (07): BLS, October 2026 CPI release.</li>
-      <li>Private domestic final sales (04, 10): BEA, Q3 2026 advance estimate.</li>
-      <li>AI financing figures (08): Federal Reserve, Financial Stability Report, November 2026, pp. 23–25.</li>
+      <li>October CPI categories (06): BLS, October 2026 CPI release.</li>
+      <li>Private domestic final sales (03, 09): BEA, Q3 2026 advance estimate.</li>
+      <li>AI financing figures (07): Federal Reserve, Financial Stability Report, November 2026, pp. 23–25.</li>
     </ul>
   </article>
   <p class="disclaimer">Team Big Apple is a student team. This briefing is a classroom exercise: the 25 bp hike is our proposed position, not official Federal Reserve policy, and this page is not affiliated with or endorsed by the Federal Reserve.</p>
@@ -1606,30 +1593,26 @@ function BandChart(host, cfg) {
     st.propOnly = false;
     if (st.cursor != null) drawCursor(st.cursor, null, false, false);
   }
-  // The latest FOMC vote as a small dot plot right after the data: one dot per voter, at the range each preferred.
+  // The latest FOMC vote as a tally beside its meeting marker: one dot per voter, brass for those who wanted a hike.
+  // It sits after the marker when there is room, otherwise before it.
   function drawVotes(v, W) {
-    const g = S_('g', {}, svg), xa = xS(v.x0), room = Math.max(40, P.m.l + P.pw - xa);
-    const n = Math.max(v.hold, v.hike), sp = Math.max(10, Math.min(15, room / n)), rad = Math.min(5.5, sp * 0.4);
-    const per = Math.max(1, Math.floor((room - 2 * rad) / sp) + 1), rowH = 2 * rad + 3, dots = [];
-    const put = (k, rg, cls, dir) => {
-      const y0 = yS((rg.lo + rg.hi) / 2);
-      for (let i = 0; i < k; i++) dots.push(S_('circle', { cx: xa + rad + (i % per) * sp, cy: y0 + dir * Math.floor(i / per) * rowH, r: rad, class: 'vote-dot ' + cls }, g));
-      return [y0, y0 + dir * (Math.ceil(k / per) - 1) * rowH];
-    };
-    const [hold0, holdEnd] = put(v.hold, CUR, 'hold', 1), [hike0, hikeEnd] = put(v.hike, PROP, 'hike', -1);
-    const fit = el => { try { const w = el.getComputedTextLength(); if (xa + w > W - 4) el.setAttribute('x', Math.max(4, W - 4 - w)); } catch (e) { /* not rendered */ } };
-    const short = room < 130;
-    const lbls = [T_(g, { x: xa, y: holdEnd + rad + 17, class: 'vote-lbl' }, v.hold + (short ? ' hold' : ' voted to hold')),
-      T_(g, { x: xa, y: hikeEnd - rad - 9, class: 'vote-lbl hike' }, v.hike + (short ? ' hike' : ' preferred +25 bp')),
-      T_(g, { x: xa, y: hikeEnd - rad - 27, class: 'ann' }, v.label || 'Oct 28 vote')];
-    lbls.forEach(fit);
-    const top = hikeEnd - rad - 40, bot = holdEnd + rad + 22;
-    const hit = S_('rect', { x: xa - 6, y: top, width: Math.max(0, W - xa + 6), height: bot - top, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${v.label || 'October 28 vote'}: ${v.hold} voted to hold at ${rng(CUR.lo, CUR.hi)}, ${v.hike} preferred raising to ${rng(PROP.lo, PROP.hi)}.` }, g);
+    const g = S_('g', {}, svg), lx = xS(v.x), n = v.hold + v.hike, big = P.pw >= 700;
+    const rad = big ? 5 : 4, sp = big ? 14 : 11, wid = n * sp - (sp - 2 * rad);
+    const right = lx + 8 + wid <= P.m.l + P.pw, x0 = right ? lx + 8 : lx - 8 - wid;
+    const yHead = P.m.t + 12 + (v.row || 0) * 14, cy = yHead + 18, dots = [];
+    const anchor = right ? 'start' : 'end', ax = right ? lx + 5 : lx - 5;
+    const head = T_(g, { x: ax, y: yHead, 'text-anchor': anchor, class: 'ann' }, v.label);
+    for (let i = 0; i < n; i++) dots.push(S_('circle', { cx: x0 + rad + i * sp, cy, r: rad, class: 'vote-dot ' + (i < v.hold ? 'hold' : 'hike') }, g));
+    const note = T_(g, { x: right ? x0 : x0 + wid, y: cy + rad + 17, 'text-anchor': anchor, class: 'vote-lbl hike' }, v.note);
+    const lbls = [head, note];
+    const bb = [head.getBBox(), note.getBBox(), { x: x0, y: cy - rad, width: wid, height: 2 * rad }];
+    const bx = Math.min(...bb.map(b => b.x)) - 4, by = Math.min(...bb.map(b => b.y)) - 3;
+    const hit = S_('rect', { x: bx, y: by, width: Math.max(...bb.map(b => b.x + b.width)) + 4 - bx, height: Math.max(...bb.map(b => b.y + b.height)) + 3 - by, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `October 28 vote: ${v.hold} voted to hold at ${rng(CUR.lo, CUR.hi)}, ${v.hike} preferred raising to ${rng(PROP.lo, PROP.hi)}.` }, g);
     const on = ev => {
       if (ev && ev.stopPropagation) ev.stopPropagation();
       curG.replaceChildren(); dots.forEach(d => d.classList.add('hot'));
       const r = hit.getBoundingClientRect();
-      showTip(v.label || 'Oct 28 vote', [{ cls: 'teal', value: String(v.hold), label: 'hold at ' + rng(CUR.lo, CUR.hi) }, { cls: 'brass', value: String(v.hike), label: 'raise to ' + rng(PROP.lo, PROP.hi) }],
+      showTip('Oct 28 vote', [{ cls: 'teal', value: String(v.hold), label: 'hold at ' + rng(CUR.lo, CUR.hi) }, { cls: 'brass', value: String(v.hike), label: 'raise to ' + rng(PROP.lo, PROP.hi) }],
         ev && ev.clientX != null ? ev.clientX : r.left, ev && ev.clientY != null ? ev.clientY : r.top + 12, 'Two dissents in favor of a 25 bp hike');
     };
     const off = () => { dots.forEach(d => d.classList.remove('hot')); hideTip(); };
@@ -1901,15 +1884,6 @@ function initCover(sc) {
   });
 }
 
-function initRecap(sc) {
-  reg('recap', BandChart($('#recapChart'), {
-    x0: 2024.5, x1: 2027.5, y0: 3, y1: 6, yStep: 0.5, scenario: null, interim: false,
-    ann: [{ x: dx('2026-09-17'), label: 'Sep 17: +25 bp', anchor: 'end', row: 0 }, { x: dx('2026-10-28'), label: 'Oct 28: hold', anchor: 'start', row: 1 }],
-    votes: { x0: dx('2026-12-04'), hold: 10, hike: 2, label: 'Oct 28 vote' },
-    aria: 'Federal funds target range since 2024, ending at 3.75–4.00% after the October 28 hold, with the 12 votes shown as dots: 10 to hold, 2 preferring a 25 basis point hike.'
-  }));
-}
-
 function initMandate(sc) {
   const tEnd = lastPt(S.unrate).t, slider = $('#mSlider'), ticks = $('#mTicks');
   let win = [tEnd - 59, tEnd], lastT = null;
@@ -1962,11 +1936,14 @@ function initMandate(sc) {
 
 function initDecision(sc) {
   const ch = reg('decision', BandChart($('#dChart'), {
-    x0: 2024.5, x1: 2027.25, y0: 3, y1: 6, yStep: 0.5, scenario: 'hike',
-    aria: 'Federal funds target range since mid-2024 with the December decision: raise to 4.00–4.25% or pause at 3.75–4.00%.'
+    x0: 2024.5, x1: 2027.25, y0: 3, y1: 6, yStep: 0.5, scenario: 'hike', propLabelMinW: 99999,
+    ann: [{ x: dx('2026-09-17'), label: 'Sep 17: +25 bp', anchor: 'end', row: 0 }, { x: dx('2026-10-28'), label: '', row: 1 }],
+    votes: { x: dx('2026-10-28'), row: 1, hold: 10, hike: 2, label: 'Oct 28: hold', note: '2 wanted +25 bp' },
+    aria: 'Federal funds target range since mid-2024: raised 25 basis points on September 17, then held on October 28, when 10 members voted to hold and 2 preferred a 25 basis point hike. December decision: raise to 4.00–4.25% or pause at 3.75–4.00%.'
   }));
+  // the October statement's own words carry the case for raising
   const WHY = {
-    hike: ['Why raise', [['Inflation', 'above target, core sticky'], ['Demand', 'can absorb one more small step'], ['Credibility', 'no premature easing of conditions']]],
+    hike: ['Why raise', [['Inflation', 'elevated, core sticky'], ['Activity', 'strong pace, resilient spending'], ['Credibility', 'no premature easing']]],
     hold: ['We would pause if', [['Demand', 'clearly softens'], ['Jobs', 'deteriorate more broadly'], ['Core inflation', 'cools faster']]]
   };
   const paint = v => { chips($('#dWhy'), WHY[v][0], WHY[v][1]); $$('#dChoice .opt').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v))); };
@@ -2147,7 +2124,7 @@ function initClosing(sc) {
 const scenes = $$('.scene'), order = scenes.map(s => s.id), rail = $$('#railList a');
 const SEQ = order.filter(id => id !== 'sources');      // Sources is reached from its link, not the sequence
 const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), prog = $('#progress i');
-const inits = { top: initCover, recap: initRecap, mandate: initMandate, decision: initDecision, economy: initEconomy, labor: initLabor, markets: initMarkets, inflation: initInflation, ai: initAI, taylor: initTaylor, closing: initClosing };
+const inits = { top: initCover, decision: initDecision, mandate: initMandate, economy: initEconomy, labor: initLabor, markets: initMarkets, inflation: initInflation, ai: initAI, taylor: initTaylor, closing: initClosing };
 const done = new Set();
 let cur = -1, booted = false, lastSeq = 0;
 function setNav(btn, id) {
