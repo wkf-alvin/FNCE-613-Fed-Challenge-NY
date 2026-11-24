@@ -393,14 +393,42 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
 .cat-sm { fill: var(--muted); font-size: 10.5px; font-family: var(--mono) !important; }
 .conn { stroke: var(--axis); stroke-width: 1; }
 
-/* motion */
-@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.scene.enter > * { animation: rise .6s cubic-bezier(.2, .7, .2, 1) both; }
-.scene.enter > *:nth-child(2) { animation-delay: .05s; }
-.scene.enter > *:nth-child(3) { animation-delay: .1s; }
-.scene.enter > *:nth-child(4) { animation-delay: .15s; }
-.scene.enter > *:nth-child(5) { animation-delay: .2s; }
-.scene.enter > *:nth-child(n+6) { animation-delay: .25s; }
+/* markets, Taylor rule, outlook */
+.chart.xs { height: clamp(110px, 15vh, 180px); }
+.ln.proj { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 4 4; filter: none; }
+.dot.proj { fill: var(--bg); stroke: var(--ink-2); stroke-width: 1.5; }
+.lk.k-proj, .tip-k.k-proj { background: none; height: 0; border-top: 1.5px dashed var(--ink-2); border-radius: 0; }
+.block p.note { margin-top: 8px; font-size: .84em; color: var(--muted); }
+.since { margin-top: 10px !important; font-size: .9em; color: var(--ink) !important; }
+.since .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-right: 8px; }
+.tbl.open { max-height: none; }
+.calc .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 8px; font-size: .86em; color: var(--ink-2); }
+.calc .row output { font-family: var(--mono); font-size: .95em; color: var(--ink); }
+.calc .controls { margin-top: 12px; }
+.formula { font-family: var(--mono); font-size: .8em !important; line-height: 1.8; overflow-wrap: anywhere; }
+.formula b { color: var(--ink); font-weight: 500; }
+.small-multiples { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(16px, 2vw, 28px); }
+@media (max-width: 1100px) { .small-multiples { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .small-multiples { grid-template-columns: minmax(0, 1fr); } }
+.risk-map { display: grid; grid-template-columns: 110px repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
+.rm-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 6px; border-bottom: 1px solid var(--hair); align-self: end; }
+.rm-cat { font-weight: 600; font-size: .9em; padding-top: 10px; }
+.rm-cell { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.risk { display: grid; gap: 3px; padding: 10px 12px; border: 1px solid var(--hair); border-radius: 8px; color: inherit; text-decoration: none; transition: border-color .2s, transform .2s, background-color .2s; }
+.risk:hover, .risk:focus-visible { border-color: var(--ink-2); background: var(--raise); transform: translateY(-1px); }
+.risk .rt { font-weight: 600; font-size: .9em; }
+.risk .re { font-size: .82em; color: var(--ink-2); }
+.risk .rl { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 760px) { .risk-map { grid-template-columns: minmax(0, 1fr); } .rm-h { display: none; } }
+
+/* motion: deliberately slow, so each chapter visibly builds */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.scene.enter > * { animation: rise 1.1s cubic-bezier(.2, .7, .2, 1) both; }
+.scene.enter > *:nth-child(2) { animation-delay: .12s; }
+.scene.enter > *:nth-child(3) { animation-delay: .24s; }
+.scene.enter > *:nth-child(4) { animation-delay: .36s; }
+.scene.enter > *:nth-child(5) { animation-delay: .48s; }
+.scene.enter > *:nth-child(n+6) { animation-delay: .6s; }
 @media (prefers-reduced-motion: reduce) {
   .scene.enter > * { animation: none; }
   *, *::before, *::after { transition: none !important; }
@@ -420,9 +448,12 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
       <li><a href="#economy"><span class="n">04</span><span class="t">Economy</span></a></li>
       <li><a href="#jobs"><span class="n">05</span><span class="t">Jobs</span></a></li>
       <li><a href="#participation"><span class="n">06</span><span class="t">Participation</span></a></li>
-      <li><a href="#inflation"><span class="n">07</span><span class="t">Inflation</span></a></li>
-      <li><a href="#implications"><span class="n">08</span><span class="t">Implications</span></a></li>
-      <li><a href="#closing"><span class="n">09</span><span class="t">Closing</span></a></li>
+      <li><a href="#markets"><span class="n">07</span><span class="t">Markets</span></a></li>
+      <li><a href="#inflation"><span class="n">08</span><span class="t">Inflation</span></a></li>
+      <li><a href="#implications"><span class="n">09</span><span class="t">Implications</span></a></li>
+      <li><a href="#taylor"><span class="n">10</span><span class="t">Taylor rule</span></a></li>
+      <li><a href="#outlook"><span class="n">11</span><span class="t">Outlook</span></a></li>
+      <li><a href="#closing"><span class="n">12</span><span class="t">Closing</span></a></li>
       <li><a href="#sources"><span class="t always">Sources</span></a></li>
     </ol>
   </nav>
@@ -438,7 +469,7 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
 <section class="scene" id="top" data-n="" data-label="Cover">
   <div class="cover-grid">
     <div>
-      <p class="kicker">December 2026 FOMC · Team NY Fed recommendation</p>
+      <p class="kicker">December 8–9, 2026 FOMC · Federal Reserve Bank of New York</p>
       <p class="hero-num" aria-label="Plus 25 basis points">+25<span class="u">bp</span></p>
       <h1 class="cover-title">Raise by 25 basis points. New target range: <b>4.00%–4.25%</b>.</h1>
       <p class="lede">Inflation is still above target and core inflation momentum is sticky. Q3 GDP and domestic demand show the economy can likely absorb one more small step.</p>
@@ -751,11 +782,101 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   <p class="src">Source: BLS (<a href="https://www.bls.gov/charts/employment-situation/civilian-labor-force-participation-rate.htm" target="_blank" rel="noopener">bls.gov</a>; FRED CIVPART). Shading: February–April 2020 recession (NBER).</p>
 </section>
 
-<!-- ===================== 07 INFLATION ===================== -->
-<section class="scene" id="inflation" data-n="07" data-label="Inflation" hidden>
+<!-- ===================== 07 FINANCIAL MARKETS ===================== -->
+<section class="scene" id="markets" data-n="07" data-label="Markets" hidden>
   <header class="scene-head">
     <div>
-      <p class="kicker"><span class="n">07</span>Inflation: drivers and outlook, impact of AI</p>
+      <p class="kicker"><span class="n">07</span>Financial markets: what has changed since October 28?</p>
+      <h2 class="title long">Financial markets have tightened since October, but credit remains broadly functional.</h2>
+      <p class="hint">Switch between rates, credit, stocks and the dollar. The table compares Oct 28, our Nov 17 write-up and the latest close.</p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span class="ro-lbl" id="mkLbl">10-year Treasury yield, Nov 20</span>
+      <span class="ro-big" id="mkBig">4.92%</span>
+      <span class="ro-line" id="mkNote"><b>−13 bp</b> since Oct 28</span>
+    </div>
+  </header>
+  <div class="controls">
+    <span class="ctl-lbl">Market</span>
+    <div class="seg" id="mkSeg" role="group" aria-label="Market shown">
+      <button type="button" data-v="rates" aria-pressed="true">Treasury yields</button><button type="button" data-v="credit" aria-pressed="false">Credit spreads</button><button type="button" data-v="stocks" aria-pressed="false">Stocks &amp; VIX</button><button type="button" data-v="dollar" aria-pressed="false">Dollar</button>
+    </div>
+    <span class="ctl-lbl">Window</span>
+    <div class="seg" id="mkWin" role="group" aria-label="Time window">
+      <button type="button" data-v="63" aria-pressed="false">3M</button><button type="button" data-v="126" aria-pressed="true">6M</button><button type="button" data-v="all" aria-pressed="false">Since Jul 2025</button>
+    </div>
+  </div>
+  <div class="gside">
+    <div class="fig" id="mkLeft">
+      <figure class="fig" data-mk="rates">
+        <div class="fig-cap"><span class="fig-title">Treasury yields</span><span class="fig-sub">%, daily · hover for the 10-year breakeven</span></div>
+        <div class="legend"><span><i class="lk k-teal"></i>10-year</span><span><i class="lk k-coral"></i>10-year real (TIPS)</span><span><i class="lk k-ctx"></i>2-year</span></div>
+        <div class="chart" id="mkRates"></div>
+      </figure>
+      <figure class="fig" data-mk="credit" hidden>
+        <div class="fig-cap"><span class="fig-title">Corporate bond spreads over Treasuries</span><span class="fig-sub">Option-adjusted spread, basis points, daily</span></div>
+        <span class="fig-sub">Investment grade</span>
+        <div class="chart xs" id="mkIG"></div>
+        <span class="fig-sub">High yield</span>
+        <div class="chart xs" id="mkHY"></div>
+      </figure>
+      <figure class="fig" data-mk="stocks" hidden>
+        <div class="fig-cap"><span class="fig-title">Stocks, rebased to Oct 28 = 100</span><span class="fig-sub">daily closes</span></div>
+        <div class="legend"><span><i class="lk k-teal"></i>S&amp;P 500</span><span><i class="lk k-coral"></i>Nasdaq Composite</span></div>
+        <div class="chart md" id="mkEq"></div>
+        <span class="fig-sub">VIX volatility index</span>
+        <div class="chart xs" id="mkVix"></div>
+      </figure>
+      <figure class="fig" data-mk="dollar" hidden>
+        <div class="fig-cap"><span class="fig-title">Nominal broad U.S. dollar index</span><span class="fig-sub">Jan 2006 = 100, daily</span></div>
+        <div class="chart" id="mkUsd"></div>
+      </figure>
+      <div class="fig-foot"><span>Dashed lines mark the Oct 28 FOMC and our Nov 17 write-up.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </div>
+    <div class="panel">
+      <article class="block">
+        <h3>October FOMC: starting point</h3>
+        <ul class="list">
+          <li><b>Markets anticipated tightening:</b> fed funds futures priced an estimated 88% probability of a 25 bp December hike; the median NY Fed Desk survey respondent expected another hike in March 2027.</li>
+          <li><b>Credit remained broadly available:</b> solid corporate bond issuance, bank lending standards slightly easier than historical norms, and generally available consumer credit, despite emerging stress among riskier borrowers.</li>
+        </ul>
+      </article>
+      <article class="block">
+        <h3>What the moves told us, through Nov 17</h3>
+        <ul class="list">
+          <li>The 10-year real yield rose 22 bp, suggesting the increase in long-term yields was not driven by rising inflation expectations.</li>
+          <li>Riskier financing is becoming more expensive, but credit remained broadly available.</li>
+          <li>A meaningful repricing in stocks, led by technology, but no established evidence yet that the decline has materially impaired households' present value of lifetime resources (PVLR) or consumption.</li>
+        </ul>
+        <p class="since" id="mkSince"></p>
+      </article>
+    </div>
+  </div>
+  <figure class="fig">
+    <div class="fig-cap"><span class="fig-title">What has changed since October 28</span><span class="fig-sub">Closing levels; latest is Nov 20 unless noted</span></div>
+    <div class="tbl open" id="mkTable"></div>
+  </figure>
+  <article class="block">
+    <h3>Emerging risk: AI infrastructure financing</h3>
+    <div class="tiles">
+      <div class="tile"><span class="v">$680B+</span><span class="l">AI-related debt issued through October 2026, about 5× all of 2023</span></div>
+      <div class="tile"><span class="v">$1.1T+</span><span class="l">outstanding public AI-related debt</span></div>
+      <div class="tile"><span class="v">31%</span><span class="l">of nonfinancial investment-grade issuance, vs. under 6% in 2023</span></div>
+    </div>
+    <ul class="list" style="margin-top:12px">
+      <li>Complex leases, guarantees and financing arrangements increase interconnectedness among technology firms, banks, insurers and private credit lenders.</li>
+      <li>AI capex supports growth but creates financial vulnerabilities if investment returns disappoint. A risk to monitor, not evidence of a current systemic crisis.</li>
+    </ul>
+  </article>
+  <p class="src">Source: FRED, daily: DGS10, DFII10, DGS2 (Treasury yields), BAMLC0A0CM, BAMLH0A0HYM2 (ICE BofA option-adjusted spreads), SP500, NASDAQCOM, VIXCLS, DTWEXBGS; breakeven = 10-year nominal − 10-year real yield. Market pricing and desk survey: Minutes of the FOMC, October 27–28, 2026. AI financing: Federal Reserve, Financial Stability Report, November 2026, pp. 23–25.</p>
+</section>
+
+<!-- ===================== 08 INFLATION ===================== -->
+<section class="scene" id="inflation" data-n="08" data-label="Inflation" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">08</span>Inflation: drivers and outlook, impact of AI</p>
       <h2 class="title">Inflation is persistent</h2>
       <p class="hint">Left: October CPI by category. Right: PCE, the Fed's target measure, split into goods and services.</p>
     </div>
@@ -796,11 +917,11 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   <p class="src">Source: BLS October 2026 CPI (<a href="https://www.bls.gov/news.release/cpi.nr0.htm" target="_blank" rel="noopener">bls.gov</a>); BEA September PCE (<a href="https://www.bea.gov/news/2026/personal-income-and-outlays-september-2026" target="_blank" rel="noopener">bea.gov</a>; FRED DSERRG3M086SBEA, DGDSRG3M086SBEA, DNRGRG3M086SBEA, DFXARG3M086SBEA). Categories overlap; monthly changes.</p>
 </section>
 
-<!-- ===================== 08 IMPLICATIONS ===================== -->
-<section class="scene" id="implications" data-n="08" data-label="Implications" hidden>
+<!-- ===================== 09 IMPLICATIONS ===================== -->
+<section class="scene" id="implications" data-n="09" data-label="Implications" hidden>
   <header class="scene-head">
     <div>
-      <p class="kicker"><span class="n">08</span>Inflation: implications for our decision</p>
+      <p class="kicker"><span class="n">09</span>Inflation: implications for our decision</p>
       <h2 class="title long">A single marginal increase is a risk-management move—not the start of a new hiking cycle.</h2>
       <p class="hint">Switch between core PCE and core CPI. The dashed line is the monthly pace that adds up to 2% a year.</p>
     </div>
@@ -852,11 +973,131 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   <p class="src">Source: BEA core PCE price index (FRED PCEPILFE) and BLS core CPI (FRED CPILFESL), through September and October 2026; BEA Q3 GDP, September PCE; Federal Reserve October 28 FOMC statement; New York Fed SCE November 9.</p>
 </section>
 
-<!-- ===================== 09 CLOSING ===================== -->
-<section class="scene" id="closing" data-n="09" data-label="Closing" hidden>
+<!-- ===================== 10 TAYLOR RULE ===================== -->
+<section class="scene" id="taylor" data-n="10" data-label="Taylor rule" hidden>
   <header class="scene-head">
     <div>
-      <p class="kicker"><span class="n">09</span>Closing recommendation</p>
+      <p class="kicker"><span class="n">10</span>Technical component: a Taylor-rule check</p>
+      <h2 class="title long">A standard policy rule puts the federal funds rate above today's 3.75%–4.00% range.</h2>
+      <p class="hint">Move the assumptions. The prescribed rate, the arithmetic and the history chart all update.</p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span class="ro-lbl" id="tyLbl">Taylor (1993) rule, today</span>
+      <span class="ro-big" id="tyBig">4.98%</span>
+      <span class="ro-line" id="tyGap"><b>+110 bp</b> versus the current 3.875% midpoint</span>
+      <span class="ro-line" id="tySmooth"><b>4.04%</b> with gradual adjustment (ρ = 0.85)</span>
+    </div>
+  </header>
+  <div class="gside">
+    <figure class="fig">
+      <div class="fig-cap"><span class="fig-title">What the rule prescribed vs. where the Fed set rates</span><span class="fig-sub">%, monthly, since 2015</span></div>
+      <div class="legend"><span><i class="lk k-teal"></i>Fed funds target, midpoint</span><span><i class="lk k-coral"></i>Rule prescription</span></div>
+      <div class="chart" id="tyChart"></div>
+      <div class="fig-foot"><span>The history line uses 12-month inflation, today's r* and u*, and no smoothing.</span><button class="tbl-btn" type="button">Data table</button></div>
+      <div class="tbl" hidden></div>
+    </figure>
+    <div class="panel">
+      <article class="block calc">
+        <h3>Assumptions</h3>
+        <div class="row"><label for="tyR">Neutral real rate, r*</label><output id="tyRv" for="tyR">1.2%</output></div>
+        <input type="range" id="tyR" min="0" max="2.5" step="0.1" value="1.2">
+        <div class="row"><label for="tyU">Natural rate of unemployment, u*</label><output id="tyUv" for="tyU">4.2%</output></div>
+        <input type="range" id="tyU" min="3.5" max="5" step="0.1" value="4.2">
+        <div class="row"><label for="tyRho">Gradualism: weight on today's rate, ρ</label><output id="tyRhov" for="tyRho">0.85</output></div>
+        <input type="range" id="tyRho" min="0" max="0.95" step="0.05" value="0.85">
+        <div class="controls">
+          <div class="seg" id="tyPi" role="group" aria-label="Inflation measure"><button type="button" data-v="core" aria-pressed="true">Core PCE</button><button type="button" data-v="headline" aria-pressed="false">Headline PCE</button></div>
+          <div class="seg" id="tyRule" role="group" aria-label="Policy rule"><button type="button" data-v="0.5" aria-pressed="true">Taylor (1993)</button><button type="button" data-v="1" aria-pressed="false">Balanced approach</button></div>
+        </div>
+      </article>
+      <article class="block">
+        <h3>The arithmetic, today</h3>
+        <p class="formula" id="tyFormula"></p>
+      </article>
+      <article class="block">
+        <h3>Intuition</h3>
+        <p id="tyIntuition"></p>
+        <p class="note">r* and u* cannot be observed, and estimates differ by a point or more. The rule is a benchmark for judgment, not an autopilot.</p>
+      </article>
+    </div>
+  </div>
+  <p class="src">Rule: Taylor (1993), i = r* + π + 0.5(π − 2) + 0.5 × gap; the balanced-approach rule puts 1.0 on the gap. Output gap from unemployment by Okun's law: gap = 2 × (u* − u). Defaults are the FOMC's September 2026 longer-run medians: fed funds 3.2%, so r* = 3.2 − 2 = 1.2, and unemployment 4.2%. Gradual adjustment: ρ × today's midpoint + (1 − ρ) × rule. Data: FRED PCEPILFE, PCEPI, UNRATE, DFEDTAR, DFEDTARL, DFEDTARU, FEDTARMDLR, UNRATEMDLR.</p>
+</section>
+
+<!-- ===================== 11 OUTLOOK & RISKS ===================== -->
+<section class="scene" id="outlook" data-n="11" data-label="Outlook" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">11</span>Outlook and risks: the baseline and what could move it</p>
+      <h2 class="title long">The FOMC's September median already had one more hike before the end of 2026.</h2>
+      <p class="hint">Dashed points are the FOMC's September median projections. Each risk card opens the chapter with its evidence.</p>
+    </div>
+    <div class="readout">
+      <span class="ro-lbl">FOMC median, end-2026 fed funds</span>
+      <span class="ro-big">4.1%</span>
+      <span class="ro-line">that is <b>4.00%–4.25%</b>, one step above today</span>
+    </div>
+  </header>
+  <div class="legend"><span><i class="lk k-teal"></i>Actual</span><span><i class="lk k-proj"></i>FOMC September median</span><span><i class="lk dash"></i>Target or longer-run level</span></div>
+  <div class="small-multiples">
+    <figure class="fig"><div class="fig-cap"><span class="fig-title">Core PCE inflation</span><span class="fig-sub" id="olCoreSub">y/y</span></div><div class="chart sm" id="olCore"></div></figure>
+    <figure class="fig"><div class="fig-cap"><span class="fig-title">Unemployment rate</span><span class="fig-sub" id="olUnSub">%</span></div><div class="chart sm" id="olUn"></div></figure>
+    <figure class="fig"><div class="fig-cap"><span class="fig-title">Real GDP growth</span><span class="fig-sub" id="olGdpSub">SAAR</span></div><div class="chart sm" id="olGdp"></div></figure>
+    <figure class="fig"><div class="fig-cap"><span class="fig-title">Fed funds rate</span><span class="fig-sub" id="olFfSub">%</span></div><div class="chart sm" id="olFf"></div></figure>
+  </div>
+  <div class="fig" id="olTblFig">
+    <div class="fig-foot"><span>Projections: inflation and GDP Q4/Q4, unemployment Q4 average, fed funds year-end.</span><button class="tbl-btn" type="button">Data table</button></div>
+    <div class="tbl" hidden></div>
+  </div>
+  <div class="g2">
+    <article class="block">
+      <h3>Market pricing</h3>
+      <ul class="list">
+        <li>Fed funds futures: an estimated <b>88%</b> probability of a 25 bp December hike (October FOMC minutes).</li>
+        <li>NY Fed Desk survey: the median respondent expected another hike in <b>March 2027</b>.</li>
+        <li id="ol2y">2-year Treasury: <b>4.63%</b> on Nov 20, vs. 4.80% on Nov 17 and 4.67% on Oct 28.</li>
+      </ul>
+    </article>
+    <article class="block">
+      <h3>The baseline, in one line</h3>
+      <p>The FOMC's medians have core PCE inflation easing from 3.4% at the end of 2026 to 2.5% in 2027 and 2.2% in 2028, with unemployment at 4.1% and the funds rate at 4.1% through 2027.</p>
+    </article>
+  </div>
+  <div class="risk-map" aria-label="Risks around the baseline">
+    <span class="rm-h"></span><span class="rm-h">Upside: hotter than the baseline</span><span class="rm-h">Downside: weaker than the baseline</span>
+    <span class="rm-cat">Economic</span>
+    <div class="rm-cell">
+      <a class="risk" href="#implications"><span class="rt">▲ Sticky core inflation</span><span class="re">Core PCE +0.3% m/m in August and September; core CPI +0.3% three months running.</span><span class="rl">Upside · economic · see 09</span></a>
+      <a class="risk" href="#economy"><span class="rt">▲ Strong domestic demand</span><span class="re">Private domestic final sales +4.9% SAAR in Q3.</span><span class="rl">Upside · economic · see 04</span></a>
+    </div>
+    <div class="rm-cell">
+      <a class="risk" href="#implications"><span class="rt">▼ Policy lags, flat spending</span><span class="re">September real PCE roughly flat; more tightening could bite later.</span><span class="rl">Downside · economic · see 09</span></a>
+      <a class="risk" href="#jobs"><span class="rt">▼ A low-hire labor market</span><span class="re">Hiring subdued; NYC private employment down 16,300 this year.</span><span class="rl">Downside · economic · see 05</span></a>
+    </div>
+    <span class="rm-cat">Financial</span>
+    <div class="rm-cell">
+      <a class="risk" href="#markets"><span class="rt">▲ AI investment boom</span><span class="re">AI capex supports growth; $680B+ of AI-related debt issued through October.</span><span class="rl">Upside · financial · see 07</span></a>
+    </div>
+    <div class="rm-cell">
+      <a class="risk" href="#markets"><span class="rt">▼ Equity selloff hits spending</span><span class="re" data-fill="eq">S&amp;P 500 −10.8% since Oct 28; VIX 35.9 on Nov 20. Would challenge the hike if consumption or investment falls.</span><span class="rl">Downside · financial · see 07</span></a>
+      <a class="risk" href="#markets"><span class="rt">▼ Credit stress, AI financing</span><span class="re" data-fill="credit">High-yield spreads +62 bp since Oct 28. AI-related stress could spread to banks, insurers or private credit.</span><span class="rl">Downside · financial · see 07</span></a>
+    </div>
+    <span class="rm-cat">International</span>
+    <div class="rm-cell">
+      <a class="risk" href="#inflation"><span class="rt">▲ Tariffs and energy</span><span class="re">PCE goods prices +3.9% y/y; energy +5.4% in September alone.</span><span class="rl">Upside · international · see 08</span></a>
+    </div>
+    <div class="rm-cell">
+      <a class="risk" href="#economy"><span class="rt">▼ Trade drag, firmer dollar</span><span class="re" data-fill="usd">Net exports subtracted 3.32 pp from Q3 growth; the broad dollar is +1.4% since Oct 28.</span><span class="rl">Downside · international · see 04</span></a>
+    </div>
+  </div>
+  <p class="src">Source: FOMC Summary of Economic Projections, September 16, 2026 (FRED FEDTARMD, UNRATEMD, JCXFEMD, PCECTPIMD, GDPC1MD and the longer-run medians). Actuals: BEA, BLS and the Federal Reserve via FRED. Market pricing: October FOMC minutes; 2-year yield FRED DGS2. Risks are drawn from chapters 04–09 and our markets write-up.</p>
+</section>
+
+<!-- ===================== 12 CLOSING ===================== -->
+<section class="scene" id="closing" data-n="12" data-label="Closing" hidden>
+  <header class="scene-head">
+    <div>
+      <p class="kicker"><span class="n">12</span>Closing recommendation</p>
       <h2 class="title">Raise by 25 bp to 4.00%–4.25%</h2>
       <p class="hint">Below: the four readings that would change our view, with the latest data. Hover the sparklines.</p>
     </div>
@@ -933,7 +1174,10 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
         <li>BLS charts: <a href="https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm" target="_blank" rel="noopener">unemployment rate</a>, <a href="https://www.bls.gov/charts/employment-situation/civilian-labor-force-participation-rate.htm" target="_blank" rel="noopener">participation rate</a></li>
         <li>New York State Comptroller, NYC securities industry report, 2026: <a href="https://www.osc.ny.gov/files/reports/osdc/2026/pdf/nyc-securities-industry-2026.pdf" target="_blank" rel="noopener">osc.ny.gov</a></li>
         <li>roic.ai, Wall Street profits, October 6, 2026: <a href="https://www.roic.ai/news/wall-street-profits-surge-51-as-ai-boom-fuels-record-pace-10-06-2026" target="_blank" rel="noopener">roic.ai</a></li>
-        <li>New York Fed, Survey of Consumer Expectations, November 9, 2026 (cited in 08)</li>
+        <li>New York Fed, Survey of Consumer Expectations, November 9, 2026 (cited in 09)</li>
+        <li>Federal Reserve, Minutes of the FOMC, October 27–28, 2026 (market pricing, desk survey): <a href="https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+        <li>Federal Reserve, Summary of Economic Projections, September 16, 2026: <a href="https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260916.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+        <li>Federal Reserve, Financial Stability Report, November 2026, pp. 23–25: <a href="https://www.federalreserve.gov/publications/financial-stability-report.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
       </ul>
     </article>
     <article class="block">
@@ -945,6 +1189,9 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
         <li>GDP growth and contributions are seasonally adjusted annual rates from BEA; contributions add up to growth, up to rounding.</li>
         <li>October 2025 household-survey and CPI data were not collected during the federal government shutdown, so those months are blank.</li>
         <li>On the rate charts, December's step is our proposal (or the pause alternative), placed at the December meeting.</li>
+        <li>Markets (07): daily closes through Nov 20 (Nasdaq Nov 19); 10-year breakeven = nominal − real (TIPS) yield; stocks rebased to Oct 28 = 100; ICE BofA option-adjusted spreads shown in basis points.</li>
+        <li>Taylor rule (10): i = r* + π + 0.5(π − 2) + w × 2(u* − u), with w = 0.5 (Taylor 1993) or 1.0 (balanced approach); the factor 2 converts the unemployment gap to an output gap (Okun's law). Defaults use the FOMC's September longer-run medians.</li>
+        <li>Projections (11): FOMC September medians; inflation and GDP are Q4/Q4, unemployment the Q4 average, fed funds the year-end level.</li>
       </ul>
     </article>
   </div>
@@ -954,19 +1201,24 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
       <table>
         <thead><tr><th>Series</th><th>What it is</th><th>Used in</th><th>Latest</th></tr></thead>
         <tbody>
-          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code></td><td>Federal funds target range, lower and upper limit</td><td>Cover, 01, 02, 03</td><td>Nov 23, 2026</td></tr>
+          <tr><td><code>DFEDTARL</code>, <code>DFEDTARU</code></td><td>Federal funds target range, lower and upper limit</td><td>Cover, 01, 02, 03, 10, 11</td><td>Nov 23, 2026</td></tr>
           <tr><td><code>DFEDTAR</code></td><td>Federal funds target rate, before December 2008</td><td>02</td><td>Dec 15, 2008</td></tr>
-          <tr><td><code>PCEPI</code></td><td>PCE price index</td><td>02</td><td>Sep 2026</td></tr>
-          <tr><td><code>PCEPILFE</code></td><td>PCE price index excluding food and energy</td><td>02, 08, 09</td><td>Sep 2026</td></tr>
-          <tr><td><code>UNRATE</code></td><td>Unemployment rate</td><td>02, 05, 09</td><td>Oct 2026</td></tr>
+          <tr><td><code>PCEPI</code></td><td>PCE price index</td><td>02, 10</td><td>Sep 2026</td></tr>
+          <tr><td><code>PCEPILFE</code></td><td>PCE price index excluding food and energy</td><td>02, 09, 10, 11, 12</td><td>Sep 2026</td></tr>
+          <tr><td><code>UNRATE</code></td><td>Unemployment rate</td><td>02, 05, 10, 11, 12</td><td>Oct 2026</td></tr>
           <tr><td><code>CIVPART</code></td><td>Labor force participation rate</td><td>06</td><td>Oct 2026</td></tr>
-          <tr><td><code>CPILFESL</code></td><td>CPI excluding food and energy</td><td>08</td><td>Oct 2026</td></tr>
-          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>07</td><td>Sep 2026</td></tr>
-          <tr><td><code>DNRGRG3M086SBEA</code>, <code>DFXARG3M086SBEA</code></td><td>PCE price indexes for energy and for food</td><td>07</td><td>Sep 2026</td></tr>
-          <tr><td><code>A191RL1Q225SBEA</code></td><td>Real GDP, annualized percent change</td><td>04</td><td>Q3 2026</td></tr>
+          <tr><td><code>DGS10</code>, <code>DFII10</code>, <code>DGS2</code></td><td>Treasury yields: 10-year, 10-year real (TIPS), 2-year</td><td>07, 11</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>BAMLC0A0CM</code>, <code>BAMLH0A0HYM2</code></td><td>ICE BofA option-adjusted spreads: investment grade, high yield</td><td>07, 11</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>SP500</code>, <code>NASDAQCOM</code>, <code>VIXCLS</code></td><td>S&amp;P 500, Nasdaq Composite, VIX</td><td>07, 11</td><td>Nov 20, 2026 (Nasdaq Nov 19)</td></tr>
+          <tr><td><code>DTWEXBGS</code></td><td>Nominal broad U.S. dollar index</td><td>07, 11</td><td>Nov 20, 2026</td></tr>
+          <tr><td><code>CPILFESL</code></td><td>CPI excluding food and energy</td><td>09</td><td>Oct 2026</td></tr>
+          <tr><td><code>DSERRG3M086SBEA</code>, <code>DGDSRG3M086SBEA</code></td><td>PCE price indexes for services and for goods</td><td>08</td><td>Sep 2026</td></tr>
+          <tr><td><code>DNRGRG3M086SBEA</code>, <code>DFXARG3M086SBEA</code></td><td>PCE price indexes for energy and for food</td><td>08</td><td>Sep 2026</td></tr>
+          <tr><td><code>A191RL1Q225SBEA</code></td><td>Real GDP, annualized percent change</td><td>04, 11</td><td>Q3 2026</td></tr>
           <tr><td><code>DPCERY2Q224SBEA</code>, <code>A007RY2Q224SBEA</code>, <code>A014RY2Q224SBEA</code>, <code>A822RY2Q224SBEA</code>, <code>A019RY2Q224SBEA</code></td><td>Contributions to real GDP growth: consumption, fixed investment, inventories, government, net exports</td><td>04</td><td>Q3 2026</td></tr>
-          <tr><td><code>PAYEMS</code></td><td>Total nonfarm payrolls</td><td>09</td><td>Oct 2026</td></tr>
-          <tr><td><code>PCEC96</code></td><td>Real personal consumption expenditures</td><td>09</td><td>Sep 2026</td></tr>
+          <tr><td><code>FEDTARMD</code>, <code>UNRATEMD</code>, <code>PCECTPIMD</code>, <code>JCXFEMD</code>, <code>GDPC1MD</code>, <code>FEDTARMDLR</code>, <code>UNRATEMDLR</code>, <code>GDPC1MDLR</code></td><td>FOMC Summary of Economic Projections, medians</td><td>10, 11</td><td>Sep 16, 2026</td></tr>
+          <tr><td><code>PAYEMS</code></td><td>Total nonfarm payrolls</td><td>12</td><td>Oct 2026</td></tr>
+          <tr><td><code>PCEC96</code></td><td>Real personal consumption expenditures</td><td>12</td><td>Sep 2026</td></tr>
         </tbody>
       </table>
     </div>
@@ -1112,6 +1364,49 @@ const CPI_CATS = [
 ];
 const SHUTDOWN = { [M(2025, 10)]: 'Not collected: federal government shutdown' };
 
+/* ---- Financial markets: daily closes, every weekday Jul 1 2025 – Nov 20 2026 (FRED; blank = no trading) ----
+   y10 DGS10, real DFII10, y2 DGS2 (%); ig BAMLC0A0CM, hy BAMLH0A0HYM2 (%, shown in bp); sp SP500; ndq NASDAQCOM;
+   vix VIXCLS; usd DTWEXBGS. To refresh, append the newest weekday values to the end of every string. */
+const MK_RAW = {
+  y10: '4.26,4.30,4.35,,4.40,4.42,4.34,4.35,4.43,4.43,4.50,4.46,4.47,4.44,4.38,4.35,4.40,4.43,4.40,4.42,4.34,4.38,4.37,4.23,4.22,4.22,4.22,4.23,4.27,4.27,4.29,4.24,4.29,4.33,4.34,4.30,4.29,4.33,4.26,4.28,4.26,4.24,4.22,4.23,,4.28,4.22,4.17,4.10,4.05,4.08,4.04,4.01,4.06,4.05,4.04,4.06,4.11,4.14,4.15,4.12,4.16,4.18,4.20,4.15,4.16,4.12,4.10,4.13,4.18,4.14,4.13,4.14,4.05,,4.03,4.05,3.99,4.02,4.00,3.98,3.97,4.01,4.02,4.01,3.99,4.08,4.11,4.11,4.13,4.10,4.17,4.11,4.11,4.13,,4.08,4.11,4.14,4.13,4.12,4.13,4.10,4.06,4.04,4.01,4.00,,4.02,4.09,4.09,4.06,4.11,4.14,4.17,4.18,4.13,4.14,4.19,4.18,4.15,4.16,4.12,4.16,4.17,4.18,4.15,,4.14,4.12,4.14,4.18,,4.19,4.17,4.18,4.15,4.19,4.18,4.19,4.18,4.15,4.17,4.24,,4.30,4.26,4.26,4.24,4.22,4.24,4.26,4.24,4.26,4.29,4.28,4.29,4.21,4.22,4.22,4.16,4.18,4.09,4.04,,4.05,4.09,4.08,4.08,4.03,4.04,4.05,4.02,3.97,4.05,4.06,4.09,4.13,4.15,4.12,4.15,4.21,4.27,4.28,4.23,4.20,4.26,4.25,4.39,4.34,4.39,4.33,4.42,4.44,4.35,4.30,4.33,4.31,4.35,4.34,4.33,4.29,4.29,4.31,4.30,4.26,4.29,4.32,4.26,4.26,4.30,4.30,4.34,4.31,4.35,4.36,4.42,4.40,4.39,4.45,4.43,4.36,4.41,4.38,4.42,4.46,4.46,4.47,4.59,4.61,4.67,4.57,4.57,4.56,,4.50,4.48,4.45,4.45,4.47,4.46,4.49,4.47,4.55,4.56,4.53,4.55,4.45,4.48,4.47,4.43,4.49,4.46,,4.51,4.50,4.41,4.40,4.38,4.38,4.44,4.48,4.49,,4.48,4.55,4.56,4.54,4.56,4.62,4.58,4.55,4.57,4.55,4.60,4.63,4.67,4.71,4.69,4.65,4.61,4.67,4.68,4.75,4.70,4.63,4.63,4.69,4.65,4.72,4.70,4.68,4.63,4.68,4.72,4.71,4.65,4.69,4.74,4.70,4.64,4.66,4.67,4.73,4.75,4.79,4.79,4.77,4.78,,4.80,4.83,4.95,4.96,4.97,5.00,5.01,4.94,5.01,4.96,4.96,5.11,5.18,5.17,5.24,5.26,5.29,5.24,5.28,5.31,5.27,5.28,5.22,5.24,,5.21,5.19,5.10,5.09,5.15,5.12,5.13,4.96,5.00,5.00,4.99,5.05,4.98,4.94,4.91,4.95,4.90,4.84,4.86,4.88,4.98,,5.10,5.15,5.12,5.10,5.07,5.04,4.92',
+  real: '1.97,2.00,2.02,,2.05,2.07,2.01,2.01,2.06,2.04,2.09,2.05,2.04,2.03,1.98,1.96,2.03,1.98,1.96,1.98,1.91,1.96,1.98,1.90,1.85,1.86,1.88,1.88,1.88,1.87,1.91,1.87,1.90,1.95,1.96,1.95,1.94,1.94,1.85,1.87,1.84,1.81,1.81,1.82,,1.87,1.82,1.79,1.73,1.70,1.72,1.69,1.67,1.70,1.68,1.67,1.68,1.73,1.75,1.78,1.75,1.78,1.80,1.82,1.80,1.80,1.77,1.76,1.80,1.84,1.79,1.78,1.80,1.75,,1.73,1.76,1.71,1.75,1.74,1.70,1.68,1.71,1.73,1.73,1.71,1.78,1.82,1.81,1.82,1.81,1.87,1.83,1.83,1.84,,1.81,1.83,1.86,1.85,1.85,1.86,1.86,1.82,1.81,1.79,1.77,,1.79,1.85,1.85,1.82,1.85,1.88,1.91,1.92,1.88,1.89,1.93,1.93,1.92,1.92,1.88,1.92,1.94,1.94,1.91,,1.91,1.90,1.90,1.93,,1.94,1.91,1.91,1.88,1.92,1.90,1.90,1.88,1.86,1.88,1.91,,1.97,1.92,1.95,1.92,1.90,1.90,1.90,1.89,1.90,1.94,1.92,1.94,1.89,1.88,1.87,1.84,1.86,1.80,1.77,,1.79,1.80,1.79,1.80,1.77,1.78,1.77,1.74,1.72,1.76,1.77,1.80,1.82,1.80,1.78,1.82,1.85,1.89,1.92,1.87,1.83,1.86,1.88,2.01,2.01,2.06,2.02,2.08,2.13,2.04,2.00,2.02,1.97,1.99,1.98,1.96,1.96,1.95,1.95,1.92,1.89,1.90,1.93,1.90,1.91,1.92,1.92,1.92,1.89,1.91,1.92,1.96,1.94,1.91,1.95,1.96,1.94,1.96,1.93,1.95,1.99,1.99,2.00,2.10,2.13,2.18,2.13,2.18,2.16,,2.10,2.09,2.06,2.07,2.07,2.07,2.11,2.11,2.19,2.21,2.20,2.21,2.16,2.17,2.15,2.14,2.23,2.21,,2.28,2.29,2.23,2.19,2.18,2.16,2.20,2.25,2.26,,2.24,2.30,2.31,2.31,2.32,2.36,2.33,2.32,2.35,2.31,2.35,2.37,2.39,2.43,2.43,2.44,2.41,2.41,2.41,2.47,2.43,2.40,2.41,2.43,2.40,2.43,2.43,2.42,2.39,2.41,2.44,2.41,2.35,2.35,2.40,2.38,2.32,2.34,2.34,2.42,2.44,2.44,2.45,2.42,2.43,,2.43,2.46,2.55,2.60,2.60,2.62,2.68,2.61,2.68,2.62,2.63,2.76,2.85,2.83,2.90,2.91,2.93,2.88,2.92,2.95,2.91,2.92,2.87,2.91,,2.88,2.84,2.78,2.74,2.80,2.77,2.76,2.64,2.66,2.66,2.64,2.67,2.63,2.60,2.62,2.65,2.64,2.60,2.63,2.66,2.78,,2.86,2.91,2.92,2.89,2.88,2.88,2.77',
+  y2: '3.78,3.78,3.88,,3.90,3.90,3.86,3.86,3.90,3.90,3.95,3.88,3.91,3.88,3.85,3.83,3.88,3.91,3.91,3.91,3.86,3.94,3.94,3.69,3.69,3.72,3.69,3.72,3.76,3.76,3.72,3.67,3.74,3.75,3.77,3.75,3.74,3.79,3.68,3.73,3.61,3.59,3.62,3.59,,3.66,3.61,3.59,3.51,3.49,3.54,3.54,3.52,3.56,3.54,3.51,3.52,3.57,3.57,3.61,3.53,3.57,3.64,3.63,3.63,3.60,3.55,3.55,3.58,3.60,3.57,3.58,3.60,3.52,,3.48,3.50,3.41,3.46,3.46,3.45,3.45,3.48,3.48,3.48,3.47,3.59,3.61,3.60,3.60,3.58,3.63,3.57,3.55,3.58,,3.56,3.58,3.62,3.60,3.58,3.58,3.55,3.51,3.46,3.43,3.45,,3.47,3.54,3.51,3.49,3.52,3.56,3.57,3.61,3.54,3.52,3.52,3.51,3.48,3.49,3.46,3.48,3.44,3.48,3.47,,3.46,3.45,3.45,3.47,,3.47,3.46,3.47,3.47,3.49,3.54,3.54,3.53,3.51,3.56,3.59,,3.60,3.60,3.61,3.60,3.56,3.53,3.56,3.53,3.52,3.57,3.57,3.57,3.47,3.50,3.48,3.45,3.52,3.47,3.40,,3.43,3.47,3.47,3.48,3.43,3.43,3.45,3.42,3.38,3.47,3.51,3.54,3.57,3.56,3.56,3.57,3.64,3.76,3.73,3.68,3.68,3.76,3.79,3.88,3.83,3.90,3.84,3.96,3.88,3.82,3.79,3.81,3.79,3.84,3.84,3.81,3.79,3.78,3.81,3.78,3.76,3.76,3.78,3.71,3.72,3.78,3.79,3.83,3.78,3.78,3.84,3.92,3.88,3.88,3.95,3.93,3.87,3.92,3.90,3.95,4.00,3.98,4.00,4.09,4.07,4.13,4.04,4.08,4.13,,4.01,4.00,3.99,3.98,4.05,4.05,4.08,4.05,4.17,4.15,4.13,4.13,4.05,4.09,4.07,4.05,4.20,4.19,,4.24,4.16,4.11,4.09,4.07,4.10,4.14,4.17,4.14,,4.13,4.19,4.21,4.16,4.21,4.26,4.18,4.13,4.16,4.18,4.21,4.26,4.31,4.37,4.33,4.31,4.26,4.22,4.23,4.28,4.25,4.20,4.18,4.25,4.19,4.25,4.22,4.20,4.15,4.17,4.19,4.19,4.19,4.19,4.24,4.24,4.17,4.19,4.20,4.34,4.34,4.39,4.39,4.34,4.37,,4.39,4.43,4.56,4.63,4.65,4.67,4.74,4.67,4.76,4.76,4.71,4.85,4.87,4.81,4.92,4.89,4.88,4.78,4.83,4.84,4.79,4.77,4.75,4.80,,4.79,4.82,4.77,4.74,4.77,4.79,4.81,4.65,4.69,4.68,4.70,4.67,4.61,4.56,4.59,4.61,4.58,4.46,4.51,4.56,4.73,,4.86,4.88,4.83,4.80,4.80,4.76,4.63',
+  ig: '0.84,0.83,0.80,0.80,0.81,0.82,0.83,0.83,0.83,0.82,0.81,0.81,0.80,0.80,0.80,0.81,0.79,0.79,0.78,0.78,0.79,0.78,0.79,0.82,0.82,0.82,0.81,0.80,0.80,0.80,0.79,0.78,0.77,0.75,0.75,0.76,0.77,0.77,0.77,0.76,0.78,0.78,0.79,0.80,0.81,0.82,0.81,0.79,0.79,0.80,0.80,0.79,0.78,0.77,0.75,0.76,0.76,0.75,0.74,0.74,0.75,0.75,0.76,0.75,0.75,0.76,0.76,0.75,0.75,0.74,0.75,0.75,0.77,0.81,0.81,0.81,0.78,0.80,0.80,0.79,0.79,0.80,0.78,0.77,0.76,0.76,0.75,0.77,0.80,0.83,0.83,0.81,0.82,0.84,0.82,0.82,0.83,0.84,0.83,0.84,0.85,0.84,0.85,0.86,0.85,0.84,0.82,0.82,0.82,0.82,0.81,0.81,0.80,0.79,0.78,0.79,0.78,0.78,0.80,0.80,0.81,0.81,0.81,0.80,0.80,0.79,0.79,,0.79,0.79,0.79,0.79,,0.79,0.79,0.79,0.79,0.79,0.78,0.78,0.77,0.77,0.76,0.75,0.75,0.75,0.74,0.73,0.73,0.74,0.73,0.73,0.74,0.74,0.74,0.74,0.75,0.76,0.76,0.76,0.77,0.77,0.78,0.79,0.79,0.80,0.78,0.79,0.78,0.80,0.81,0.80,0.82,0.85,0.85,0.84,0.82,0.82,0.84,0.85,0.84,0.88,0.91,0.93,0.94,0.92,0.91,0.90,0.88,0.88,0.87,0.87,0.88,0.91,0.93,0.90,0.87,0.86,0.86,0.85,0.86,0.83,0.83,0.82,0.82,0.81,0.80,0.81,0.80,0.81,0.80,0.79,0.80,0.80,0.81,0.81,0.81,0.81,0.81,0.80,0.79,0.78,0.79,0.79,0.78,0.77,0.76,0.76,0.75,0.75,0.76,0.75,0.75,0.74,0.74,0.74,0.74,0.73,0.73,0.73,0.74,0.74,0.74,0.74,0.75,0.75,0.75,0.75,0.74,0.73,0.75,0.74,0.74,0.74,0.74,0.74,0.75,0.76,0.77,0.76,0.76,0.76,0.75,0.75,0.75,0.76,0.76,0.76,0.77,0.78,0.79,0.79,0.78,0.79,0.78,0.78,0.78,0.79,0.80,0.81,0.81,0.81,0.80,0.79,0.78,0.78,0.78,0.78,0.78,0.78,0.79,0.79,0.79,0.80,0.81,0.82,0.81,0.82,0.81,0.81,0.81,0.80,0.79,0.79,0.80,0.81,0.81,0.81,0.81,0.81,0.81,0.81,0.80,0.80,0.80,0.80,0.78,0.78,0.77,0.77,0.77,0.77,0.79,0.81,0.83,0.84,0.84,0.86,0.85,0.84,0.83,0.82,0.82,0.83,0.83,0.83,0.84,0.84,0.85,0.87,0.87,0.88,0.89,0.91,0.90,0.88,0.86,0.89,0.94,0.94,0.93,0.91,0.93,0.93,0.91,0.90,0.90,0.89,0.89,0.90,0.92,0.93,0.94,0.98',
+  hy: '2.91,2.88,2.80,2.80,2.86,2.92,2.94,2.92,2.97,2.95,2.95,3.00,2.91,2.93,2.89,2.90,2.83,2.82,2.84,2.82,2.86,2.89,2.86,3.13,3.02,2.98,2.98,2.95,2.94,2.94,2.93,2.90,2.89,2.88,2.88,2.90,2.94,2.95,2.88,2.80,2.78,2.78,2.75,2.82,2.84,2.92,2.88,2.84,2.83,2.84,2.87,2.84,2.78,2.79,2.75,2.79,2.79,2.71,2.72,2.69,2.71,2.70,2.76,2.75,2.74,2.80,2.81,2.81,2.80,2.76,2.82,2.84,2.95,3.18,3.18,3.11,2.95,3.04,3.04,2.99,2.97,3.01,2.96,2.88,2.80,2.82,2.76,2.85,2.94,3.04,3.13,3.05,3.13,3.15,3.02,3.02,3.02,3.09,3.07,3.13,3.20,3.17,3.17,3.19,3.15,3.10,3.00,3.00,2.95,2.94,2.92,2.89,2.88,2.85,2.89,2.89,2.91,2.88,2.91,2.91,2.98,2.99,2.95,2.90,2.88,2.83,2.84,,2.86,2.87,2.84,2.81,,2.83,2.81,2.79,2.79,2.76,2.74,2.74,2.75,2.76,2.71,2.65,2.65,2.73,2.69,2.64,2.68,2.69,2.71,2.72,2.77,2.80,2.81,2.85,2.86,2.97,2.87,2.84,2.86,2.84,2.92,2.95,2.94,2.94,2.86,2.88,2.86,2.95,2.97,2.94,2.98,3.10,3.03,3.08,2.97,3.00,3.13,3.19,3.06,3.09,3.17,3.28,3.27,3.22,3.20,3.27,3.24,3.19,3.19,3.17,3.21,3.42,3.46,3.28,3.16,3.17,3.13,3.05,3.12,2.94,2.90,2.94,2.95,2.84,2.85,2.86,2.83,2.87,2.85,2.84,2.86,2.86,2.84,2.85,2.82,2.83,2.77,2.78,2.77,2.75,2.79,2.81,2.79,2.82,2.82,2.76,2.80,2.83,2.86,2.80,2.78,2.74,2.74,2.72,2.71,2.72,2.72,2.72,2.71,2.75,2.74,2.76,2.75,2.78,2.80,2.78,2.71,2.66,2.71,2.63,2.66,2.66,2.65,2.71,2.76,2.78,2.83,2.80,2.75,2.74,2.75,2.74,2.72,2.67,2.70,2.70,2.69,2.69,2.72,2.71,2.71,2.73,2.69,2.69,2.68,2.77,2.79,2.81,2.84,2.87,2.84,2.85,2.78,2.73,2.75,2.71,2.70,2.70,2.72,2.71,2.71,2.67,2.70,2.75,2.73,2.75,2.70,2.69,2.70,2.67,2.63,2.60,2.63,2.65,2.66,2.65,2.68,2.68,2.67,2.71,2.70,2.65,2.71,2.76,2.70,2.70,2.68,2.66,2.68,2.73,2.80,2.93,3.02,3.08,3.12,3.24,3.10,3.12,3.03,3.09,3.15,3.11,3.11,3.16,3.25,3.23,3.31,3.29,3.33,3.27,3.40,3.38,3.30,3.18,3.14,3.26,3.44,3.43,3.40,3.32,3.48,3.42,3.34,3.30,3.30,3.20,3.23,3.34,3.43,3.47,3.52,3.76',
+  sp: '6198.01,6227.42,6279.35,,6229.98,6225.52,6263.26,6280.46,6259.75,6268.56,6243.76,6263.70,6297.36,6296.79,6305.60,6309.62,6358.91,6363.35,6388.64,6389.77,6370.86,6362.90,6339.39,6238.01,6329.94,6299.19,6345.06,6340.00,6389.45,6373.45,6445.76,6466.58,6468.54,6449.80,6449.15,6411.37,6395.78,6370.17,6466.91,6439.32,6465.94,6481.40,6501.86,6460.26,,6415.54,6448.26,6502.08,6481.50,6495.15,6512.61,6532.04,6587.47,6584.29,6615.28,6606.76,6600.35,6631.96,6664.36,6693.75,6656.92,6637.97,6604.72,6643.70,6661.21,6688.46,6711.20,6715.35,6715.79,6740.28,6714.59,6753.72,6735.11,6552.51,6654.72,6644.31,6671.06,6629.07,6664.01,6735.13,6735.35,6699.40,6738.44,6791.69,6875.16,6890.89,6890.59,6822.34,6840.20,6851.97,6771.55,6796.29,6720.32,6728.80,6832.43,6846.61,6850.92,6737.49,6734.11,6672.41,6617.32,6642.16,6538.76,6602.99,6705.12,6765.88,6812.61,,6849.09,6812.63,6829.37,6849.72,6857.12,6870.40,6846.51,6840.51,6886.68,6901.00,6827.41,6816.51,6800.26,6721.43,6774.76,6834.50,6878.49,6909.79,6932.05,,6929.94,6905.74,6896.24,6845.50,,6858.47,6902.05,6944.82,6920.93,6921.46,6966.28,6977.27,6963.74,6926.60,6944.47,6940.01,,6796.86,6875.62,6913.35,6915.61,6950.23,6978.60,6978.03,6969.01,6939.03,6976.44,6917.81,6882.72,6798.40,6932.30,6964.82,6941.81,6941.47,6832.76,6836.17,,6843.22,6881.31,6861.89,6909.51,6837.75,6890.07,6946.13,6908.86,6878.88,6881.62,6816.63,6869.50,6830.71,6740.02,6795.99,6781.48,6775.80,6672.62,6632.19,6699.38,6716.09,6624.70,6606.49,6506.48,6581.00,6556.37,6591.90,6477.16,6368.85,6343.72,6528.52,6575.32,6582.69,,6611.83,6616.85,6782.81,6824.66,6816.89,6886.24,6967.38,7022.95,7041.28,7126.06,7109.14,7064.01,7137.90,7108.40,7165.08,7173.91,7138.80,7135.95,7209.01,7230.12,7200.75,7259.22,7365.12,7337.11,7398.93,7412.84,7400.96,7444.25,7501.24,7408.50,7403.05,7353.61,7432.97,7445.72,7473.47,,7519.12,7520.36,7563.63,7580.06,7599.96,7609.78,7553.68,7584.31,7383.74,7405.73,7386.65,7266.99,7394.30,7431.46,7554.29,7511.35,7420.10,7500.58,,7472.79,7365.46,7358.22,7357.49,7354.02,7440.43,7499.36,7483.23,7483.24,,7537.43,7503.85,7482.71,7543.64,7575.39,7515.34,7543.59,7572.40,7533.77,7457.69,7443.28,7509.20,7498.96,7408.30,7411.98,7413.18,7428.78,7316.15,7437.63,7489.72,7600.50,7736.52,7723.55,7709.96,7757.64,7753.11,7728.20,7748.50,7798.99,7785.76,7745.06,7691.76,7707.98,7641.16,7674.37,7652.86,7677.28,7675.70,7730.99,7711.76,7686.14,7631.47,7666.60,7747.71,7718.60,,7673.52,7636.36,7591.70,7656.98,7619.98,7585.73,7551.81,7637.76,7650.50,7764.70,7764.64,7706.03,7704.13,7743.41,7683.69,7670.84,7651.54,7666.45,7722.72,7773.95,7818.93,7801.77,7765.36,7811.54,7807.24,7805.45,7718.94,7744.06,7659.44,7690.73,7712.57,7757.17,7663.43,7623.68,7676.77,7722.60,7743.98,7720.39,7580.07,7541.40,7568.92,7688.62,7353.73,7376.86,7549.94,7520.93,7619.38,7592.40,7561.67,7416.59,7340.53,7323.63,7175.83,6910.39',
+  ndq: '20202.890,20393.130,20601.100,,20412.520,20418.460,20611.340,20630.660,20585.530,20640.330,20677.800,20730.490,20885.650,20895.660,20974.170,20892.680,21020.020,21057.960,21108.320,21178.580,21098.290,21129.670,21122.450,20650.130,21053.580,20916.550,21169.420,21242.700,21450.020,21385.400,21681.900,21713.140,21710.670,21622.980,21629.770,21314.950,21172.860,21100.310,21496.530,21449.290,21544.270,21590.140,21705.160,21455.550,,21279.630,21497.730,21707.690,21700.390,21798.700,21879.490,21886.060,22043.070,22141.100,22348.750,22333.960,22261.330,22470.730,22631.480,22788.980,22573.470,22497.860,22384.700,22484.070,22591.150,22660.010,22755.160,22844.050,22780.510,22941.670,22788.360,23043.380,23024.630,22204.430,22694.610,22521.700,22670.080,22562.540,22679.970,22990.540,22953.670,22740.400,22941.800,23204.870,23637.460,23827.490,23958.470,23581.140,23724.960,23834.720,23348.640,23499.800,23053.990,23004.540,23527.170,23468.300,23406.460,22870.360,22900.590,22708.070,22432.850,22564.230,22078.050,22273.080,22872.010,23025.590,23214.690,,23365.690,23275.920,23413.670,23454.090,23505.140,23578.130,23545.900,23576.490,23654.160,23593.860,23195.170,23057.410,23111.460,22693.320,23006.360,23307.620,23428.830,23561.840,23613.310,,23593.100,23474.350,23419.080,23241.990,,23235.630,23395.820,23547.170,23584.270,23480.020,23671.350,23733.900,23709.870,23471.750,23530.020,23515.390,,22954.320,23224.820,23436.020,23501.240,23601.360,23817.100,23857.450,23685.120,23461.820,23592.110,23255.190,22904.580,22540.590,23031.210,23238.670,23102.470,23066.470,22597.150,22546.670,,22578.380,22753.630,22682.730,22886.070,22627.270,22863.680,23152.080,22878.380,22668.210,22748.860,22516.690,22807.480,22748.990,22387.680,22695.950,22697.100,22716.130,22311.980,22105.360,22374.180,22479.530,22152.420,22090.690,21647.610,21946.760,21761.890,21929.830,21408.080,20948.360,20794.640,21590.630,21840.950,21879.180,,21996.340,22017.850,22635.000,22822.420,22902.890,23183.740,23639.080,24016.020,24102.700,24468.480,24404.390,24259.960,24657.570,24438.500,24836.600,24887.100,24663.800,24673.240,24892.310,25114.440,25067.800,25326.130,25838.940,25806.200,26247.080,26274.130,26088.200,26402.340,26635.220,26225.140,26090.730,25870.710,26270.360,26293.100,26343.970,,26656.180,26674.730,26917.470,26972.620,27086.810,27093.900,26853.980,26830.960,25709.430,25929.660,25678.820,25169.500,25809.660,25888.840,26683.940,26376.340,26021.660,26517.930,,26166.600,25587.040,25476.640,25358.600,25297.620,25820.140,26213.720,26040.030,25832.670,,26121.160,25818.690,25870.650,26206.890,26281.610,25873.180,26107.010,26269.230,25881.950,25520.240,25508.070,25837.210,25690.900,25137.690,24975.820,24932.080,24876.910,24442.940,25122.180,25373.850,25913.900,26584.990,26363.440,26348.350,26690.620,26605.360,26445.450,26588.490,26803.030,26729.160,26644.910,26289.710,26331.090,26067.170,26180.450,25980.190,26151.300,26130.200,26541.350,26402.420,26370.890,26099.770,26217.830,26584.060,26506.990,,26421.410,26253.340,26081.720,26333.040,26186.410,25981.570,25978.420,26418.300,26522.550,27122.090,27244.280,26936.040,26939.370,27068.720,26820.380,26797.540,26861.060,26871.600,27190.860,27477.310,27599.890,27538.690,27193.340,27366.170,27245.900,27204.380,26692.870,26713.030,26140.030,26430.890,26424.820,26702.860,26008.860,25955.340,26169.380,26477.810,26549.850,26184.720,25437.000,25164.360,25372.010,25736.510,24315.000,24579.420,25253.140,25065.870,25466.190,25366.090,25136.270,24509.760,24328.380,24429.880,23879.200,',
+  vix: '16.83,16.64,16.38,17.48,17.79,16.81,15.94,15.78,16.40,17.20,17.38,17.16,16.52,16.41,16.65,16.50,15.37,15.39,14.93,15.03,15.98,15.48,16.72,20.38,17.52,17.85,16.77,16.57,15.15,16.25,14.73,14.49,14.83,15.09,14.99,15.57,15.69,16.60,14.22,14.79,14.62,14.85,14.43,15.36,16.12,17.17,16.35,15.30,15.18,15.11,15.04,15.35,14.71,14.76,15.69,16.36,15.72,15.70,15.45,16.10,16.64,16.18,16.74,15.29,16.12,16.28,16.29,16.63,16.65,16.37,17.24,16.30,16.43,21.66,19.03,20.81,20.64,25.31,20.78,18.23,17.87,18.60,17.30,16.37,15.79,16.42,16.92,16.91,17.44,17.17,19.00,18.01,19.50,19.08,17.60,17.28,17.51,20.00,19.83,22.38,24.69,23.66,26.42,23.43,20.52,18.56,17.19,17.21,16.35,17.24,16.59,16.08,15.78,15.41,16.66,16.93,15.77,14.85,15.74,16.50,16.48,17.62,16.87,14.91,14.08,14.00,13.47,,13.60,14.20,14.33,14.95,,14.51,14.90,14.75,15.38,15.45,14.49,15.12,15.98,16.75,15.84,15.86,18.84,20.09,16.90,15.64,16.09,16.15,16.35,16.35,16.88,17.44,16.34,18.00,18.64,21.77,17.76,17.36,17.79,17.65,20.82,20.60,21.20,20.29,19.62,20.23,19.09,21.01,19.55,17.93,18.63,19.86,21.44,23.57,21.15,23.75,29.49,25.50,24.93,24.23,27.29,27.19,23.51,22.37,25.09,24.06,26.78,26.15,26.95,25.33,27.44,31.05,30.61,25.25,24.54,23.87,,24.17,25.78,21.04,19.49,19.23,19.12,18.36,18.17,17.94,17.48,18.87,19.50,18.92,19.31,18.71,18.02,17.83,18.81,16.89,16.99,18.29,17.38,17.39,17.08,17.19,18.38,17.99,17.87,17.26,18.43,17.82,18.06,17.44,16.76,16.70,16.59,17.01,16.29,15.74,15.32,16.05,15.77,16.06,15.40,21.51,18.92,19.87,22.22,19.44,17.68,16.20,16.41,18.44,16.40,16.78,17.28,19.49,18.63,18.89,18.41,17.65,16.45,16.59,16.15,15.81,15.57,16.13,16.90,15.84,15.03,17.16,16.50,15.67,16.73,18.77,18.65,17.05,16.64,18.70,18.58,18.67,18.21,20.66,17.09,15.99,15.86,16.50,15.81,15.15,14.90,15.46,15.28,14.55,14.63,14.25,15.19,15.84,14.89,16.01,15.13,15.85,15.45,15.21,14.51,14.43,14.92,16.34,15.20,14.32,14.53,15.30,15.72,16.46,17.84,15.84,17.10,17.20,17.71,15.44,14.81,14.87,14.21,15.18,15.67,14.87,16.07,16.04,16.34,16.39,15.31,15.52,15.01,15.08,15.41,14.84,15.21,15.27,16.87,16.46,19.99,18.44,17.31,16.68,19.03,19.45,18.39,17.52,16.91,17.20,19.42,21.15,20.83,16.61,28.18,25.64,19.92,19.46,17.49,18.70,19.30,22.91,25.46,24.56,28.44,35.89',
+  usd: '119.3436,119.3037,119.2382,,119.6201,119.8371,119.7311,119.8343,119.9214,120.2209,120.5105,120.4175,120.6384,120.3560,119.9961,119.6810,119.5697,119.5664,119.9857,120.6149,120.9674,121.4042,121.7210,121.2122,120.9859,120.9082,120.5082,120.5043,120.3329,120.6892,120.2736,120.1300,120.6446,120.3377,120.5622,120.7224,120.7757,121.0843,120.2774,120.4214,120.5274,120.7274,120.2595,120.2082,,120.6837,120.5052,120.7629,120.1282,120.0971,120.1569,120.1223,119.9534,120.0611,119.5644,119.1348,119.1582,119.6616,119.7858,119.8152,119.6202,120.1707,120.5419,120.4349,120.1150,120.1368,120.1502,120.4296,120.0881,120.2722,120.4884,120.7766,121.0902,121.1163,,121.1822,120.8642,120.6698,120.7028,120.6209,120.8895,120.8958,120.9531,120.9345,120.7988,120.6361,120.5312,121.2832,121.3859,121.4512,121.8271,121.8482,121.6948,121.3880,121.2984,,121.0458,120.7725,120.9666,121.1146,121.2127,121.4978,121.6889,121.8653,121.9171,121.6335,121.2437,,121.0527,120.9862,121.1467,120.7336,120.6766,120.6863,120.7760,120.6832,120.6752,119.9800,120.1442,119.9561,119.8902,120.1550,120.0528,120.1652,119.9912,119.7057,119.4372,,119.4723,119.5899,119.4939,119.7456,,119.6059,119.6192,119.7807,119.8719,120.0904,120.2215,119.9958,120.1401,119.9537,119.9951,120.0838,,119.4455,119.3431,119.1962,118.8976,118.0525,117.4523,117.5117,117.4396,117.8996,118.3609,117.9764,118.2602,118.5034,118.2407,117.6392,117.5216,117.4601,117.5376,117.5258,,117.7375,117.8426,118.2354,117.9917,117.9395,117.9463,117.7690,117.9042,117.8223,118.6670,119.4341,119.0705,119.5683,119.4910,119.5151,118.7255,119.2885,119.8227,120.5518,120.0970,119.8328,119.9276,120.1802,120.2757,119.9371,120.1295,120.1282,120.3890,120.8851,121.2851,121.0350,120.1198,120.5030,120.6565,120.4302,120.3200,119.0596,118.8998,118.8552,118.9916,118.3581,118.3623,118.3616,118.0795,118.2374,118.4331,118.6004,118.7155,118.7294,118.5458,118.7717,119.0975,118.6710,118.3926,118.8264,118.6207,118.0982,118.0116,118.0392,118.0562,118.5238,118.4737,118.6696,119.2825,119.0574,119.4510,119.1624,119.3690,119.2868,,119.1696,119.1829,119.0318,118.8783,119.1653,119.0359,119.3848,119.3615,120.0831,120.0340,119.9617,119.9134,120.1174,119.5073,119.3158,119.2560,119.3871,120.3958,,120.5463,121.0552,121.4120,121.0559,120.8866,120.9525,120.9248,121.1455,120.6902,,120.8350,120.8145,121.1307,120.7530,120.5046,120.7413,120.4728,120.3088,120.3310,120.5315,120.5401,120.5779,120.5736,120.9075,120.7105,120.7739,120.6247,120.7892,119.6753,119.7034,119.6951,119.5977,119.3881,119.5113,119.0649,119.1187,119.1790,119.1179,119.1848,118.9028,118.8140,118.9831,118.3328,118.2548,118.0628,118.3195,118.2283,118.4461,118.3583,118.7479,118.5679,118.6568,118.5296,118.1270,118.0732,,117.9127,117.8834,118.0787,118.2126,118.6923,118.8822,118.9206,119.3489,119.5133,119.4014,119.5933,120.1169,120.5521,120.3300,120.6958,121.0296,120.9693,121.7882,121.3848,121.2708,120.8976,121.2558,121.4469,121.6023,,121.4433,122.0037,121.5693,121.4048,121.3248,121.1160,121.3422,121.3531,121.3202,121.6042,121.6622,121.8491,121.7361,121.6656,121.3702,121.8084,121.3983,121.5061,121.8803,121.6623,122.1143,,122.5433,122.6503,122.8617,122.6097,123.1376,123.5253,123.5978'
+};
+const WD = (() => { const n = MK_RAW.y10.split(',').length, out = []; let d = Date.UTC(2025, 6, 1); while (out.length < n) { const w = new Date(d).getUTCDay(); if (w !== 0 && w !== 6) out.push(d); d += 864e5; } return out; })();
+const wdIso = i => new Date(WD[i]).toISOString().slice(0, 10);
+const wdFmt = i => { const d = new Date(WD[i]); return MON[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear(); };
+const wdShort = i => { const d = new Date(WD[i]); return MON[d.getUTCMonth()] + ' ' + d.getUTCDate(); };
+const wdIdx = iso => { for (let i = 0; i < WD.length; i++) if (wdIso(i) === iso) return i; return -1; };
+const daily = (str, k) => str.split(',').map((x, i) => ({ t: i, v: x === '' ? null : +x * (k || 1) }));
+const MK = { y10: daily(MK_RAW.y10), real: daily(MK_RAW.real), y2: daily(MK_RAW.y2), ig: daily(MK_RAW.ig, 100), hy: daily(MK_RAW.hy, 100), sp: daily(MK_RAW.sp), ndq: daily(MK_RAW.ndq), vix: daily(MK_RAW.vix), usd: daily(MK_RAW.usd) };
+MK.be = MK.y10.map((p, i) => ({ t: p.t, v: p.v != null && MK.real[i].v != null ? p.v - MK.real[i].v : null }));   // 10-year breakeven
+const I_OCT28 = wdIdx('2026-10-28'), I_NOV17 = wdIdx('2026-11-17');
+const rebase = (s, i0) => s.map(p => ({ t: p.t, v: p.v == null ? null : p.v / s[i0].v * 100 }));
+MK.spX = rebase(MK.sp, I_OCT28); MK.ndqX = rebase(MK.ndq, I_OCT28);
+const valid = s => s.filter(p => p.v != null);              // bridge market holidays instead of drawing gaps
+const lastI = s => { for (let i = s.length - 1; i >= 0; i--) if (s[i].v != null) return i; return -1; };
+const chgPct = (s, a, b) => (s[b].v / s[a].v - 1) * 100;
+const chgBp = (s, a, b, k) => Math.round((s[b].v - s[a].v) * (k || 1));
+const sI = n => (n > 0 ? '+' : n < 0 ? '−' : '') + Math.abs(n);
+function wdTicks(t0, t1, pw) {   // first trading day of each month, thinned to fit
+  const starts = [];
+  for (let i = Math.max(0, Math.ceil(t0)); i <= t1; i++) { const m = new Date(WD[i]).getUTCMonth(); if (i === 0 || m !== new Date(WD[i - 1]).getUTCMonth()) starts.push(i); }
+  const perMonth = 21 * pw / Math.max(1, t1 - t0), k = [1, 2, 3, 6].find(s => s * perMonth >= 44) || 6;
+  return starts.filter(i => new Date(WD[i]).getUTCMonth() % k === 0).map(i => { const d = new Date(WD[i]); return { t: i, label: d.getUTCMonth() === 0 ? String(d.getUTCFullYear()) : MON[d.getUTCMonth()] }; });
+}
+
+/* ---- FOMC Summary of Economic Projections, September 16 2026: medians (FRED FEDTARMD, UNRATEMD, PCECTPIMD,
+   JCXFEMD, GDPC1MD and the longer-run series). Inflation and GDP are Q4/Q4, unemployment Q4 average, fed funds year-end. ---- */
+const SEP = { years: [2026, 2027, 2028, 2029], ff: [4.1, 4.1, 3.9, 3.6], ffLR: 3.2, un: [4.1, 4.1, 4.1, 4.1], unLR: 4.2, pce: [3.7, 2.3, 2.1, 2.0], core: [3.4, 2.5, 2.2, 2.0], gdp: [2.3, 2.4, 2.2, 2.1], gdpLR: 2.0 };
+// Real GDP growth, % SAAR (FRED A191RL1Q225SBEA), placed at each quarter's last month
+const GDPQ = [[M(2024, 6), 3.6], [M(2024, 9), 3.2], [M(2024, 12), 2.4], [M(2025, 3), 0.1], [M(2025, 6), 4.0], [M(2025, 9), 3.9], [M(2025, 12), 0.2], [M(2026, 3), 2.5], [M(2026, 6), 2.2], [M(2026, 9), 3.4]];
+
 /* ================= formatting ================= */
 const fx = (v, d = 1) => (Math.abs(v) < 0.5 * Math.pow(10, -d) ? 0 : v).toFixed(d);
 const pctF = (v, d = 1) => v == null ? 'n/a' : fx(v, d) + '%';
@@ -1192,23 +1487,30 @@ function chartBase(host, drawFn) {
   else window.addEventListener('resize', () => c.draw(false));
   return c;
 }
+// Motion timing. Slow on purpose: lines draw over ~2.2s and bars grow over ~1.4s, one after another,
+// starting once the chapter has begun to fade in.
+const LINE_MS = 2200, LINE_DELAY = 300, BAR_MS = 1400, BAR_DELAY = 350, BAR_GAP = 160;
 function animLines(svg) {
   if (reduceMotion) return;
-  svg.querySelectorAll('path.ln').forEach(p => {
+  svg.querySelectorAll('path.ln:not(.proj)').forEach(p => {
     const L = p.getTotalLength ? p.getTotalLength() : 0; if (!L) return;
     p.style.strokeDasharray = L + ' ' + L; p.style.strokeDashoffset = L; p.getBoundingClientRect();
-    p.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(.3,.7,.2,1)'; p.style.strokeDashoffset = '0';
-    setTimeout(() => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; p.style.transition = ''; }, 1250);
+    p.style.transition = `stroke-dashoffset ${LINE_MS}ms cubic-bezier(.3,.7,.2,1) ${LINE_DELAY}ms`; p.style.strokeDashoffset = '0';
+    setTimeout(() => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; p.style.transition = ''; }, LINE_DELAY + LINE_MS + 150);
   });
-  svg.querySelectorAll('.fade').forEach(e => e.animate && e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: 'ease-out' }));
+  svg.querySelectorAll('.fade').forEach(e => e.animate && e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1600, delay: LINE_DELAY, easing: 'ease-out', fill: 'backwards' }));
+  svg.querySelectorAll('.endfx').forEach(e => e.animate && e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: LINE_DELAY + LINE_MS * 0.85, easing: 'ease-out', fill: 'backwards' }));
 }
-function animBars(nodes, horizontal) {
+function animBars(nodes, horizontal, o = {}) {
   if (reduceMotion) return;
+  const dur = o.dur || BAR_MS, gap = o.gap || BAR_GAP, d0 = o.delay != null ? o.delay : BAR_DELAY;
   nodes.forEach((n, i) => {
     if (!n.animate) return;
-    const b = +n.dataset.base;
+    const b = +n.dataset.base, delay = d0 + i * gap;
     n.style.transformOrigin = horizontal ? `${b}px 0px` : `0px ${b}px`;
-    n.animate([{ transform: horizontal ? 'scaleX(0)' : 'scaleY(0)' }, { transform: 'none' }], { duration: 650, delay: i * 70, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'backwards' });
+    n.animate([{ transform: horizontal ? 'scaleX(0)' : 'scaleY(0)' }, { transform: 'none' }], { duration: dur, delay, easing: 'cubic-bezier(.22,.8,.24,1)', fill: 'backwards' });
+    // the bar's value label (and connector) appear as the bar finishes growing
+    (n._fx || []).forEach(e => e && e.animate && e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: delay + dur * 0.7, easing: 'ease-out', fill: 'backwards' }));
   });
 }
 function hoverMark(hit, mark, getTip) {
@@ -1257,8 +1559,12 @@ function Player(btn, o) {
 
 /* ================= line chart ================= */
 function LineChart(host, cfg) {
+  // Options beyond the basics: xFmt / xTicks (custom x labels, e.g. daily dates), snap (hover snaps to the
+  // nearest point that has data), marks (vertical event lines), yUnit, tipExtra, and series flagged
+  // proj: true (dashed projection with dots, e.g. FOMC median projections).
   const st = { win: cfg.win || null, cursor: null, reveal: null };
-  cfg.series.forEach(s => { s.byT = new Map(s.data.map(p => [p.t, p.v])); });
+  const prep = s => { s.byT = new Map(s.data.map(p => [p.t, p.v])); };
+  cfg.series.forEach(prep);
   let svg = null, xS, yS, P, curG;
   const c = chartBase(host, draw);
   function bounds() {
@@ -1292,13 +1598,20 @@ function LineChart(host, cfg) {
     nt.ticks.forEach(v => {
       const y = Math.round(yS(v)) + 0.5;
       S_('line', { x1: m.l, x2: m.l + pw, y1: y, y2: y, class: (cfg.zero && Math.abs(v) < 1e-9) ? 'zero' : 'grid' }, gA);
-      T_(gA, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, tickF(v, dec, '%'));
+      T_(gA, { x: m.l - 8, y: y + 3.5, 'text-anchor': 'end', class: 'tick' }, tickF(v, dec, cfg.yUnit != null ? cfg.yUnit : '%'));
     });
     S_('line', { x1: m.l, x2: m.l + pw, y1: m.t + ph + 0.5, y2: m.t + ph + 0.5, class: 'axisln' }, gA);
-    xTicks(t0, t1, pw).forEach(t => {
-      const x = Math.round(xS(t)) + 0.5;
+    const xt = cfg.xTicks ? cfg.xTicks(t0, t1, pw) : xTicks(t0, t1, pw).map(t => ({ t, label: (t1 - t0) <= 30 && t % 12 !== 0 ? MON[t % 12] : String(Math.floor(t / 12)) }));
+    xt.forEach(k => {
+      const x = Math.round(xS(k.t)) + 0.5;
       S_('line', { x1: x, x2: x, y1: m.t + ph, y2: m.t + ph + 4, class: 'axisln' }, gA);
-      T_(gA, { x, y: H - 7, 'text-anchor': 'middle', class: 'tick' }, (t1 - t0) <= 30 && t % 12 !== 0 ? MON[t % 12] : String(Math.floor(t / 12)));
+      T_(gA, { x, y: H - 7, 'text-anchor': 'middle', class: 'tick' }, k.label);
+    });
+    (cfg.marks || []).forEach(k => {
+      if (k.t < t0 || k.t > t1) return;
+      const x = xS(k.t), y = m.t + 10 + (k.row || 0) * 13;
+      S_('line', { x1: x, x2: x, y1: y + 4, y2: m.t + ph, class: 'mark' }, gA);
+      T_(gA, { x: x + (k.anchor === 'end' ? -4 : 4), y, 'text-anchor': k.anchor || 'start', class: 'ann' }, k.label);
     });
     (cfg.refs || []).forEach(r => {
       const y = yS(r.v);
@@ -1309,6 +1622,12 @@ function LineChart(host, cfg) {
     const gS = S_('g', {}, svg);
     cfg.series.forEach(s => {
       const pts = shown(s);
+      if (s.proj) {
+        const d = lineD(pts, xS, yS);
+        if (d) S_('path', { d, class: 'ln proj fade' }, gS);
+        pts.forEach(p => { if (p.v != null) S_('circle', { cx: xS(p.t), cy: yS(p.v), r: 3.5, class: 'dot proj fade' }, gS); });
+        return;
+      }
       if (cfg.area && s.role === 'primary') { const d = areaD(pts, xS, yS, m.t + ph); if (d) S_('path', { d, class: 'area fade' }, gS); }
       const d = lineD(pts, xS, yS);
       if (d) S_('path', { d, class: 'ln ' + s.cls + (s.role === 'primary' ? ' primary' : '') }, gS);
@@ -1316,6 +1635,7 @@ function LineChart(host, cfg) {
     if (cfg.gaps) {
       cfg.series.forEach(s => shown(s).forEach(p => { if (p.v == null && p.t > t0 && p.t < t1) { const x = xS(p.t); S_('line', { x1: x, x2: x, y1: m.t + ph - 7, y2: m.t + ph, class: 'gapmark' }, gS); } }));
     }
+    P.ts = cfg.snap ? [...new Set(cfg.series.flatMap(s => shown(s).filter(p => p.v != null).map(p => p.t)))].sort((a, b) => a - b) : null;
     if (cfg.endLabels) endLabels(gS, shown, m, ph);
     curG = S_('g', {}, svg);
     S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
@@ -1325,26 +1645,39 @@ function LineChart(host, cfg) {
   }
   function endLabels(g, shown, m, ph) {
     const labs = [];
-    cfg.series.forEach(s => { const pts = shown(s).filter(p => p.v != null); if (!pts.length) return; const p = pts[pts.length - 1]; labs.push({ s, p, x: xS(p.t), y: yS(p.v), ty: yS(p.v) }); });
+    cfg.series.forEach(s => { if (s.proj) return; const pts = shown(s).filter(p => p.v != null); if (!pts.length) return; const p = pts[pts.length - 1]; labs.push({ s, p, x: xS(p.t), y: yS(p.v), ty: yS(p.v) }); });
     labs.sort((a, b) => a.ty - b.ty);
     for (let i = 1; i < labs.length; i++) if (labs[i].ty - labs[i - 1].ty < 15) labs[i].ty = labs[i - 1].ty + 15;
     const over = labs.length ? labs[labs.length - 1].ty - (m.t + ph) : 0; if (over > 0) labs.forEach(l => { l.ty -= over; });
     labs.forEach(l => {
-      S_('circle', { cx: l.x, cy: l.y, r: 4, class: 'dot ' + l.s.cls }, g);
+      S_('circle', { cx: l.x, cy: l.y, r: 4, class: 'dot endfx ' + l.s.cls }, g);
       const lx = l.x + 9;
-      if (Math.abs(l.ty - l.y) > 3) S_('line', { x1: l.x + 5, y1: l.y, x2: lx - 1, y2: l.ty, class: 'leader' }, g);
-      const tEl = T_(g, { x: lx, y: l.ty + 4, class: 'end-lbl' }, cfg.fmt(l.p.v));
+      if (Math.abs(l.ty - l.y) > 3) S_('line', { x1: l.x + 5, y1: l.y, x2: lx - 1, y2: l.ty, class: 'leader endfx' }, g);
+      const tEl = T_(g, { x: lx, y: l.ty + 4, class: 'end-lbl endfx' }, cfg.fmt(l.p.v));
       if (cfg.endNames) { const ts = S_('tspan', { class: 'end-name', dx: '5' }, tEl); ts.textContent = l.s.short || l.s.name; }
     });
   }
-  function tAt(px) { const hiT = st.reveal != null ? Math.min(P.t1, st.reveal) : P.t1; return Math.max(P.t0, Math.min(hiT, Math.round(xS.inv(px)))); }
+  function tAt(px) {
+    const hiT = st.reveal != null ? Math.min(P.t1, st.reveal) : P.t1;
+    const t = Math.max(P.t0, Math.min(hiT, Math.round(xS.inv(px))));
+    if (!P.ts || !P.ts.length) return t;
+    let best = P.ts[0], bd = Infinity;
+    for (const u of P.ts) { const d = Math.abs(u - t); if (d < bd) { bd = d; best = u; } }
+    return best;
+  }
   function drawCursor(t, ev, tipOn, emit) {
     if (!curG) return;
     curG.replaceChildren(); st.cursor = t;
-    const x = xS(t);
+    const x = xS(t), rows = [];
     S_('line', { x1: x, x2: x, y1: P.m.t, y2: P.m.t + P.ph, class: 'xhair' }, curG);
-    const rows = cfg.series.map(s => { const v = s.byT.get(t); if (v != null) S_('circle', { cx: x, cy: yS(v), r: 4.5, class: 'dot ' + s.cls }, curG); return { cls: s.cls, value: v == null ? 'n/a' : cfg.fmt(v), label: s.name }; });
-    if (tipOn) { const r = svg.getBoundingClientRect(); showTip(fmtT(t), rows, ev ? ev.clientX : r.left + x, ev ? ev.clientY : r.top + P.m.t + 10, cfg.notes && cfg.notes[t]); }
+    cfg.series.forEach(s => {
+      const v = s.byT.get(t), cls = s.proj ? 'proj' : s.cls;
+      if (v != null) S_('circle', { cx: x, cy: yS(v), r: 4.5, class: 'dot ' + cls }, curG);
+      if (v == null && (s.proj || cfg.snap)) return;     // sparse series: list only what exists at this date
+      rows.push({ cls, value: v == null ? 'n/a' : cfg.fmt(v), label: s.name });
+    });
+    if (cfg.tipExtra) { const e = cfg.tipExtra(t); if (e) rows.push(e); }
+    if (tipOn) { const r = svg.getBoundingClientRect(); showTip(cfg.xFmt ? cfg.xFmt(t) : fmtT(t), rows, ev ? ev.clientX : r.left + x, ev ? ev.clientY : r.top + P.m.t + 10, cfg.notes && cfg.notes[t]); }
     if (emit && cfg.onCursor) cfg.onCursor(t);
   }
   function bind() {
@@ -1358,10 +1691,17 @@ function LineChart(host, cfg) {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(ev.key)) return;
       ev.preventDefault(); ev.stopPropagation();
       let t = st.cursor != null ? st.cursor : P.t1;
+      if (P.ts && P.ts.length) {   // step through the dates that have data
+        const i = Math.max(0, P.ts.indexOf(tAt(xS(t))));
+        t = P.ts[ev.key === 'ArrowLeft' ? Math.max(0, i - 1) : ev.key === 'ArrowRight' ? Math.min(P.ts.length - 1, i + 1) : ev.key === 'Home' ? 0 : P.ts.length - 1];
+        drawCursor(t, null, true, true);
+        return;
+      }
       t = ev.key === 'ArrowLeft' ? t - 1 : ev.key === 'ArrowRight' ? t + 1 : ev.key === 'Home' ? P.t0 : P.t1;
       drawCursor(tAt(xS(t)), null, true, true);
     });
   }
+  c.setData = (i, data) => { cfg.series[i].data = data; prep(cfg.series[i]); c.draw(true); };
   c.setWindow = w => { st.win = w; st.reveal = null; if (st.cursor != null && (st.cursor < w[0] || st.cursor > w[1])) st.cursor = null; c.draw(true); };
   c.setReveal = t => { st.reveal = t; c.draw(true); };
   c.setCursor = t => { st.cursor = t; if (svg && P && t >= P.t0 && t <= P.t1) drawCursor(t, null, false, false); };
@@ -1425,22 +1765,36 @@ function BandChart(host, cfg) {
       // thin midline so moves bigger than the band's own 25 bp height still read as one connected path
       S_('path', { d: segs.map((s, i) => (i ? 'L' : 'M') + xS(s.a).toFixed(1) + ',' + yS((s.lo + s.hi) / 2).toFixed(1) + 'L' + xS(s.b).toFixed(1) + ',' + yS((s.lo + s.hi) / 2).toFixed(1)).join(''), class: 'band-mid' }, g);
     }
+    const gP = S_('g', {}, svg);   // the December step and its label
     if (cfg.x1 > FF_END_X && r > FF_END_X) {
       const b = Math.min(st.scn ? PROP_X : cfg.x1, r, cfg.x1);
       if (b > FF_END_X) S_('path', { d: bandD([{ a: FF_END_X, b, lo: CUR.lo, hi: CUR.hi }]), class: 'band-interim' }, g);
       if (st.scn && r > PROP_X) {
         const b2 = Math.min(r, cfg.x1);
         const lo = st.scn === 'hike' ? PROP.lo : CUR.lo, hi = st.scn === 'hike' ? PROP.hi : CUR.hi;
-        const prop = S_('path', { d: bandD([{ a: PROP_X, b: b2, lo, hi }]), class: st.scn === 'hike' ? 'band-prop' : 'band-hold' }, g);
+        S_('path', { d: bandD([{ a: PROP_X, b: b2, lo, hi }]), class: st.scn === 'hike' ? 'band-prop' : 'band-hold' }, gP);
         if (r >= cfg.x1 && W >= (cfg.propLabelMinW || 0)) {
           const x = xS(PROP_X);
-          S_('line', { x1: x, x2: x, y1: m.t + 30, y2: yS(hi) - 4, class: 'leader' }, g);
-          T_(g, { x: x - 6, y: m.t + 10, 'text-anchor': 'end', class: 'prop-lbl' }, st.scn === 'hike' ? '+25 bp in December (proposed)' : 'Pause in December (alternative)');
-          T_(g, { x: x - 6, y: m.t + 25, 'text-anchor': 'end', class: 'prop-sub' }, rng(lo, hi));
-          if (c.intro && !reduceMotion && prop.animate) prop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: 250, easing: 'ease-out', fill: 'backwards' });
+          S_('line', { x1: x, x2: x, y1: m.t + 30, y2: yS(hi) - 4, class: 'leader' }, gP);
+          T_(gP, { x: x - 6, y: m.t + 10, 'text-anchor': 'end', class: 'prop-lbl' }, st.scn === 'hike' ? '+25 bp in December (proposed)' : 'Pause in December (alternative)');
+          T_(gP, { x: x - 6, y: m.t + 25, 'text-anchor': 'end', class: 'prop-sub' }, rng(lo, hi));
         }
       }
     }
+    if (c.intro && !reduceMotion) {
+      if (!st.propOnly && g.animate) {
+        // sweep the rate history in from left to right, then bring in the December step
+        const id = 'bc' + Math.random().toString(36).slice(2, 9);
+        const cp = S_('clipPath', { id }, svg), cr = S_('rect', { x: m.l - 2, y: 0, width: pw + 4, height: H }, cp);
+        g.setAttribute('clip-path', `url(#${id})`);
+        cr.style.transformOrigin = `${m.l}px 0px`;
+        if (cr.animate) cr.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 2000, delay: 300, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'backwards' });
+        if (gP.animate) gP.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1200, delay: 2000, easing: 'ease-out', fill: 'backwards' });
+      } else if (gP.animate) {
+        gP.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: 100, easing: 'ease-out', fill: 'backwards' });
+      }
+    }
+    st.propOnly = false;
     curG = S_('g', {}, svg);
     S_('rect', { x: m.l, y: m.t, width: Math.max(0, pw), height: Math.max(0, ph), class: 'hit' }, svg);
     bind();
@@ -1471,7 +1825,7 @@ function BandChart(host, cfg) {
     });
   }
   c.setReveal = x => { st.reveal = x; c.draw(true); };
-  c.setScenario = s => { st.scn = s; c.intro = !reduceMotion; c.draw(true); };
+  c.setScenario = s => { st.scn = s; st.propOnly = true; c.intro = !reduceMotion; c.draw(true); };
   c.infoAt = infoAt;
   return c;
 }
@@ -1496,7 +1850,7 @@ function DemandChart(host) {
       [['q2', 'Q2 2026', 'ctx', 'Q2'], ['q3', 'Q3 2026', 'teal', 'Q3']].forEach(([k, lbl, cls, sh], bi) => {
         const x = bi === 0 ? cx - gap / 2 - bw : cx + gap / 2, v = g[k];
         const bar = S_('path', { d: vbar(x, bw, yS(0), yS(v)), class: 'bar bar-' + cls }, svg); bar.dataset.base = yS(0); bars.push(bar);
-        T_(svg, { x: x + bw / 2, y: yS(v) - 7, 'text-anchor': 'middle', class: 'val' + (bi === 0 ? ' val-2' : '') }, v.toFixed(1) + '%');
+        bar._fx = [T_(svg, { x: x + bw / 2, y: yS(v) - 7, 'text-anchor': 'middle', class: 'val' + (bi === 0 ? ' val-2' : '') }, v.toFixed(1) + '%')];
         T_(svg, { x: x + bw / 2, y: m.t + ph + 15, 'text-anchor': 'middle', class: 'cat-sm' }, sh);
         const hit = S_('rect', { x: x - gap / 2, y: m.t, width: bw + gap, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${g.short}, ${lbl}: ${v.toFixed(1)}%` }, svg);
         hoverMark(hit, bar, () => [g.name.replace('¹', ''), [{ cls, value: v.toFixed(1) + '%', label: lbl + ', annualized' }]]);
@@ -1531,19 +1885,19 @@ function Waterfall(host, getQ) {
       const x = m.l + band * (i + 0.5) - bw / 2, cls = s.v >= 0 ? 'teal' : 'coral';
       const bar = S_('path', { d: vbar(x, bw, yS(s.a), yS(s.b)), class: 'bar bar-' + cls }, svg); bar.dataset.base = yS(s.a); bars.push(bar);
       const nx = m.l + band * (i + 1.5) - bw / 2;
-      S_('line', { x1: x + bw, x2: nx, y1: yS(s.b), y2: yS(s.b), class: 'conn' }, svg);
-      T_(svg, { x: x + bw / 2, y: s.v >= 0 ? yS(s.b) - 7 : yS(s.b) + 15, 'text-anchor': 'middle', class: 'val' }, sgn(s.v, 2));
+      bar._fx = [S_('line', { x1: x + bw, x2: nx, y1: yS(s.b), y2: yS(s.b), class: 'conn' }, svg),
+        T_(svg, { x: x + bw / 2, y: s.v >= 0 ? yS(s.b) - 7 : yS(s.b) + 15, 'text-anchor': 'middle', class: 'val' }, sgn(s.v, 2))];
       T_(svg, { x: x + bw / 2, y: H - 9, 'text-anchor': 'middle', class: 'cat' }, useShort ? s.short : s.lbl);
       const hit = S_('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${s.name}: ${sgn(s.v, 2)} percentage points` }, svg);
       hoverMark(hit, bar, () => [s.name + ', ' + qk, [{ cls, value: sgn(s.v, 2) + ' pp', label: 'contribution' }, { value: s.b.toFixed(2) + ' pp', label: 'running total' }]]);
     });
     const x = m.l + band * (n - 0.5) - bw / 2;
     const tb = S_('path', { d: vbar(x, bw, yS(0), yS(total)), class: 'bar bar-ink' }, svg); tb.dataset.base = yS(0); bars.push(tb);
-    T_(svg, { x: x + bw / 2, y: total >= 0 ? yS(total) - 7 : yS(total) + 15, 'text-anchor': 'middle', class: 'val' }, q.gdp.toFixed(1) + '%');
+    tb._fx = [T_(svg, { x: x + bw / 2, y: total >= 0 ? yS(total) - 7 : yS(total) + 15, 'text-anchor': 'middle', class: 'val' }, q.gdp.toFixed(1) + '%')];
     T_(svg, { x: x + bw / 2, y: H - 9, 'text-anchor': 'middle', class: 'cat' }, useShort ? 'GDP' : 'Real GDP');
     const hit = S_('rect', { x: m.l + band * (n - 1), y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `Real GDP growth ${q.gdp.toFixed(1)}%` }, svg);
     hoverMark(hit, tb, () => ['Real GDP, ' + qk, [{ cls: 'ink', value: q.gdp.toFixed(1) + '%', label: 'growth, annualized' }], 'Contributions sum to ' + total.toFixed(2) + ' pp; the gap is rounding.']);
-    if (c.intro) animBars(bars);
+    if (c.intro) animBars(bars, false, { gap: 280 });   // the waterfall builds one step at a time
   }
   return c;
 }
@@ -1566,7 +1920,7 @@ function HBars(host, items) {
     items.forEach((d, i) => {
       const y = m.t + slot * (i + 0.5) - bh / 2;
       const bar = S_('path', { d: hbar(y, bh, xS(0), xS(d.v)), class: 'bar bar-teal' }, svg); bar.dataset.base = xS(0); bars.push(bar);
-      T_(svg, { x: xS(d.v) + 6, y: y + bh / 2 + 4, class: 'val' }, d.v.toFixed(1) + '%');
+      bar._fx = [T_(svg, { x: xS(d.v) + 6, y: y + bh / 2 + 4, class: 'val' }, d.v.toFixed(1) + '%')];
       const tEl = T_(svg, { x: m.l - 10, y: y + bh / 2 + 4 - (d.lines.length - 1) * 7, 'text-anchor': 'end', class: 'cat' }, '');
       d.lines.forEach((ln, k) => { const ts = S_('tspan', { x: m.l - 10, dy: k ? '14' : '0' }, tEl); ts.textContent = ln; });
       const hit = S_('rect', { x: 0, y: m.t + slot * i, width: W, height: slot, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${d.name}: ${d.v.toFixed(1)}%` }, svg);
@@ -1598,7 +1952,7 @@ function MoMChart(host, getMode) {
     d.forEach((p, i) => {
       const x = m.l + band * (i + 0.5) - bw / 2;
       const bar = S_('path', { d: vbar(x, bw, yS(0), yS(p.v)), class: 'bar bar-teal' }, svg); bar.dataset.base = yS(0); bars.push(bar);
-      T_(svg, { x: x + bw / 2, y: p.v >= 0 ? yS(p.v) - 7 : yS(p.v) + 15, 'text-anchor': 'middle', class: 'val' }, fx(p.v) + '%');
+      bar._fx = [T_(svg, { x: x + bw / 2, y: p.v >= 0 ? yS(p.v) - 7 : yS(p.v) + 15, 'text-anchor': 'middle', class: 'val' }, fx(p.v) + '%')];
       T_(svg, { x: x + bw / 2, y: H - 8, 'text-anchor': 'middle', class: 'tick' }, (i === 0 || p.t % 12 === 0) ? MON[p.t % 12] + " '" + String(Math.floor(p.t / 12)).slice(2) : MON[p.t % 12]);
       const hit = S_('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, class: 'hit', tabindex: '0', role: 'img', 'aria-label': `${fmtT(p.t)}: ${p.v.toFixed(2)}%` }, svg);
       hoverMark(hit, bar, () => [fmtT(p.t), [{ cls: 'teal', value: sgn(p.v, 2) + '%', label: name + ', m/m' }], p.v > PACE_2PCT ? 'Faster than a 2%-a-year pace' : 'At or below a 2%-a-year pace']);
@@ -1859,10 +2213,175 @@ function initClosing(sc) {
   reg('closing', Spark(host, lastN(S.rpceM, 24), { name: 'real PCE, m/m', fmt: v => sgn(v, 2) + '%', zero: true, aria: 'Real consumer spending, monthly change, over the last 24 months; ' + sgn(lp.v, 1) + '% in ' + fmtT(lp.t) + '.' }));
 }
 
+/* ---- chapter 07: financial markets ---- */
+function initMarkets(sc) {
+  const last = MK.y10.length - 1;
+  let view = 'rates', win = 126;   // ~6 months of trading days
+  const W = () => win === 'all' ? [0, last] : [Math.max(0, last - win + 1), last];
+  const marks = [{ t: I_OCT28, label: 'Oct 28 FOMC', anchor: 'end' }, { t: I_NOV17, label: 'Nov 17', anchor: 'start' }];
+  const base = () => ({ win: W(), xFmt: wdFmt, xTicks: wdTicks, snap: true, marks, endLabels: true });
+  const pct2 = v => v.toFixed(2) + '%', bp0 = v => Math.round(v) + ' bp', one = v => v.toFixed(1);
+  const C = {
+    rates: LineChart($('#mkRates'), Object.assign(base(), {
+      series: [{ name: '10-year Treasury', short: '10Y', cls: 'teal', role: 'primary', data: valid(MK.y10) },
+        { name: '10-year real (TIPS)', short: 'Real', cls: 'coral', role: 'primary', data: valid(MK.real) },
+        { name: '2-year Treasury', short: '2Y', cls: 'ctx', role: 'context', data: valid(MK.y2) }],
+      fmt: pct2, endNames: true, endPad: 92,
+      tipExtra: t => { const b = MK.be[t] && MK.be[t].v; return b == null ? null : { value: b.toFixed(2) + '%', label: 'breakeven (10-year minus real)' }; },
+      aria: 'Daily 10-year, 10-year real and 2-year Treasury yields, with the October 28 FOMC meeting marked.' })),
+    ig: LineChart($('#mkIG'), Object.assign(base(), { series: [{ name: 'Investment-grade spread', cls: 'teal', role: 'primary', data: valid(MK.ig) }], fmt: bp0, yUnit: '', aria: 'Daily investment-grade corporate bond spread, basis points.' })),
+    hy: LineChart($('#mkHY'), Object.assign(base(), { series: [{ name: 'High-yield spread', cls: 'coral', role: 'primary', data: valid(MK.hy) }], fmt: bp0, yUnit: '', aria: 'Daily high-yield corporate bond spread, basis points.' })),
+    eq: LineChart($('#mkEq'), Object.assign(base(), {
+      series: [{ name: 'S&P 500', short: 'S&P', cls: 'teal', role: 'primary', data: valid(MK.spX) },
+        { name: 'Nasdaq Composite', short: 'Nasdaq', cls: 'coral', role: 'primary', data: valid(MK.ndqX) }],
+      refs: [{ v: 100, label: 'Oct 28 = 100', align: 'end' }], fmt: one, yUnit: '', endNames: true, endPad: 104,
+      aria: 'S&P 500 and Nasdaq Composite, rebased to October 28 = 100.' })),
+    vix: LineChart($('#mkVix'), Object.assign(base(), { series: [{ name: 'VIX', cls: 'teal', role: 'primary', data: valid(MK.vix) }], fmt: one, yUnit: '', aria: 'Daily VIX volatility index.' })),
+    usd: LineChart($('#mkUsd'), Object.assign(base(), { series: [{ name: 'Broad dollar index', cls: 'teal', role: 'primary', data: valid(MK.usd) }], fmt: one, yUnit: '', aria: 'Daily nominal broad U.S. dollar index.' }))
+  };
+  Object.values(C).forEach(ch => reg('markets', ch));
+  const VIEWS = { rates: ['rates'], credit: ['ig', 'hy'], stocks: ['eq', 'vix'], dollar: ['usd'] };
+  const left = $('#mkLeft');
+  function ro(lbl, big, parts) {
+    $('#mkLbl').textContent = lbl; $('#mkBig').textContent = big;
+    const n = $('#mkNote'); n.replaceChildren();
+    parts.forEach(p => { if (Array.isArray(p)) H_('b', null, p[0], n); else n.append(p); });
+  }
+  function readout() {
+    if (view === 'rates') { const i = lastI(MK.y10), j = lastI(MK.real); ro('10-year Treasury yield, ' + wdShort(i), MK.y10[i].v.toFixed(2) + '%', [[sI(chgBp(MK.y10, I_OCT28, i, 100)) + ' bp'], ' since Oct 28 · real yield ', [MK.real[j].v.toFixed(2) + '%'], ' (' + sI(chgBp(MK.real, I_OCT28, j, 100)) + ' bp)']); }
+    else if (view === 'credit') { const i = lastI(MK.hy), j = lastI(MK.ig); ro('High-yield spread, ' + wdShort(i), Math.round(MK.hy[i].v) + ' bp', [[sI(chgBp(MK.hy, I_OCT28, i)) + ' bp'], ' since Oct 28 · investment grade ', [Math.round(MK.ig[j].v) + ' bp'], ' (' + sI(chgBp(MK.ig, I_OCT28, j)) + ')']); }
+    else if (view === 'stocks') { const i = lastI(MK.sp), j = lastI(MK.ndq), k = lastI(MK.vix); ro('S&P 500 since Oct 28, to ' + wdShort(i), sgn(chgPct(MK.sp, I_OCT28, i), 1) + '%', ['Nasdaq ', [sgn(chgPct(MK.ndq, I_OCT28, j), 1) + '%'], ' to ' + wdShort(j) + ' · VIX ', [MK.vix[k].v.toFixed(1)]]); }
+    else { const i = lastI(MK.usd); ro('Broad dollar since Oct 28, to ' + wdShort(i), sgn(chgPct(MK.usd, I_OCT28, i), 1) + '%', ['index level ', [MK.usd[i].v.toFixed(1)]]); }
+  }
+  function show(v) {
+    view = v;
+    $$('[data-mk]', sc).forEach(f => { f.hidden = f.dataset.mk !== v; });
+    VIEWS[v].forEach(k => { C[k].intro = !reduceMotion; C[k].draw(true); });
+    readout(); if (left._refresh) left._refresh();
+  }
+  segBind($('#mkSeg'), show);
+  segBind($('#mkWin'), v => { win = v === 'all' ? 'all' : +v; Object.values(C).forEach(ch => { ch.intro = !reduceMotion; ch.setWindow(W()); }); if (left._refresh) left._refresh(); });
+  readout();
+
+  // what changed: Oct 28 | Nov 17 (our write-up) | latest | change since Oct 28
+  const L = lastI(MK.y10), big = v => Math.round(v).toLocaleString('en-US');
+  const ROWS = [['10-year Treasury', MK.y10, pct2, 'bp100'], ['10-year real (TIPS)', MK.real, pct2, 'bp100'], ['10-year breakeven', MK.be, pct2, 'bp100'], ['2-year Treasury', MK.y2, pct2, 'bp100'],
+    ['Investment-grade spread', MK.ig, bp0, 'bp'], ['High-yield spread', MK.hy, bp0, 'bp'], ['S&P 500', MK.sp, big, 'pct'], ['Nasdaq Composite', MK.ndq, big, 'pct'], ['VIX', MK.vix, one, 'pts'], ['Broad dollar index', MK.usd, one, 'pct']];
+  const chg = (s, kind, i) => kind === 'bp100' ? sI(chgBp(s, I_OCT28, i, 100)) + ' bp' : kind === 'bp' ? sI(chgBp(s, I_OCT28, i)) + ' bp' : kind === 'pct' ? sgn(chgPct(s, I_OCT28, i), 1) + '%' : sgn(s[i].v - s[I_OCT28].v, 1) + ' pts';
+  const tb = H_('table', null, null, $('#mkTable')), hr = H_('tr', null, null, H_('thead', null, null, tb)), bd = H_('tbody', null, null, tb);
+  ['Market', 'Oct 28', 'Nov 17 (our write-up)', 'Latest', 'Since Oct 28'].forEach(h => H_('th', null, h, hr));
+  ROWS.forEach(([name, s, f, kind]) => {
+    const i = lastI(s), row = H_('tr', null, null, bd);
+    [name, f(s[I_OCT28].v), f(s[I_NOV17].v), f(s[i].v) + (i !== L ? ' (' + wdShort(i) + ')' : ''), chg(s, kind, i)].forEach(c => H_('td', null, c, row));
+  });
+
+  // what moved after the write-up
+  const i = lastI(MK.sp), j = lastI(MK.ndq), h = lastI(MK.hy), k = lastI(MK.vix), y = lastI(MK.y10);
+  const move = (s, a, b) => { const p = chgPct(s, a, b); return (p < 0 ? 'fell ' : 'rose ') + Math.abs(p).toFixed(1) + '%'; };
+  const hyB = chgBp(MK.hy, I_NOV17, h), yB = chgBp(MK.y10, I_NOV17, y, 100);
+  const since = $('#mkSince'); since.replaceChildren(); H_('span', 'lbl', 'Since Nov 17', since);
+  since.append(` the S&P 500 ${move(MK.sp, I_NOV17, i)} and the Nasdaq ${move(MK.ndq, I_NOV17, j)} (to ${wdShort(j)}); high-yield spreads ${hyB >= 0 ? 'widened' : 'narrowed'} ${Math.abs(hyB)} bp; the VIX reached ${MK.vix[k].v.toFixed(1)}; and the 10-year yield ${yB < 0 ? 'fell' : 'rose'} ${Math.abs(yB)} bp to ${MK.y10[y].v.toFixed(2)}%.`);
+
+  // data table for whichever market is showing
+  const TBL = { rates: [['10-year', MK.y10, pct2], ['Real', MK.real, pct2], ['Breakeven', MK.be, pct2], ['2-year', MK.y2, pct2]], credit: [['Investment grade', MK.ig, bp0], ['High yield', MK.hy, bp0]],
+    stocks: [['S&P 500', MK.sp, v => v.toFixed(2)], ['Nasdaq', MK.ndq, v => v.toFixed(2)], ['VIX', MK.vix, v => v.toFixed(2)]], dollar: [['Broad dollar index', MK.usd, v => v.toFixed(2)]] };
+  setupTable(left, () => {
+    const [a, b] = W(), defs = TBL[view], rows = [];
+    for (let t = b; t >= a; t--) { if (defs.every(d => d[1][t].v == null)) continue; rows.push([wdFmt(t)].concat(defs.map(([, s, f]) => s[t].v == null ? '—' : f(s[t].v)))); }
+    return { cols: ['Date'].concat(defs.map(d => d[0])), rows };
+  });
+}
+
+/* ---- chapter 10: Taylor rule (technical component) ---- */
+function initTaylor(sc) {
+  const st = { r: +(SEP.ffLR - 2).toFixed(1), u: SEP.unLR, rho: 0.85, pi: 'core', w: 0.5 };
+  const curMid = (CUR.lo + CUR.hi) / 2;
+  const piS = () => st.pi === 'core' ? S.coreY : S.pceY;
+  const rule = (pi, u) => st.r + pi + 0.5 * (pi - 2) + st.w * 2 * (st.u - u);
+  const t0 = M(2015, 1), tFF = M(2026, 11);
+  const hist = () => { const s = piS(), out = []; for (let t = t0; t <= lastPt(s).t; t++) { const p = at(s, t), u = at(S.unrate, t); out.push({ t, v: p == null || u == null ? null : rule(p, u) }); } return out; };
+  const ff = []; for (let t = t0; t <= tFF; t++) { const f = ffAt((t + 0.5) / 12); ff.push({ t, v: (f.lo + f.hi) / 2 }); }
+  const ch = reg('taylor', LineChart($('#tyChart'), {
+    series: [{ name: 'Fed funds target, midpoint', short: 'Fed funds', cls: 'teal', role: 'primary', data: ff }, { name: 'Rule prescription', short: 'Rule', cls: 'coral', role: 'primary', data: hist() }],
+    win: [t0, tFF], fmt: v => v.toFixed(2) + '%', endLabels: true, endNames: true, endPad: 108, zero: true, notes: SHUTDOWN,
+    aria: 'Taylor-rule prescription compared with the federal funds target midpoint, monthly since 2015.' }));
+  const fig = sc.querySelector('.fig');
+  const bp = x => (x >= 0 ? '+' : '−') + Math.abs(Math.round(x * 100)) + ' bp';
+  function update(redraw) {
+    const lp = lastPt(piS()), pi = lp.v, ul = lastPt(S.unrate), u = ul.v;
+    const iStar = rule(pi, u), smooth = st.rho * curMid + (1 - st.rho) * iStar, move = smooth - curMid, steps = Math.round(move / 0.25);
+    const piName = st.pi === 'core' ? 'core PCE' : 'headline PCE';
+    $('#tyRv').textContent = st.r.toFixed(1) + '%'; $('#tyUv').textContent = st.u.toFixed(1) + '%'; $('#tyRhov').textContent = st.rho.toFixed(2);
+    $('#tyLbl').textContent = (st.w === 0.5 ? 'Taylor (1993) rule' : 'Balanced-approach rule') + ', today';
+    $('#tyBig').textContent = iStar.toFixed(2) + '%';
+    const g = $('#tyGap'); g.replaceChildren(); H_('b', null, bp(iStar - curMid), g); g.append(' versus the current 3.875% midpoint');
+    const sm = $('#tySmooth'); sm.replaceChildren(); H_('b', null, smooth.toFixed(2) + '%', sm); sm.append(' with gradual adjustment (ρ = ' + st.rho.toFixed(2) + ')');
+    const f2 = v => v.toFixed(2);
+    $('#tyFormula').innerHTML =
+      `i* = r* + π + 0.5 × (π − 2) + ${st.w.toFixed(1)} × 2 × (u* − u)<br>` +
+      `&nbsp;&nbsp; = <b>${st.r.toFixed(1)}</b> + <b>${f2(pi)}</b> + 0.5 × (${f2(pi)} − 2) + ${st.w.toFixed(1)} × 2 × (<b>${st.u.toFixed(1)}</b> − <b>${u.toFixed(1)}</b>)<br>` +
+      `&nbsp;&nbsp; = <b>${f2(iStar)}%</b><br>` +
+      `π = ${piName}, ${fmtT(lp.t)}, y/y; u = unemployment, ${fmtT(ul.t)}<br>` +
+      `Gradual: ${st.rho.toFixed(2)} × 3.875 + ${(1 - st.rho).toFixed(2)} × ${f2(iStar)} = <b>${f2(smooth)}%</b> (${bp(move)})`;
+    const infl = 0.5 * (pi - 2), lab = st.w * 2 * (st.u - u), gapU = u - st.u;
+    const uTxt = Math.abs(gapU) < 0.05 ? 'right at its long-run level' : `${Math.abs(gapU).toFixed(1)} point${Math.abs(gapU) >= 0.15 ? 's' : ''} ${gapU < 0 ? 'below' : 'above'} its long-run level`;
+    const stepTxt = steps === 0 ? 'no change' : steps === 1 ? 'one 25 bp hike' : steps > 1 ? steps + ' hikes of 25 bp' : steps === -1 ? 'one 25 bp cut' : (-steps) + ' cuts of 25 bp';
+    $('#tyIntuition').textContent = `Inflation is ${(pi - 2).toFixed(1)} points above the 2% target while unemployment is ${uTxt}, so the ${Math.abs(infl) >= Math.abs(lab) ? 'inflation' : 'labor-market'} term dominates. The rule asks for ${iStar.toFixed(2)}%, ${bp(iStar - curMid)} from today's midpoint. Policymakers usually adjust gradually: with a ${st.rho.toFixed(2)} weight on today's rate, the move is ${bp(move)}, which rounds to ${stepTxt}.`;
+    if (redraw) ch.setData(1, hist());
+    if (fig._refresh) fig._refresh();
+  }
+  $('#tyR').addEventListener('input', e => { st.r = +e.target.value; update(true); });
+  $('#tyU').addEventListener('input', e => { st.u = +e.target.value; update(true); });
+  $('#tyRho').addEventListener('input', e => { st.rho = +e.target.value; update(false); });
+  segBind($('#tyPi'), v => { st.pi = v; update(true); });
+  segBind($('#tyRule'), v => { st.w = +v; update(true); });
+  update(false);
+  setupTable(fig, () => { const r = hist(), rows = []; for (let t = tFF; t >= t0; t--) { const a = ff[t - t0] && ff[t - t0].v, b = r[t - t0] ? r[t - t0].v : null; rows.push([fmtT(t), a == null ? '—' : a.toFixed(3) + '%', b == null ? '—' : b.toFixed(2) + '%']); } return { cols: ['Month', 'Fed funds midpoint', 'Rule'], rows }; });
+}
+
+/* ---- chapter 11: outlook (FOMC medians) and the risk map ---- */
+function initOutlook(sc) {
+  const w = [M(2024, 1), M(2028, 12)], yrs = SEP.years.slice(0, 3);
+  const proj = vals => yrs.map((y, i) => ({ t: M(y, 12), v: vals[i] }));
+  const notes = Object.assign({}, SHUTDOWN); yrs.forEach(y => { notes[M(y, 12)] = 'FOMC September median for ' + y; });
+  const mk = (id, name, hist, vals, ref, fmt, aria) => reg('outlook', LineChart($(id), {
+    series: [{ name, cls: 'teal', role: 'primary', data: hist }, { name: 'FOMC median (Sep)', proj: true, cls: 'proj', data: proj(vals) }],
+    refs: ref ? [ref] : [], win: w, fmt, snap: true, notes, aria }));
+  const f1 = v => v.toFixed(1) + '%';
+  const ffm = []; for (let t = w[0]; t <= M(2026, 11); t++) { const f = ffAt((t + 0.5) / 12); ffm.push({ t, v: (f.lo + f.hi) / 2 }); }
+  mk('#olCore', 'Core PCE inflation, y/y', S.coreY.filter(p => p.t >= w[0]), SEP.core, { v: 2, label: '2% target' }, f1, 'Core PCE inflation since 2024 and the FOMC median projections: 3.4% in 2026, 2.5% in 2027, 2.2% in 2028.');
+  mk('#olUn', 'Unemployment rate', S.unrate.filter(p => p.t >= w[0]), SEP.un, { v: SEP.unLR, label: 'Longer run ' + SEP.unLR.toFixed(1) + '%' }, f1, 'Unemployment since 2024 and the FOMC median projections: 4.1% each year.');
+  mk('#olGdp', 'Real GDP growth, SAAR', GDPQ.map(([t, v]) => ({ t, v })), SEP.gdp, { v: SEP.gdpLR, label: 'Longer run ' + SEP.gdpLR.toFixed(1) + '%' }, f1, 'Quarterly real GDP growth since 2024 and the FOMC median projections: 2.3%, 2.4% and 2.2%.');
+  mk('#olFf', 'Fed funds target, midpoint', ffm, SEP.ff, { v: SEP.ffLR, label: 'Longer run ' + SEP.ffLR.toFixed(1) + '%' }, v => v.toFixed(2) + '%', 'Fed funds target midpoint since 2024 and the FOMC median projections: 4.1%, 4.1% and 3.9%.');
+  const lc = lastPt(S.coreY), lu = lastPt(S.unrate);
+  $('#olCoreSub').textContent = `${fmtT(lc.t)} ${fx(lc.v)}% · median ${SEP.core.slice(0, 3).join(' → ')}`;
+  $('#olUnSub').textContent = `${fmtT(lu.t)} ${fx(lu.v)}% · median ${SEP.un.slice(0, 3).join(' → ')}`;
+  $('#olGdpSub').textContent = `Q3 2026 ${GDPQ[GDPQ.length - 1][1].toFixed(1)}% · median ${SEP.gdp.slice(0, 3).join(' → ')}`;
+  $('#olFfSub').textContent = `Now 3.875% · median ${SEP.ff.slice(0, 3).join(' → ')}`;
+  // market pricing and the risk cards use the latest market closes
+  const y = lastI(MK.y2), i = lastI(MK.sp), k = lastI(MK.vix), h = lastI(MK.hy), u = lastI(MK.usd);
+  const two = $('#ol2y'); two.replaceChildren(); two.append('2-year Treasury: '); H_('b', null, MK.y2[y].v.toFixed(2) + '%', two);
+  two.append(` on ${wdShort(y)}, vs. ${MK.y2[I_NOV17].v.toFixed(2)}% on Nov 17 and ${MK.y2[I_OCT28].v.toFixed(2)}% on Oct 28.`);
+  const fill = (key, text) => { const el = sc.querySelector(`[data-fill="${key}"]`); if (el) el.textContent = text; };
+  fill('eq', `S&P 500 ${sgn(chgPct(MK.sp, I_OCT28, i), 1)}% since Oct 28; VIX ${MK.vix[k].v.toFixed(1)} on ${wdShort(k)}. Would challenge the hike if consumption or investment falls.`);
+  fill('credit', `High-yield spreads ${sI(chgBp(MK.hy, I_OCT28, h))} bp since Oct 28. AI-related stress could spread to banks, insurers or private credit.`);
+  fill('usd', `Net exports subtracted 3.32 pp from Q3 growth; the broad dollar is ${sgn(chgPct(MK.usd, I_OCT28, u), 1)}% since Oct 28.`);
+  const tf = $('#olTblFig');
+  setupTable(tf, () => {
+    const c = v => v == null ? '—' : v.toFixed(1) + '%';
+    return { cols: ['FOMC median, September 2026', '2026', '2027', '2028', '2029', 'Longer run'], rows: [
+      ['Real GDP growth, Q4/Q4'].concat(SEP.gdp.map(c), [c(SEP.gdpLR)]),
+      ['Unemployment rate, Q4'].concat(SEP.un.map(c), [c(SEP.unLR)]),
+      ['PCE inflation, Q4/Q4'].concat(SEP.pce.map(c), [c(2)]),
+      ['Core PCE inflation, Q4/Q4'].concat(SEP.core.map(c), ['—']),
+      ['Fed funds rate, year-end'].concat(SEP.ff.map(c), [c(SEP.ffLR)])] };
+  });
+}
+
 /* ================= navigation ================= */
 const scenes = $$('.scene'), order = scenes.map(s => s.id), rail = $$('#railList a');
 const prevBtn = $('#prevBtn'), nextBtn = $('#nextBtn'), prog = $('#progress i');
-const inits = { top: initCover, recap: initRecap, mandate: initMandate, decision: initDecision, economy: initEconomy, jobs: initJobs, participation: initParticipation, inflation: initInflation, implications: initImplications, closing: initClosing };
+const inits = { top: initCover, recap: initRecap, mandate: initMandate, decision: initDecision, economy: initEconomy, jobs: initJobs, participation: initParticipation, markets: initMarkets, inflation: initInflation, implications: initImplications, taylor: initTaylor, outlook: initOutlook, closing: initClosing };
 const done = new Set();
 let cur = -1, booted = false;
 function setNav(btn, j) {
